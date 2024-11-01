@@ -1,0 +1,89 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Restaurants</title>
+    <meta http-equiv="Content-Security-Policy" content="">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+    <style>
+        html, body, #app {
+            width: 100%;
+            height: 100%;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+    </style>
+</head>
+
+<body>
+<div id="app" class="p-4">
+    <div class="w-full h-full grid grid-cols-4">
+        <template v-for="restaurant in restaurants">
+            <template v-if="restaurant.handler">
+                <div v-if="restaurant.content" v-html="restaurant.content"></div>
+                <div v-else class="flex flex-row justify-center items-center font-bold">LOADING</div>
+            </template>
+            <template v-else>
+                <iframe :src="restaurant.url" class="w-full h-full border-none" :style="{ zoom: restaurant.zoom }" referrerpolicy="unsafe-url"></iframe>
+            </template>
+        </template>
+    </div>
+</div>
+
+<script>
+    const { createApp, ref, onMounted } = Vue
+
+    createApp({
+        setup() {
+            const restaurants = ref([
+                {
+                    url: 'https://www.restaurace-u-sisku.cz',
+                    zoom: 1.25
+                },
+                {
+                    url: 'https://www.restauraceklika.cz',
+                    zoom: 1
+                },
+                {
+                    // TODO
+                    url: 'http://www.restaurantbarredhook.cz/?Polední_menu',
+                    handler: async (url) => {
+                        const response = await fetch(url);
+                        return await response.text();
+                    },
+                    zoom: 1
+                },
+                {
+                    url: 'https://nominanza.com/index-pankrac.html#mu-reservation',
+                    zoom: 0.75
+                },
+            ])
+
+            const runHandlers = async () => {
+                for (const restaurant of restaurants.value) {
+                    if (restaurant.handler) {
+                        try {
+                            restaurant.content = await restaurant.handler(restaurant.url)
+                        } catch (e) {
+                            console.error(e)
+                        }
+                    }
+                }
+            }
+            
+            onMounted(async () => {
+                await runHandlers()
+            })
+
+            return {
+                restaurants
+            }
+        }
+    }).mount('#app')
+</script>
+</body>
+
+</html>
