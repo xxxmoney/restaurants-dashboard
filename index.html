@@ -21,7 +21,7 @@
 <body>
 <div id="app" class="p-4">
     <div class="w-full h-full grid grid-cols-4">
-        <iframe v-for="restaurant in restaurants" :src="restaurant.url" class="w-full h-full border-none" :style="{ zoom: restaurant.zoom }"></iframe>
+        <iframe v-for="restaurant in restaurants" :src="restaurant.url" class="w-full h-full border-none" :style="{ zoom: restaurant.zoom }" referrerpolicy="unsafe-url"></iframe>
     </div>
 </div>
 
