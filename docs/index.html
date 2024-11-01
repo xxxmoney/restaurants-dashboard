@@ -38,6 +38,8 @@
 
     createApp({
         setup() {
+            const proxyUrl = 'https://proxy.xxxmoney111.workers.dev/?';
+
             const restaurants = ref([
                 {
                     url: 'https://www.restaurace-u-sisku.cz',
@@ -48,11 +50,9 @@
                     zoom: 1
                 },
                 {
-                    // TODO
                     url: 'http://www.restaurantbarredhook.cz/?Polední_menu',
-                    handler: async (url) => {
-                        const response = await fetch(url);
-                        return await response.text();
+                    handler: (url) => {
+                        return getUrlContent(url)
                     },
                     zoom: 1
                 },
@@ -62,20 +62,20 @@
                 },
             ])
 
-            const runHandlers = async () => {
-                for (const restaurant of restaurants.value) {
-                    if (restaurant.handler) {
-                        try {
-                            restaurant.content = await restaurant.handler(restaurant.url)
-                        } catch (e) {
-                            console.error(e)
-                        }
+            const getUrlContent = async (url) => {
+                const response = await fetch(proxyUrl + url);
+                return await response.text();
+            }
+
+            onMounted(async () => {
+                // Run handlers for restaurants that have them
+                for (const restaurant of restaurants.value.filter(restaurant => restaurant.handler)) {
+                    try {
+                        restaurant.content = await restaurant.handler(restaurant.url)
+                    } catch (e) {
+                        console.error(e)
                     }
                 }
-            }
-            
-            onMounted(async () => {
-                await runHandlers()
             })
 
             return {
