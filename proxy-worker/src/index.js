@@ -2,10 +2,12 @@
 // Configuration: Whitelist and Blacklist (not used in this version)
 // whitelist = [ "^http.?://www.zibri.org$", "zibri.org$", "test\\..*" ];  // regexp for whitelisted urls
 const blacklistUrls = [];           // regexp for blacklisted urls
-const whitelistOrigins = [ ".*" ];   // regexp for whitelisted origins
+const whiteListUrls = [ "xxxmoney\\.github\\.io" ];   // regexp for whitelisted origins
 
 // Function to check if a given URI or origin is listed in the whitelist or blacklist
 function isUrlInList(uri, listing) {
+	console.log(uri)
+
 	let isListed = false;
 	if (typeof uri === "string") {
 		listing.forEach((pattern) => {
@@ -30,7 +32,7 @@ export default {
 
 		// Function to modify headers to enable CORS
 		function setupCORSHeaders(headers) {
-			headers.set("Access-Control-Allow-Origin", event.request.headers.get("Origin"));
+			headers.set("Access-Control-Allow-Origin", event.request.headers.get("origin"));
 			if (isPreflightRequest) {
 				headers.set("Access-Control-Allow-Methods", event.request.headers.get("access-control-request-method"));
 				const requestedHeaders = event.request.headers.get("access-control-request-headers");
@@ -46,10 +48,9 @@ export default {
 
 		const targetUrl = decodeURIComponent(decodeURIComponent(originUrl.search.substr(1)));
 
-		const originHeader = event.request.headers.get("Origin");
-		const connectingIp = event.request.headers.get("CF-Connecting-IP");
+		const originHeader = event.request.headers.get("origin");
 
-		if ((!isUrlInList(targetUrl, blacklistUrls)) && (isUrlInList(originHeader, whitelistOrigins))) {
+		if ((!isUrlInList(targetUrl, blacklistUrls)) && (isUrlInList(originHeader, whiteListUrls))) {
 			let customHeaders = event.request.headers.get("x-cors-headers");
 
 			if (customHeaders !== null) {
