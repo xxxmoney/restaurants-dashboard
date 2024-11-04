@@ -5,7 +5,7 @@ const blacklistUrls = [];           // regexp for blacklisted urls
 const whitelistOrigins = [ ".*" ];   // regexp for whitelisted origins
 
 // Function to check if a given URI or origin is listed in the whitelist or blacklist
-function isListedInWhitelist(uri, listing) {
+function isUrlInList(uri, listing) {
 	let isListed = false;
 	if (typeof uri === "string") {
 		listing.forEach((pattern) => {
@@ -49,7 +49,7 @@ export default {
 		const originHeader = event.request.headers.get("Origin");
 		const connectingIp = event.request.headers.get("CF-Connecting-IP");
 
-		if ((!isListedInWhitelist(targetUrl, blacklistUrls)) && (isListedInWhitelist(originHeader, whitelistOrigins))) {
+		if ((!isUrlInList(targetUrl, blacklistUrls)) && (isUrlInList(originHeader, whitelistOrigins))) {
 			let customHeaders = event.request.headers.get("x-cors-headers");
 
 			if (customHeaders !== null) {
