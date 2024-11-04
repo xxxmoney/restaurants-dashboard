@@ -4,6 +4,9 @@
 <head>
     <title>Restaurants</title>
     <meta http-equiv="Content-Security-Policy" content="">
+
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.14/dist/full.min.css" rel="stylesheet" type="text/css" />
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 
@@ -11,25 +14,42 @@
         html, body, #app {
             width: 100%;
             height: 100%;
-            min-height: 100vh;
             margin: 0;
         }
-
+        html {
+            height: 100vh;
+        }
+        * {
+            box-sizing: border-box;
+        }
     </style>
 </head>
 
 <body>
-<div id="app" class="p-4">
-    <div class="w-full h-full grid grid-cols-4">
-        <template v-for="restaurant in restaurants">
-            <template v-if="restaurant.handler">
-                <div v-if="restaurant.content" v-html="restaurant.content"></div>
-                <div v-else class="flex flex-row justify-center items-center font-bold">LOADING</div>
+<div id="app" class="py-2 px-6 lg:p-4">
+    <div class="w-full h-full flex flex-col gap-4">
+        <div class="flex-0 text-center my-2">
+            <h1 class="text-2xl text-white">Restaurace v okolí Pražského Povstání</h1>
+        </div>
+
+        <div class="flex-1 carousel lg:grid lg:grid-cols-4">
+            <template v-for="(restaurant, index) in restaurants">
+                <div :id="`slide_${index}`" class="carousel-item relative w-full">
+                    <template v-if="restaurant.handler">
+                        <div v-if="!restaurant.content" class="flex flex-row justify-center items-center font-bold">LOADING</div>
+                        <iframe v-else :srcdoc="restaurant.content" class="w-full h-full border-none" :style="{ zoom: restaurant.zoom }"></iframe>
+                    </template>
+                    <template v-else>
+                        <iframe :src="restaurant.url" class="w-full h-full border-none" :style="{ zoom: restaurant.zoom }" referrerpolicy="unsafe-url"></iframe>
+                    </template>
+                </div>
+
+                <div class="lg:hidden absolute left-12 right-12 top-1/2 flex -translate-y-1/2 transform justify-between">
+                    <a :href="`#slide_${getPreviousIndex(index)}`" class="btn btn-lg btn-circle">❮</a>
+                    <a :href="`#slide_${getNextIndex(index)}`" class="btn btn-lg btn-circle">❯</a>
+                </div>
             </template>
-            <template v-else>
-                <iframe :src="restaurant.url" class="w-full h-full border-none" :style="{ zoom: restaurant.zoom }" referrerpolicy="unsafe-url"></iframe>
-            </template>
-        </template>
+        </div>
     </div>
 </div>
 
@@ -67,6 +87,13 @@
                 return await response.text();
             }
 
+            const getNextIndex = (index) => {
+                return (index + 1) % restaurants.value.length;
+            }
+            const getPreviousIndex = (index) => {
+                return (index - 1 + restaurants.value.length) % restaurants.value.length;
+            }
+
             onMounted(async () => {
                 // Run handlers for restaurants that have them
                 for (const restaurant of restaurants.value.filter(restaurant => restaurant.handler)) {
@@ -79,7 +106,9 @@
             })
 
             return {
-                restaurants
+                restaurants,
+                getNextIndex,
+                getPreviousIndex
             }
         }
     }).mount('#app')
