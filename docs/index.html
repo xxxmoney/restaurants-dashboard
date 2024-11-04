@@ -52,10 +52,10 @@
                         <iframe :src="restaurant.url" class="w-full h-full border-none" :style="{ zoom: restaurant.zoom }" referrerpolicy="unsafe-url"></iframe>
                     </template>
 
-                    <Teleport v-if="currentIndex === index" defer to="#header" :disabled="isMobile || !enableCarousel">
+                    <Teleport v-if="isMobile || currentIndex === index" defer to="#header" :disabled="isMobile || !enableCarousel">
                         <div class="absolute left-2 right-2 top-1/2 flex -translate-y-1/2 transform justify-between lg:left-5 lg:right-5" :class="{ 'lg:hidden': isMobile || !enableCarousel }">
-                            <a :href="`#slide_${getPreviousIndex(index)}`" @click="setPreviousIndex(index)" class="btn btn-md btn-circle lg:btn-sm">❮</a>
-                            <a :href="`#slide_${getNextIndex(index)}`" @click="setNextIndex(index)" class="btn btn-md btn-circle lg:btn-sm">❯</a>
+                            <a :href="`#slide_${getPreviousIndex(index)}`" @click="setPreviousIndex(index)" class="btn btn-lg btn-circle lg:btn-sm">❮</a>
+                            <a :href="`#slide_${getNextIndex(index)}`" @click="setNextIndex(index)" class="btn btn-lg btn-circle lg:btn-sm">❯</a>
                         </div>
                     </Teleport>
                 </div>
