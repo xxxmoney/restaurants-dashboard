@@ -43,7 +43,7 @@
 
         <div class="flex-1 carousel" :class="{ 'lg:grid lg:grid-cols-4': !enableCarousel }">
             <template v-for="(restaurant, index) in restaurants">
-                <div :id="`slide_${index}`" class="relative w-full max-lg:relative carousel-item" ref="carouselItemsRef">
+                <div :id="`${indexPrefix}${index}`" class="relative w-full max-lg:relative carousel-item" ref="carouselItemsRef">
                     <template v-if="restaurant.handler">
                         <div v-if="!restaurant.content" class="w-full h-full flex flex-row justify-center items-center font-bold">LOADING</div>
                         <iframe v-else :srcdoc="restaurant.content" class="w-full h-full border-none" :style="{ zoom: restaurant.zoom }"></iframe>
@@ -54,8 +54,8 @@
 
                     <Teleport v-if="isMobile || currentIndex === index" defer to="#header" :disabled="isMobile || !enableCarousel">
                         <div class="absolute left-2 right-2 top-1/2 flex -translate-y-1/2 transform justify-between lg:left-5 lg:right-5" :class="{ 'lg:hidden': isMobile || !enableCarousel }">
-                            <a :href="`#slide_${getPreviousIndex(index)}`" @click="setPreviousIndex(index)" class="btn btn-lg btn-circle lg:btn-sm">❮</a>
-                            <a :href="`#slide_${getNextIndex(index)}`" @click="setNextIndex(index)" class="btn btn-lg btn-circle lg:btn-sm">❯</a>
+                            <button @click.prevent="setPreviousIndex(index)" class="btn btn-lg btn-circle lg:btn-sm">❮</button>
+                            <button @click.prevent="setNextIndex(index)" class="btn btn-lg btn-circle lg:btn-sm">❯</button>
                         </div>
                     </Teleport>
                 </div>
@@ -71,6 +71,7 @@
     createApp({
         setup() {
             const proxyUrl = 'https://proxy-worker.xxxmoney111.workers.dev/?';
+            const indexPrefix = 'slide_';
 
             const carouselItemsRef = ref(null);
             const enableCarousel = useStorage('enable-carousel', true);
@@ -96,28 +97,42 @@
                 },
             ])
             const breakpoints = useBreakpoints(breakpointsTailwind);
-            const isMobile = computed(() => breakpoints.isSmaller('lg'));
             const hash = ref(window.location.hash);
+
+            const isMobile = computed(() => breakpoints.isSmaller('lg'));
+            const itemByIndex = computed(() => Object.fromEntries(carouselItemsRef.value.map(item => [parseIndex(item.id), item])));
+            const currentItem = computed(() => itemByIndex.value[currentIndex.value]);
 
             const getUrlContent = async (url) => {
                 const response = await fetch(proxyUrl + url);
                 return await response.text();
             }
 
-            const parseIndex = () => {
-                if(!hash.value) return null;
+            const parseIndex = (value) => {
+                if(!value) return null;
 
-                const index = parseInt(hash.value.split('_')[1]);
+                const index = parseInt(value.split('_')[1]);
                 return isNaN(index) ? null : index;
             }
-            const setIndex = (index) => {
-                window.history.pushState({}, '', window.location.href.split('#')[0] + `#slide_${index}`);
+            const setUrlIndex = (index) => {
+                window.history.pushState({}, '', window.location.href.split('#')[0] + `#${indexPrefix}${index}`);
             }
 
             const currentIndex = computed({
-                get: () => parseIndex() ?? 0,
+                get: () => parseIndex(hash.value) ?? 0,
                 set: (index) => {
-                    setIndex(index);
+                    // Focus current item
+                    currentItem.value.focus();
+
+                    // Scroll onto next item
+                    itemByIndex.value[index].scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'nearest',
+                        inline: 'start'
+                    });
+
+                    // Set to url
+                    setUrlIndex(index);
                 }
             })
             const getNextIndex = (index) => {
@@ -146,16 +161,16 @@
             })
 
             // Register key shortcuts
-            onKeyStroke(['ArrowRight', 'D'], (e) => {
-                e.preventDefault();
-
-                setNextIndex(currentIndex.value);
-            })
             onKeyStroke(['ArrowLeft', 'A'], (e) => {
                 e.preventDefault();
 
                 setPreviousIndex(currentIndex.value);
-            })
+            });
+            onKeyStroke(['ArrowRight', 'D'], (e) => {
+                e.preventDefault();
+
+                setNextIndex(currentIndex.value);
+            });
 
             onMounted(async () => {
                 // Run handlers for restaurants that have them
@@ -172,7 +187,10 @@
             })
 
             return {
+                indexPrefix,
                 carouselItemsRef,
+                itemByIndex,
+                currentItem,
                 isMobile,
                 enableCarousel,
                 restaurants,
