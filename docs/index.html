@@ -103,6 +103,7 @@
             const itemByIndex = computed(() => Object.fromEntries(carouselItemsRef.value.map(item => [parseIndex(item.id), item])));
             const currentItem = computed(() => itemByIndex.value[currentIndex.value]);
 
+
             const getUrlContent = async (url) => {
                 const response = await fetch(proxyUrl + url);
                 return await response.text();
@@ -161,12 +162,12 @@
             })
 
             // Register key shortcuts
-            onKeyStroke(['ArrowLeft', 'A'], (e) => {
+            onKeyStroke('ArrowLeft', (e) => {
                 e.preventDefault();
 
                 setPreviousIndex(currentIndex.value);
             });
-            onKeyStroke(['ArrowRight', 'D'], (e) => {
+            onKeyStroke('ArrowRight', (e) => {
                 e.preventDefault();
 
                 setNextIndex(currentIndex.value);
