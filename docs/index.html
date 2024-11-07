@@ -66,7 +66,7 @@
 
 <script>
     const { createApp, ref, computed, onMounted, watch } = Vue
-    const { breakpointsTailwind, useBreakpoints, useElementVisibility, useStorage } = VueUse
+    const { breakpointsTailwind, useBreakpoints, useStorage } = VueUse
 
     createApp({
         setup() {
@@ -117,8 +117,8 @@
                 currentIndex.value = getPreviousIndex(index);
             }
 
-            // Watch isMobile to refresh index
-            watch(isMobile, () => {
+            // Watch to refresh index
+            watch([isMobile, enableCarousel], () => {
                 currentIndex.value = 0;
             })
 
