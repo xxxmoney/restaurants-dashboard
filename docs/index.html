@@ -32,8 +32,9 @@
 <div id="app" class="py-2 px-1 lg:p-4">
     <div class="w-full h-full flex flex-col gap-4">
         <div class="flex-0 text-center my-2">
-            <div id="header" class="relative flex flex-row justify-center items-center gap-8">
-                <h1 class="text-2xl text-black dark:text-white text-black z-10">Restaurace v okolí</h1>
+            <div id="header" class="relative flex flex-row justify-center items-center text-black dark:text-white gap-8">
+                <h1 v-if="isMobile || enableCarousel" class="text-2xl z-10">{{ currentRestaurant.name }}</h1>
+                <h1 v-else class="text-2xl z-10">Restaurace</h1>
 
                 <div class="tooltip hidden lg:flex flex-row justify-center z-10" data-tip="Carousel">
                     <input type="checkbox" class="toggle" v-model="enableCarousel" />
@@ -77,14 +78,17 @@
             const enableCarousel = useStorage('enable-carousel', true);
             const restaurants = ref([
                 {
+                    name: 'U Šíšků',
                     url: 'https://www.restaurace-u-sisku.cz',
                     zoom: 1.25
                 },
                 {
+                    name: 'Klika',
                     url: 'https://www.restauraceklika.cz',
                     zoom: 1
                 },
                 {
+                    name: 'Bar Red Hook',
                     url: 'http://www.restaurantbarredhook.cz/?Polední_menu',
                     handler: (url) => {
                         return getUrlContent(url)
@@ -92,6 +96,7 @@
                     zoom: 1
                 },
                 {
+                    name: 'Palatino (Dole)',
                     url: 'https://nominanza.com/index-pankrac.html#mu-reservation',
                     zoom: 0.75
                 },
@@ -100,6 +105,7 @@
             const hash = ref(window.location.hash);
 
             const isMobile = computed(() => breakpoints.isSmaller('lg'));
+            const currentRestaurant = computed(() => restaurants.value[currentIndex.value]);
             const itemByIndex = computed(() => Object.fromEntries(carouselItemsRef.value.map(item => [parseIndex(item.id), item])));
             const currentItem = computed(() => itemByIndex.value[currentIndex.value]);
 
@@ -190,8 +196,7 @@
             return {
                 indexPrefix,
                 carouselItemsRef,
-                itemByIndex,
-                currentItem,
+                currentRestaurant,
                 isMobile,
                 enableCarousel,
                 restaurants,
