@@ -66,7 +66,7 @@
 
 <script>
     const { createApp, ref, computed, onMounted, watch } = Vue
-    const { breakpointsTailwind, useBreakpoints, useStorage } = VueUse
+    const { breakpointsTailwind, useBreakpoints, useStorage, onKeyStroke } = VueUse
 
     createApp({
         setup() {
@@ -97,13 +97,29 @@
             ])
             const breakpoints = useBreakpoints(breakpointsTailwind);
             const isMobile = computed(() => breakpoints.isSmaller('lg'));
+            const hash = ref(window.location.hash);
 
             const getUrlContent = async (url) => {
                 const response = await fetch(proxyUrl + url);
                 return await response.text();
             }
 
-            const currentIndex = ref(0);
+            const parseIndex = () => {
+                if(!hash.value) return null;
+
+                const index = parseInt(hash.value.split('_')[1]);
+                return isNaN(index) ? null : index;
+            }
+            const setIndex = (index) => {
+                window.history.pushState({}, '', window.location.href.split('#')[0] + `#slide_${index}`);
+            }
+
+            const currentIndex = computed({
+                get: () => parseIndex() ?? 0,
+                set: (index) => {
+                    setIndex(index);
+                }
+            })
             const getNextIndex = (index) => {
                 return (index + 1) % restaurants.value.length;
             }
@@ -117,9 +133,28 @@
                 currentIndex.value = getPreviousIndex(index);
             }
 
+            // Sync hash
+            setInterval(() => {
+                if(window.location.hash !== hash.value) {
+                    hash.value = window.location.hash;
+                }
+            }, 100);
+
             // Watch to refresh index
             watch([isMobile, enableCarousel], () => {
                 currentIndex.value = 0;
+            })
+
+            // Register key shortcuts
+            onKeyStroke(['ArrowRight', 'D'], (e) => {
+                e.preventDefault();
+
+                setNextIndex(currentIndex.value);
+            })
+            onKeyStroke(['ArrowLeft', 'A'], (e) => {
+                e.preventDefault();
+
+                setPreviousIndex(currentIndex.value);
             })
 
             onMounted(async () => {
@@ -131,6 +166,9 @@
                         console.error(e)
                     }
                 }
+
+                // Reset index
+                currentIndex.value = 0;
             })
 
             return {
@@ -139,6 +177,7 @@
                 enableCarousel,
                 restaurants,
                 currentIndex,
+                hash,
                 setNextIndex,
                 setPreviousIndex,
                 getNextIndex,
