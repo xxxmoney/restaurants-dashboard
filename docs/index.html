@@ -127,8 +127,6 @@
                     onShow: async (iframe) => {
                         // Focus on menu
                         const menu = iframe.contentDocument.getElementById('mu-reservation');
-                        window.menu = menu;
-                        console.log(menu);
                         scrollOntoItem(menu);
                     },
                     isLoaded: false
@@ -262,6 +260,11 @@
                     await restaurant.onShow(iframe);
                 }
             }
+            const handleRestaurantsOnShow = async () => {
+                for (const index of Object.keys(itemByIndex.value)) {
+                    await handleRestaurantOnShow(index);
+                }
+            }
 
             // Sync hash
             setInterval(() => {
@@ -273,6 +276,10 @@
             // Watch to refresh index
             watch([isMobile, enableCarousel], () => {
                 currentIndex.value = 0;
+
+                if(!isMobile.value && !enableCarousel.value) {
+                    handleRestaurantsOnShow();
+                }
             });
 
             // Watch current item to apply handling
