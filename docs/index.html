@@ -85,8 +85,8 @@
                         const doc = await getHtmlDocFromUrl(url);
                         return doc.documentElement.outerHTML;
                     },
-                    onShow: (iframe) => {
-                        if(!iframe.contentDocument) {
+                    onLoad: (iframe) => {
+                        if(!iframe?.contentDocument) {
                             return;
                         }
 
@@ -104,9 +104,6 @@
                         const doc = await getHtmlDocFromUrl(url);
                         return doc.documentElement.outerHTML;
                     },
-                    onShow: (iframe) => {
-                        // TODO
-                    },
                     isLoaded: false
                 },
                 {
@@ -116,9 +113,6 @@
                     handler: async (url) => {
                         const doc = await getHtmlDocFromUrl(url);
                         return doc.documentElement.outerHTML;
-                    },
-                    onShow: (iframe) => {
-                        // TODO
                     },
                     isLoaded: false
                 },
@@ -130,9 +124,12 @@
                         const doc = await getHtmlDocFromUrl(url);
                         return doc.documentElement.outerHTML;
                     },
-                    onShow: (iframe) => {
-                        // Reload iframe
-                        //iframe.contentDocument.location.reload();
+                    onShow: async (iframe) => {
+                        // Focus on menu
+                        const menu = iframe.contentDocument.getElementById('mu-reservation');
+                        window.menu = menu;
+                        console.log(menu);
+                        scrollOntoItem(menu);
                     },
                     isLoaded: false
                 },
@@ -232,11 +229,18 @@
                 currentIndex.value = getPreviousIndex(index);
             }
 
-            const setRestaurantLoaded = (index) => {
-                restaurants.value[index].isLoaded = true;
-            }
+            const setRestaurantLoaded = async (index) => {
+                const restaurant = restaurants.value[index];
+                restaurant.isLoaded = true;
 
-            const restaurantsLoaded = computed(() => restaurants.value.every(restaurant => restaurant.isLoaded));
+                if(restaurant.onLoad) {
+                    await restaurant.onLoad(itemByIndex.value[index].querySelector('iframe'));
+                }
+
+                if(!isMobile.value && !enableCarousel.value) {
+                    await handleRestaurantOnShow(index);
+                }
+            }
 
             const handleRestaurantsHandlers = async () => {
                 for (const restaurant of restaurants.value.filter(restaurant => restaurant.handler)) {
@@ -248,29 +252,14 @@
                 }
             }
 
-            const handleRestaurantOnShow = (index) => {
+            const handleRestaurantOnShow = async (index) => {
                 const restaurant = restaurants.value[index];
                 const item = itemByIndex.value[index];
                 const iframe = item.querySelector('iframe');
 
                 // Handle on show
                 if(restaurant.onShow) {
-                    restaurant.onShow(iframe);
-                }
-            }
-            const handleRestaurantsOnShow = async () => {
-                // Wait for restaurantLoaded with timeout
-                await new Promise((resolve) => {
-                    const interval = setInterval(() => {
-                        if(restaurantsLoaded.value) {
-                            clearInterval(interval);
-                            resolve();
-                        }
-                    }, 250);
-                });
-
-                for (const index in Object.keys(itemByIndex.value)) {
-                    handleRestaurantOnShow(index);
+                    await restaurant.onShow(iframe);
                 }
             }
 
@@ -308,7 +297,6 @@
                 currentIndex.value = 0;
 
                 await handleRestaurantsHandlers();
-                await handleRestaurantsOnShow();
             })
 
             return {
