@@ -47,10 +47,10 @@
                 <div :id="`${indexPrefix}${index}`" class="relative w-full max-lg:relative carousel-item" ref="carouselItemsRef">
                     <template v-if="restaurant.handler">
                         <div v-if="!restaurant.content" class="w-full h-full flex flex-row justify-center items-center font-bold">LOADING</div>
-                        <iframe v-else :srcdoc="restaurant.content" class="w-full h-full border-none" :style="{ zoom: restaurant.zoom }"></iframe>
+                        <iframe v-else :srcdoc="restaurant.content" @load="setRestaurantLoaded(index)" class="w-full h-full border-none" :style="{ zoom: restaurant.zoom }" sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-top-navigation allow-modals"></iframe>
                     </template>
                     <template v-else>
-                        <iframe :src="restaurant.url" class="w-full h-full border-none" :style="{ zoom: restaurant.zoom }" referrerpolicy="unsafe-url"></iframe>
+                        <iframe :src="restaurant.url" class="w-full h-full border-none" @load="setRestaurantLoaded(index)" :style="{ zoom: restaurant.zoom }" referrerpolicy="unsafe-url" sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-top-navigation allow-modals"></iframe>
                     </template>
 
                     <Teleport v-if="isMobile || currentIndex === index" defer to="#header" :disabled="isMobile || !enableCarousel">
@@ -78,27 +78,59 @@
             const enableCarousel = useStorage('enable-carousel', true);
             const restaurants = ref([
                 {
-                    name: 'U Šíšků',
+                    name: 'U Šišků',
                     url: 'https://www.restaurace-u-sisku.cz',
-                    zoom: 1.25
+                    zoom: 0.75,
+                    handler: async (url) => {
+                        const doc = await getHtmlDocFromUrl(url);
+                        return doc.documentElement.outerHTML;
+                    },
+                    onShow: (iframe) => {
+                        // TODO
+                        console.log(iframe);
+                        const marker = iframe.contentDocument.querySelector('.marker');
+                        marker.click();
+                    },
+                    isLoaded: false
                 },
                 {
                     name: 'Klika',
                     url: 'https://www.restauraceklika.cz',
-                    zoom: 1
+                    zoom: 1,
+                    handler: async (url) => {
+                        const doc = await getHtmlDocFromUrl(url);
+                        return doc.documentElement.outerHTML;
+                    },
+                    onShow: (iframe) => {
+                        // TODO
+                    },
+                    isLoaded: false
                 },
                 {
                     name: 'Bar Red Hook',
                     url: 'http://www.restaurantbarredhook.cz/?Polední_menu',
-                    handler: (url) => {
-                        return getUrlContent(url)
+                    zoom: 1,
+                    handler: async (url) => {
+                        const doc = await getHtmlDocFromUrl(url);
+                        return doc.documentElement.outerHTML;
                     },
-                    zoom: 1
+                    onShow: (iframe) => {
+                        // TODO
+                    },
+                    isLoaded: false
                 },
                 {
                     name: 'Palatino (Dole)',
                     url: 'https://nominanza.com/index-pankrac.html#mu-reservation',
-                    zoom: 0.75
+                    zoom: 0.75,
+                    handler: async (url) => {
+                        const doc = await getHtmlDocFromUrl(url);
+                        return doc.documentElement.outerHTML;
+                    },
+                    onShow: (iframe) => {
+                        // TODO
+                    },
+                    isLoaded: false
                 },
             ])
             const breakpoints = useBreakpoints(breakpointsTailwind);
@@ -109,10 +141,37 @@
             const itemByIndex = computed(() => Object.fromEntries(carouselItemsRef.value.map(item => [parseIndex(item.id), item])));
             const currentItem = computed(() => itemByIndex.value[currentIndex.value]);
 
-
-            const getUrlContent = async (url) => {
+            const getHtmlDocFromUrl = async (url) => {
                 const response = await fetch(proxyUrl + url);
-                return await response.text();
+                const html = await response.text();
+
+                // Handle relative references in html
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+
+                // Get all link from head
+                const links = doc.head.querySelectorAll('link');
+                const anchors = doc.body.querySelectorAll('a');
+
+                // Replace all link and anchors with absolute url
+                [...links, ...anchors].forEach(link => {
+                    const href = link.getAttribute('href');
+
+                    if(href && !href.startsWith('http')) {
+                        link.setAttribute('href', new URL(href, url).href);
+                    }
+                });
+
+                // Replace each image src with absolute url
+                const images = doc.body.querySelectorAll('img');
+                images.forEach(image => {
+                    const src = image.getAttribute('src');
+                    if(src && !src.startsWith('http')) {
+                        image.setAttribute('src', new URL(src, url).href);
+                    }
+                });
+
+                return doc;
             }
 
             const parseIndex = (value) => {
@@ -125,6 +184,14 @@
                 window.history.pushState({}, '', window.location.href.split('#')[0] + `#${indexPrefix}${index}`);
             }
 
+            const scrollOntoItem = (item) => {
+                item.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'nearest',
+                    inline: 'start'
+                });
+            }
+
             const currentIndex = computed({
                 get: () => parseIndex(hash.value) ?? 0,
                 set: (index) => {
@@ -132,11 +199,7 @@
                     currentItem.value.focus();
 
                     // Scroll onto next item
-                    itemByIndex.value[index].scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'nearest',
-                        inline: 'start'
-                    });
+                    scrollOntoItem(itemByIndex.value[index]);
 
                     // Set to url
                     setUrlIndex(index);
@@ -155,6 +218,48 @@
                 currentIndex.value = getPreviousIndex(index);
             }
 
+            const setRestaurantLoaded = (index) => {
+                restaurants.value[index].isLoaded = true;
+            }
+
+            const restaurantsLoaded = computed(() => restaurants.value.every(restaurant => restaurant.isLoaded));
+
+            const handleRestaurantsHandlers = async () => {
+                for (const restaurant of restaurants.value.filter(restaurant => restaurant.handler)) {
+                    try {
+                        restaurant.content = await restaurant.handler(restaurant.url)
+                    } catch (e) {
+                        console.error(e)
+                    }
+                }
+            }
+
+            const handleRestaurantOnShow = (index) => {
+                const restaurant = restaurants.value[index];
+                const item = itemByIndex.value[index];
+                const iframe = item.querySelector('iframe');
+
+                // Handle on show
+                if(restaurant.onShow) {
+                    restaurant.onShow(iframe);
+                }
+            }
+            const handleRestaurantsOnShow = async () => {
+                // Wait for restaurantLoaded with timeout
+                await new Promise((resolve) => {
+                    const interval = setInterval(() => {
+                        if(restaurantsLoaded.value) {
+                            clearInterval(interval);
+                            resolve();
+                        }
+                    }, 250);
+                });
+
+                for (const index in Object.keys(itemByIndex.value)) {
+                    handleRestaurantOnShow(index);
+                }
+            }
+
             // Sync hash
             setInterval(() => {
                 if(window.location.hash !== hash.value) {
@@ -165,7 +270,12 @@
             // Watch to refresh index
             watch([isMobile, enableCarousel], () => {
                 currentIndex.value = 0;
-            })
+            });
+
+            // Watch current item to apply handling
+            watch(currentIndex, (index) => {
+                handleRestaurantOnShow(index);
+            });
 
             // Register key shortcuts
             onKeyStroke('ArrowLeft', (e) => {
@@ -180,17 +290,11 @@
             });
 
             onMounted(async () => {
-                // Run handlers for restaurants that have them
-                for (const restaurant of restaurants.value.filter(restaurant => restaurant.handler)) {
-                    try {
-                        restaurant.content = await restaurant.handler(restaurant.url)
-                    } catch (e) {
-                        console.error(e)
-                    }
-                }
-
                 // Reset index
                 currentIndex.value = 0;
+
+                await handleRestaurantsHandlers();
+                await handleRestaurantsOnShow();
             })
 
             return {
@@ -202,6 +306,7 @@
                 restaurants,
                 currentIndex,
                 hash,
+                setRestaurantLoaded,
                 setNextIndex,
                 setPreviousIndex,
                 getNextIndex,
