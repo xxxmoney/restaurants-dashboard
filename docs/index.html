@@ -86,8 +86,7 @@
                         return doc.documentElement.outerHTML;
                     },
                     onShow: (iframe) => {
-                        // TODO
-                        console.log(iframe);
+                        // Click on menu
                         const marker = iframe.contentDocument.querySelector('.marker');
                         marker.click();
                     },
@@ -128,7 +127,8 @@
                         return doc.documentElement.outerHTML;
                     },
                     onShow: (iframe) => {
-                        // TODO
+                        // Reload iframe
+                        iframe.contentDocument.location.reload();
                     },
                     isLoaded: false
                 },
@@ -141,8 +141,8 @@
             const itemByIndex = computed(() => Object.fromEntries(carouselItemsRef.value.map(item => [parseIndex(item.id), item])));
             const currentItem = computed(() => itemByIndex.value[currentIndex.value]);
 
-            const getHtmlDocFromUrl = async (url) => {
-                const response = await fetch(proxyUrl + url);
+            const getHtmlDocFromUrl = async (url, useProxy = true) => {
+                const response = await fetch(useProxy ? `${proxyUrl}${url}` : url);
                 const html = await response.text();
 
                 // Handle relative references in html
@@ -170,6 +170,16 @@
                         image.setAttribute('src', new URL(src, url).href);
                     }
                 });
+
+                // Replace each script src with absolute url
+                const scripts = doc.body.querySelectorAll('script');
+                scripts.forEach(script => {
+                    const src = script.getAttribute('src');
+                    if(src && !src.startsWith('http')) {
+                        script.setAttribute('src', new URL(src, url).href);
+                    }
+                });
+
 
                 return doc;
             }
