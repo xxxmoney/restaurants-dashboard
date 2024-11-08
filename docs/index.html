@@ -86,6 +86,10 @@
                         return doc.documentElement.outerHTML;
                     },
                     onShow: (iframe) => {
+                        if(!iframe.contentDocument) {
+                            return;
+                        }
+
                         // Click on menu
                         const marker = iframe.contentDocument.querySelector('.marker');
                         marker.click();
@@ -128,7 +132,7 @@
                     },
                     onShow: (iframe) => {
                         // Reload iframe
-                        iframe.contentDocument.location.reload();
+                        //iframe.contentDocument.location.reload();
                     },
                     isLoaded: false
                 },
