@@ -96,14 +96,20 @@ export default {
 				responseHeaders.set("Access-Control-Expose-Headers", exposedHeaders.join(","));
 				responseHeaders.set("cors-received-headers", JSON.stringify(allResponseHeaders));
 
-				const responseBody = isPreflightRequest ? null : await response.arrayBuffer();
+				// Try get charset from html response
+				const responseBuffer = await response.arrayBuffer();
+				const charsetRegex = /<meta.*?charset=['"](.*?)['"].*?>/i;
+				const charset = charsetRegex.exec(new TextDecoder().decode(responseBuffer));
+
+				const decoder = new TextDecoder(charset ? charset[1] : "utf-8");
+				const decodedText = decoder.decode(responseBuffer);
 
 				const responseInit = {
 					headers: responseHeaders,
 					status: isPreflightRequest ? 200 : response.status,
 					statusText: isPreflightRequest ? "OK" : response.statusText
 				};
-				return new Response(responseBody, responseInit);
+				return new Response(decodedText, responseInit);
 
 			} else {
 				let responseHeaders = new Headers();
