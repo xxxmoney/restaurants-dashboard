@@ -241,7 +241,7 @@
                     await restaurant.onLoad(itemByIndex.value[index].querySelector('iframe'));
                 }
 
-                if(!isMobile.value && !enableCarousel.value) {
+                if(!isMobile.value && !enableCarousel.value || currentIndex.value === index) {
                     await restaurantOnShow(index);
                 }
             }
