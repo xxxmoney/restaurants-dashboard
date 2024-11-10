@@ -110,6 +110,11 @@
                         const doc = await getHtmlDocFromUrl(url);
                         return doc.documentElement.outerHTML;
                     },
+                    onShow: async (iframe) => {
+                        // Focus on menu - second content element
+                        const menu = Array.from(iframe.contentDocument.querySelectorAll('.content table'))[1];
+                        scrollOntoItem(menu);
+                    },
                     isLoaded: false
                 },
                 {
@@ -202,8 +207,8 @@
             const scrollOntoItem = (item) => {
                 item.scrollIntoView({
                     behavior: 'smooth',
-                    block: 'nearest',
-                    inline: 'start'
+                    block: 'start',
+                    inline: 'center',
                 });
             }
 
