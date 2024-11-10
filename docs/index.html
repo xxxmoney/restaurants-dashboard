@@ -139,6 +139,14 @@
                         // Focus on menu
                         const menu = iframe.contentDocument.getElementById('mu-reservation');
                         scrollOntoItem(menu);
+
+                        // Select current day
+                        const dayLinks = iframe.contentDocument.querySelectorAll('.fr-tyden-menu li a');
+                        const currentDayString = new Date().toLocaleDateString('cs-CZ', { weekday: 'long' });
+                        const currentDay = Array.from(dayLinks).find(link => link.textContent.trim().toLocaleLowerCase() === currentDayString.toLowerCase());
+                        if(currentDay) {
+                            currentDay.click();
+                        }
                     },
                     isLoaded: false
                 },
