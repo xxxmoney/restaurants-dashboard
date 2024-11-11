@@ -112,7 +112,7 @@
                     },
                     onShow: async (iframe) => {
                         // Focus on menu - second content element
-                        const menu = Array.from(iframe.contentDocument.querySelectorAll('.content table'))[1];
+                        const menu = iframe.contentDocument.querySelector('.content table');
                         scrollOntoItem(menu);
                     },
                     isLoaded: false
