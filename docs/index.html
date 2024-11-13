@@ -47,7 +47,7 @@
         <div class="flex-1 carousel" :class="{ 'lg:grid lg:grid-cols-4': !enableCarousel }">
             <template v-for="(restaurant, index) in restaurants">
                 <div :id="`${indexPrefix}${index}`" class="relative w-full max-lg:relative carousel-item flex flex-col" ref="carouselItemsRef">
-                    <div v-if="!isMobile && !enableCarousel" class="text-center my-3 flex flex-row justify-center">
+                    <div v-if="!isMobile && !enableCarousel" class="text-center py-3 flex flex-row justify-center">
                         <a :href="restaurant.url" target="_blank" class=" text-2xl text-black dark:text-white m-auto">{{ restaurant.name }}</a>
                     </div>
 
@@ -142,6 +142,9 @@
                         return doc.documentElement.outerHTML;
                     },
                     onShow: async (iframe) => {
+                        // Timeout
+                        await new Promise(resolve => setTimeout(resolve, 1000));
+
                         // Focus on menu
                         const menu = iframe.contentDocument.getElementById('mu-reservation');
                         scrollOntoItem(menu);
@@ -306,7 +309,11 @@
             }
             const restaurantsOnShow = async () => {
                 for (const index of Object.keys(itemByIndex.value)) {
-                    await restaurantOnShow(index);
+                    try {
+                        await restaurantOnShow(index);
+                    } catch (e) {
+                        console.error(e)
+                    }
                 }
             }
 
@@ -318,10 +325,10 @@
             }, 100);
 
             // Watch to refresh index
-            watch([isMobile, enableCarousel], () => {
+            watch(enableCarousel, (newValue) => {
                 currentIndex.value = 0;
 
-                if(!isMobile.value && !enableCarousel.value) {
+                if(!newValue) {
                     restaurantsOnShow();
                 }
             });
