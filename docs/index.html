@@ -33,7 +33,9 @@
     <div class="w-full h-full flex flex-col gap-4">
         <div class="flex-0 text-center my-2">
             <div id="header" class="relative flex flex-row justify-center items-center text-black dark:text-white gap-8">
-                <h1 v-if="isMobile || enableCarousel" class="text-2xl z-10">{{ currentRestaurant.name }}</h1>
+                <div v-if="isMobile || enableCarousel" class="z-10">
+                    <a class="text-2xl" :href="currentRestaurant.url" target="_blank">{{ currentRestaurant.name }}</a>
+                </div>
                 <h1 v-else class="text-2xl z-10">Restaurace</h1>
 
                 <div class="tooltip hidden lg:flex flex-row justify-center z-10" data-tip="Carousel">
@@ -44,7 +46,11 @@
 
         <div class="flex-1 carousel" :class="{ 'lg:grid lg:grid-cols-4': !enableCarousel }">
             <template v-for="(restaurant, index) in restaurants">
-                <div :id="`${indexPrefix}${index}`" class="relative w-full max-lg:relative carousel-item" ref="carouselItemsRef">
+                <div :id="`${indexPrefix}${index}`" class="relative w-full max-lg:relative carousel-item flex flex-col" ref="carouselItemsRef">
+                    <div v-if="!isMobile && !enableCarousel" class="text-center my-3 flex flex-row justify-center">
+                        <a :href="restaurant.url" target="_blank" class=" text-2xl text-black dark:text-white m-auto">{{ restaurant.name }}</a>
+                    </div>
+
                     <template v-if="restaurant.handler">
                         <div v-if="!restaurant.content" class="w-full h-full flex flex-row justify-center items-center font-bold">
                             <span class="loading loading-spinner loading-xs"></span>
@@ -62,7 +68,7 @@
                         </div>
                     </Teleport>
 
-                    <div class="absolute left-1/2 top-1 -translate-x-1/2 transform">
+                    <div class="absolute left-1/2 top-1 -translate-x-1/2 transform" :class="{ 'top-16': !isMobile && !enableCarousel }">
                         <button @click.prevent="loadRestaurant(index)" class="btn btn-lg lg:btn-sm">REFRESH</button>
                     </div>
                 </div>
