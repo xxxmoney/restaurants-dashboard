@@ -129,7 +129,30 @@
                     zoom: 1,
                     handler: async (url) => {
                         const doc = await getHtmlDocFromUrl(url);
+
+                        // Set inner frame
+                        const innerFrame = doc.querySelector('iframe');
+                        const innerDoc = await getHtmlDocFromUrl(innerFrame.src);
+                        innerFrame.srcdoc = innerDoc.documentElement.outerHTML;
+
                         return doc.documentElement.outerHTML;
+                    },
+                    onShow: async (iframe) => {
+                        const innerFrame = iframe.contentDocument.querySelector('iframe');
+
+                        // TODO: fix encoding for inner frame
+
+                        // Focus on menu - second content element
+                        const dayTitles = Array.from(innerFrame.contentDocument.querySelectorAll('.content h2'));
+                        console.log(dayTitles);
+                        // Find current day
+                        const currentDayString = new Date().toLocaleDateString('cs-CZ', { weekday: 'long' });
+                        const currentDayTitle = dayTitles.find(title => title.textContent.trim().toLocaleLowerCase().startsWith(currentDayString.toLowerCase()));
+                        console.log(currentDayTitle);
+
+                        if (currentDayTitle) {
+                            scrollOntoItem(currentDayTitle);
+                        }
                     },
                     isLoaded: false
                 },
