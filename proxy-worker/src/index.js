@@ -29,6 +29,7 @@ export default {
 		const isPreflightRequest = (event.request.method === "OPTIONS");
 
 		const originUrl = new URL(event.request.url);
+		const originUrlParams = new URLSearchParams(originUrl.search);
 
 		// Function to modify headers to enable CORS
 		function setupCORSHeaders(headers) {
@@ -46,7 +47,7 @@ export default {
 			return headers;
 		}
 
-		const targetUrl = decodeURIComponent(decodeURIComponent(originUrl.search.substr(1)));
+		const targetUrl = decodeURIComponent(decodeURIComponent(originUrlParams.get("url")));
 
 		const originHeader = event.request.headers.get("origin");
 
@@ -101,7 +102,7 @@ export default {
 				const charsetRegex = /<meta.*?charset=['"](.*?)['"].*?>/i;
 				const charset = charsetRegex.exec(new TextDecoder().decode(responseBuffer));
 
-				const decoder = new TextDecoder(charset ? charset[1] : "utf-8");
+				const decoder = new TextDecoder(originUrlParams.get("charset") ?? (charset ? charset[1] : "utf-8"));
 				const decodedText = decoder.decode(responseBuffer);
 
 				const responseInit = {
