@@ -83,7 +83,7 @@
 
     createApp({
         setup() {
-            const proxyUrl = 'https://proxy-worker.xxxmoney111.workers.dev/?';
+            const proxyUrl = 'https://proxy-worker.xxxmoney111.workers.dev';
             const indexPrefix = 'slide_';
 
             const carouselItemsRef = ref(null);
@@ -168,8 +168,12 @@
             const itemByIndex = computed(() => Object.fromEntries(carouselItemsRef.value.map(item => [parseIndex(item.id), item])));
             const currentItem = computed(() => itemByIndex.value[currentIndex.value]);
 
-            const getHtmlDocFromUrl = async (url, useProxy = true) => {
-                const response = await fetch(useProxy ? `${proxyUrl}${url}` : url);
+            const getHtmlDocFromUrl = async (url, charset = '', useProxy = true) => {
+                const searchParams = new URLSearchParams({
+                    url: url,
+                    charset: charset,
+                });
+                const response = await fetch(useProxy ? `${proxyUrl}?${searchParams}` : url);
                 const html = await response.text();
 
                 // Handle relative references in html
