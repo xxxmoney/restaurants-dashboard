@@ -83,7 +83,9 @@
 
     createApp({
         setup() {
-            const proxyUrl = 'https://proxy-worker.xxxmoney111.workers.dev';
+            //const proxyUrl = 'https://proxy-worker.xxxmoney111.workers.dev';
+            // DEBUG
+            const proxyUrl = 'http://localhost:8787';
             const indexPrefix = 'slide_';
 
             const carouselItemsRef = ref(null);
@@ -132,7 +134,7 @@
 
                         // Set inner frame
                         const innerFrame = doc.querySelector('iframe');
-                        const innerDoc = await getHtmlDocFromUrl(innerFrame.src);
+                        const innerDoc = await getHtmlDocFromUrl(innerFrame.src, 'windows-1250');
                         innerFrame.srcdoc = innerDoc.documentElement.outerHTML;
 
                         return doc.documentElement.outerHTML;
@@ -191,11 +193,14 @@
             const itemByIndex = computed(() => Object.fromEntries(carouselItemsRef.value.map(item => [parseIndex(item.id), item])));
             const currentItem = computed(() => itemByIndex.value[currentIndex.value]);
 
-            const getHtmlDocFromUrl = async (url, charset = '', useProxy = true) => {
-                const searchParams = new URLSearchParams({
-                    url: url,
-                    charset: charset,
-                });
+            const getHtmlDocFromUrl = async (url, charset = null, useProxy = true) => {
+                const searchParamsObject = {
+                    url: url
+                };
+                if (charset) {
+                    searchParamsObject.charset = charset;
+                }
+                const searchParams = new URLSearchParams(searchParamsObject);
                 const response = await fetch(useProxy ? `${proxyUrl}?${searchParams}` : url);
                 const html = await response.text();
 
