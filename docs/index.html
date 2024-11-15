@@ -140,17 +140,15 @@
                         return doc.documentElement.outerHTML;
                     },
                     onShow: async (iframe) => {
-                        const innerFrame = iframe.contentDocument.querySelector('iframe');
+                        // Timeout
+                        await new Promise(resolve => setTimeout(resolve, 500));
 
-                        // TODO: fix encoding for inner frame
+                        const innerFrame = iframe.contentDocument.querySelector('iframe');
 
                         // Focus on menu - second content element
                         const dayTitles = Array.from(innerFrame.contentDocument.querySelectorAll('.content h2'));
-                        console.log(dayTitles);
-                        // Find current day
                         const currentDayString = new Date().toLocaleDateString('cs-CZ', { weekday: 'long' });
                         const currentDayTitle = dayTitles.find(title => title.textContent.trim().toLocaleLowerCase().startsWith(currentDayString.toLowerCase()));
-                        console.log(currentDayTitle);
 
                         if (currentDayTitle) {
                             scrollOntoItem(currentDayTitle);
