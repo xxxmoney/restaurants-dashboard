@@ -97,7 +97,10 @@ export const useRestaurantsStore = defineStore('restaurants', () => {
             isLoaded: false
         },
     ]);
-    const restaurantToIndex = ref(new Map(restaurants.value.map((restaurant, index) => [restaurant, index])));
 
-    return {restaurants, restaurantToIndex}
+    function getRestaurantIndex(restaurant) {
+        return restaurants.value.findIndex(r => r.name === restaurant.name);
+    }
+
+    return {restaurants, getRestaurantIndex}
 })
