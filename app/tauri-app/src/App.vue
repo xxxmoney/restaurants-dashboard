@@ -1,10 +1,15 @@
 <script setup>
+import NavBar from '@/components/layout/NavBar.vue'
+
 </script>
 
 <template>
-  <main>
-    <h1>TEST</h1>
-  </main>
+  <div>
+    <NavBar />
+
+    <router-view />
+  </div>
+
 </template>
 
 <style>
