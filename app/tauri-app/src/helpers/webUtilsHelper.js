@@ -1,6 +1,6 @@
 const scrollOntoItem = (item) => {
     item.scrollIntoView({
-        behavior: 'smooth',
+        behavior: 'instant',
         block: 'start',
         inline: 'center',
     });

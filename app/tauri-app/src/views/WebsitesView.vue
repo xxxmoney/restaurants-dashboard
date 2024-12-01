@@ -4,9 +4,9 @@ import {useRestaurantsStore} from "@/stores/restaurants.js";
 import {storeToRefs} from "pinia";
 import Carousel from 'primevue/carousel';
 import Select from 'primevue/select';
-
 import Website from "@/components/views/websites/Website.vue";
 import {useIsMobile} from "@/composables/isMobile.js";
+import {useRestaurantHandling} from "@/composables/restaurantHandling.js";
 
 const store = useRestaurantsStore();
 const {restaurants, visibleCount, visibleCounts} = storeToRefs(store);
@@ -19,15 +19,11 @@ const currentPage = computed({
   set: (value) => store.currentPage = value
 });
 
-function refreshCarousel() {
-  refreshKey.value++;
-}
-
-watch(visibleCount, () => {
+function resetCarousel() {
   currentPage.value = 0;
 
-  refreshCarousel();
-});
+  refreshKey.value++;
+}
 
 onMounted(() => {
   if (isMobile.value) {
@@ -42,7 +38,7 @@ onMounted(() => {
 <template>
   <div class="flex flex-col gap-lg h-full">
     <div class="flex flex-row justify-center">
-      <Select v-model="visibleCount" :options="visibleCounts"/>
+      <Select v-model="visibleCount" :options="visibleCounts" @change="resetCarousel()"/>
     </div>
 
     <Carousel v-if="visibleCount" :key="refreshKey" :value="restaurants" v-model:page="currentPage"
