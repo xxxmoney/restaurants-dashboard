@@ -3,25 +3,9 @@
 @import "./primevue/tailwind.css";
 @import "tailwindcss/utilities";
 
-* {
-    box-sizing: border-box;
-}
-
-html, body {
-    margin: 0;
-    padding: 0;
-    min-width: 100vh;
-    min-height: 100vh;
-    width: 100%;
-    height: 100%;
-    font-family: 'Roboto', sans-serif;
-    font-size: 14px;
-    line-height: 1.5;
-}
-
-
-
-
+/*
+    Set colors
+*/
 /* Primary and Surface Palettes */
 :root {
     --p-primary-50: #ecfdf5;
@@ -96,5 +80,28 @@ html, body {
         --p-text-hover-muted-color: var(--p-surface-300);
     }
 }
+
+
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    min-width: 100vh;
+    min-height: 100vh;
+    width: 100%;
+    height: 100%;
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+
+    /* Set the colors */
+    background-color: var(--p-primary-contrast-color);
+    color: var(--p-text-color);
+}
+
+
 
 
