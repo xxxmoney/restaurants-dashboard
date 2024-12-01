@@ -46,7 +46,7 @@ onMounted(async () => {
 
     <Button @click="load"
             label="Refresh" severity="secondary"
-            class="absolute left-1/2 top-md -translate-x-1/2 transform"/>
+            class="absolute left-1/2 top-5xl -translate-x-1/2 transform"/>
 
     <template v-if="restaurant.handler">
       <div v-if="!restaurant.content" class="w-full h-full flex flex-row justify-center items-center font-bold">

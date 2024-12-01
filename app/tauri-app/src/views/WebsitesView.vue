@@ -1,26 +1,55 @@
 <script setup>
-import {ref, computed, onMounted} from "vue";
+import {ref, watch, onMounted, computed} from "vue";
 import {useRestaurantsStore} from "@/stores/restaurants.js";
 import {storeToRefs} from "pinia";
 import Carousel from 'primevue/carousel';
+import Select from 'primevue/select';
+
 import Website from "@/components/views/websites/Website.vue";
+import {useIsMobile} from "@/composables/isMobile.js";
 
 const store = useRestaurantsStore();
-const {restaurants, visibleCount} = storeToRefs(store);
+const {restaurants, visibleCount, visibleCounts} = storeToRefs(store);
 const containersRef = ref([]);
+const refreshKey = ref(0);
+const {isMobile} = useIsMobile();
 
 const currentPage = computed({
   get: () => store.currentPage,
   set: (value) => store.currentPage = value
 });
 
+function refreshCarousel() {
+  refreshKey.value++;
+}
+
+watch(visibleCount, () => {
+  currentPage.value = 0;
+
+  refreshCarousel();
+});
+
+onMounted(() => {
+  if (isMobile.value) {
+    store.setMobileVisibleCount();
+  } else {
+    store.setDesktopVisibleCount();
+  }
+});
+
 </script>
 
 <template>
-  <div class="h-full">
-    <Carousel :value="restaurants" v-model:page="currentPage" :numVisible="visibleCount" :numScroll="1" class="h-full">
-      <template #item="{ data }">
-        <Website ref="containersRef" class="relative h-[95%]" :index="store.getRestaurantIndex(data)"/>
+  <div class="flex flex-col gap-lg h-full">
+    <div class="flex flex-row justify-center">
+      <Select v-model="visibleCount" :options="visibleCounts"/>
+    </div>
+
+    <Carousel v-if="visibleCount" :key="refreshKey" :value="restaurants" v-model:page="currentPage"
+              :numVisible="visibleCount"
+              :numScroll="1" class="h-full">
+      <template #item="{ index }">
+        <Website ref="containersRef" class="relative h-[95%]" :index="index"/>
       </template>
     </Carousel>
   </div>

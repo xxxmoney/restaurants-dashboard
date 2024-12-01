@@ -1,4 +1,4 @@
-import {ref} from 'vue'
+import {computed, ref} from 'vue'
 import {defineStore} from 'pinia'
 import {getHtmlDocFromUrl} from "@/helpers/webScraperHelper.js";
 import {scrollOntoItem} from "@/helpers/webUtilsHelper.js";
@@ -98,7 +98,16 @@ export const useRestaurantsStore = defineStore('restaurants', () => {
         },
     ]);
     const currentPage = ref(0);
-    const visibleCount = ref(4);
+    const visibleCount = ref(0);
+    const visibleCounts = computed(() => [1, restaurants.value.length]);
+
+    function setMobileVisibleCount() {
+        visibleCount.value = 1;
+    }
+
+    function setDesktopVisibleCount() {
+        visibleCount.value = restaurants.value.length;
+    }
 
     function getRestaurantIndex(restaurant) {
         return restaurants.value.findIndex(r => r.name === restaurant.name);
@@ -108,5 +117,14 @@ export const useRestaurantsStore = defineStore('restaurants', () => {
         return index >= currentPage.value && index < currentPage.value + visibleCount.value;
     }
 
-    return {restaurants, currentPage, visibleCount, getRestaurantIndex, isIndexVisible}
+    return {
+        restaurants,
+        currentPage,
+        visibleCount,
+        visibleCounts,
+        getRestaurantIndex,
+        isIndexVisible,
+        setMobileVisibleCount,
+        setDesktopVisibleCount
+    }
 })
