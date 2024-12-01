@@ -8,7 +8,7 @@ export const useRestaurantsStore = defineStore('restaurants', () => {
         {
             name: 'U Šišků',
             url: 'https://www.restaurace-u-sisku.cz',
-            zoom: 0.75,
+            zoom: 1,
             handler: async (url) => {
                 const doc = await getHtmlDocFromUrl(url);
                 return doc.documentElement.outerHTML;
@@ -73,7 +73,7 @@ export const useRestaurantsStore = defineStore('restaurants', () => {
         {
             name: 'Palatino (Dole)',
             url: 'https://nominanza.com/index-pankrac.html#mu-reservation',
-            zoom: 0.75,
+            zoom: 1,
             handler: async (url) => {
                 const doc = await getHtmlDocFromUrl(url);
                 return doc.documentElement.outerHTML;
