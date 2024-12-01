@@ -3,15 +3,19 @@ import {useRestaurantsStore} from "@/stores/restaurants.js";
 export const useRestaurantHandling = () => {
     const store = useRestaurantsStore();
 
-    async function onRestaurantLoaded(restaurant, container, isVisble) {
+    async function onRestaurantLoaded(restaurant, container) {
         const frame = container.querySelector('iframe');
 
         if (restaurant.onLoad) {
             await restaurant.onLoad(frame);
         }
+    }
 
-        if (isVisble && restaurant.onShow) {
-            await restaurant.onShow(frame)
+    async function onRestaurantShow(restaurant, container) {
+        const frame = container.querySelector('iframe');
+
+        if (restaurant.onShow) {
+            await restaurant.onShow(frame);
         }
     }
 
@@ -36,6 +40,7 @@ export const useRestaurantHandling = () => {
 
     return {
         onRestaurantLoaded,
+        onRestaurantShow,
         loadRestaurant,
         loadRestaurants
     }

@@ -97,10 +97,16 @@ export const useRestaurantsStore = defineStore('restaurants', () => {
             isLoaded: false
         },
     ]);
+    const currentPage = ref(0);
+    const visibleCount = ref(4);
 
     function getRestaurantIndex(restaurant) {
         return restaurants.value.findIndex(r => r.name === restaurant.name);
     }
 
-    return {restaurants, getRestaurantIndex}
+    function isIndexVisible(index) {
+        return index >= currentPage.value && index < currentPage.value + visibleCount.value;
+    }
+
+    return {restaurants, currentPage, visibleCount, getRestaurantIndex, isIndexVisible}
 })

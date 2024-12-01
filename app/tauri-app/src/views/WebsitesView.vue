@@ -4,28 +4,23 @@ import {useRestaurantsStore} from "@/stores/restaurants.js";
 import {storeToRefs} from "pinia";
 import Carousel from 'primevue/carousel';
 import Website from "@/components/views/websites/Website.vue";
-import {useRestaurantHandling} from "@/composables/restaurantHandling.js";
-import {useIsMobile} from "@/composables/isMobile.js";
 
 const store = useRestaurantsStore();
-const {restaurants} = storeToRefs(store);
+const {restaurants, visibleCount} = storeToRefs(store);
 const containersRef = ref([]);
 
-const {loadRestaurants} = useRestaurantHandling();
-const {isMobile} = useIsMobile();
-
-const numVisible = computed(() => isMobile.value ? 1 : 4);
-
-onMounted(async () => {
-  await loadRestaurants(containersRef.value);
+const currentPage = computed({
+  get: () => store.currentPage,
+  set: (value) => store.currentPage = value
 });
+
 </script>
 
 <template>
   <div class="h-full">
-    <Carousel :value="restaurants" :numVisible="numVisible" :numScroll="1" class="h-full">
+    <Carousel :value="restaurants" v-model:page="currentPage" :numVisible="visibleCount" :numScroll="1" class="h-full">
       <template #item="{ data }">
-        <Website ref="containersRef" class="relative h-[95%]" :restaurant="data"/>
+        <Website ref="containersRef" class="relative h-[95%]" :index="store.getRestaurantIndex(data)"/>
       </template>
     </Carousel>
   </div>
