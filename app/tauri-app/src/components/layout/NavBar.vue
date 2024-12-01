@@ -4,14 +4,17 @@
 
 <template>
   <nav class="flex flex-col md:flex-row gap-4xl py-2xl">
-    <h1 class="text-3xl max-md:text-center">Restaurants</h1>
+    <RouterLink to="/" class="text-3xl max-md:text-center">Restaurants</RouterLink>
 
     <ul class="flex flex-col md:flex-row items-center gap-md">
       <li>
         <RouterLink to="/">Home</RouterLink>
       </li>
       <li>
-        <RouterLink to="/overview">Overview</RouterLink>
+        <RouterLink to="/websites">Webs</RouterLink>
+      </li>
+      <li>
+        <RouterLink to="/menus">Menus</RouterLink>
       </li>
     </ul>
   </nav>
