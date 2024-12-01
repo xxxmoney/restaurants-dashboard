@@ -6,7 +6,6 @@ import Carousel from 'primevue/carousel';
 import Select from 'primevue/select';
 import Website from "@/components/views/websites/Website.vue";
 import {useIsMobile} from "@/composables/isMobile.js";
-import {useRestaurantHandling} from "@/composables/restaurantHandling.js";
 
 const store = useRestaurantsStore();
 const {restaurants, visibleCount, visibleCounts} = storeToRefs(store);

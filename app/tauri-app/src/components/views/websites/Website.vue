@@ -18,20 +18,22 @@ const {loadRestaurant, onRestaurantLoaded, onRestaurantShow} = useRestaurantHand
 const restaurant = computed(() => restaurants.value[index]);
 const isVisible = computed(() => store.isIndexVisible(index));
 
-async function whenVisibleOnShow() {
-  if (isVisible.value) {
-    await onRestaurantShow(restaurant.value, containerRef.value);
-  }
+async function onShow() {
+  await onRestaurantShow(restaurant.value, containerRef.value);
 }
 
 async function load() {
   await loadRestaurant(restaurant.value, containerRef.value)
 
-  await whenVisibleOnShow();
+  if (isVisible.value) {
+    await onShow();
+  }
 }
 
-watch(isVisible, async () => {
-  await whenVisibleOnShow();
+watch(isVisible, async (value) => {
+  if (value) {
+    await onShow();
+  }
 });
 
 onMounted(async () => {

@@ -35,7 +35,7 @@ export const useRestaurantsStore = defineStore('restaurants', () => {
             onShow: async (iframe) => {
                 // Focus on menu - second content element
                 const menu = iframe.contentDocument.querySelector('.content table');
-                scrollOntoItem(menu);
+                scrollOntoItem(iframe, menu);
             },
             isLoaded: false
         },
@@ -65,7 +65,7 @@ export const useRestaurantsStore = defineStore('restaurants', () => {
                 const currentDayTitle = dayTitles.find(title => title.textContent.trim().toLocaleLowerCase().startsWith(currentDayString.toLowerCase()));
 
                 if (currentDayTitle) {
-                    scrollOntoItem(currentDayTitle);
+                    scrollOntoItem(innerFrame, currentDayTitle);
                 }
             },
             isLoaded: false
@@ -84,7 +84,7 @@ export const useRestaurantsStore = defineStore('restaurants', () => {
 
                 // Focus on menu
                 const menu = iframe.contentDocument.getElementById('mu-reservation');
-                scrollOntoItem(menu);
+                scrollOntoItem(iframe, menu);
 
                 // Select current day
                 const dayLinks = iframe.contentDocument.querySelectorAll('.fr-tyden-menu li a');
