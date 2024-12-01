@@ -1,9 +1,7 @@
 <script setup>
 import {useRestaurantsStore} from "@/stores/restaurants.js";
 
-const restaurantsStore = useRestaurantsStore();
-
-const restaurants = restaurantsStore.restaurants;
+const {restaurants} = useRestaurantsStore();
 </script>
 
 <template>
