@@ -1,75 +1,24 @@
 <script setup>
 import {ref, onMounted} from "vue";
-import Loading from "@/components/common/Loading.vue";
 import {useRestaurantsStore} from "@/stores/restaurants.js";
 import {storeToRefs} from "pinia";
-import Button from 'primevue/button';
+import Website from "@/components/views/websites/Website.vue";
+import {useRestaurantHandling} from "@/composables/restaurantHandling.js";
 
 const store = useRestaurantsStore();
 const {restaurants} = storeToRefs(store);
 const containersRef = ref([]);
 
-async function onRestaurantLoaded(restaurant) {
-  const container = containersRef.value[store.getRestaurantIndex(restaurant)];
-  const frame = container.querySelector('iframe');
-
-  if (restaurant.onLoad) {
-    await restaurant.onLoad(frame);
-  }
-
-  if (restaurant.onShow) {
-    await restaurant.onShow(frame)
-  }
-}
-
-async function loadRestaurant(restaurant) {
-  if (restaurant.handler) {
-    restaurant.content = null;
-    restaurant.content = await restaurant.handler(restaurant.url);
-  } else {
-    const container = containersRef.value[store.getRestaurantIndex(restaurant)];
-    const frame = container.querySelector('iframe');
-
-    // Refresh iframe
-    frame.src = '';
-    frame.src = restaurant.url;
-  }
-}
-
-async function loadRestaurants() {
-  for (const restaurant of restaurants.value) {
-    await loadRestaurant(restaurant);
-  }
-}
+const {loadRestaurants} = useRestaurantHandling();
 
 onMounted(async () => {
-  await loadRestaurants();
+  await loadRestaurants(containersRef.value);
 });
 </script>
 
 <template>
   <div class="h-full grid grid-cols-4">
-    <div v-for="restaurant in restaurants" class="relative" ref="containersRef">
-      <Button @click="loadRestaurant(restaurant)"
-              label="Refresh" severity="secondary"
-              class="absolute left-1/2 top-md -translate-x-1/2 transform"/>
-
-      <template v-if="restaurant.handler">
-        <div v-if="!restaurant.content" class="w-full h-full flex flex-row justify-center items-center font-bold">
-          <Loading/>
-        </div>
-        <iframe v-else ref="frames" :srcdoc="restaurant.content" @load="onRestaurantLoaded(restaurant)"
-                class="w-full h-full border-none"
-                :style="{ zoom: restaurant.zoom }"
-                sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-top-navigation allow-modals"></iframe>
-      </template>
-      <template v-else>
-        <iframe :src="restaurant.url" ref="frames" class="w-full h-full border-none"
-                @load="onRestaurantLoaded(restaurant)"
-                :style="{ zoom: restaurant.zoom }" referrerpolicy="unsafe-url"
-                sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-top-navigation allow-modals"></iframe>
-      </template>
-    </div>
+    <Website ref="containersRef" v-for="restaurant in restaurants" class="relative" :restaurant="restaurant"/>
   </div>
 </template>
 
