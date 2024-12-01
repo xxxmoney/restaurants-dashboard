@@ -96,7 +96,8 @@ export const useRestaurantsStore = defineStore('restaurants', () => {
             },
             isLoaded: false
         },
-    ])
+    ]);
+    const restaurantToIndex = ref(new Map(restaurants.value.map((restaurant, index) => [restaurant, index])));
 
-    return {restaurants}
+    return {restaurants, restaurantToIndex}
 })

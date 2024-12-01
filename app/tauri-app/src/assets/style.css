@@ -83,7 +83,7 @@
     box-sizing: border-box;
 }
 
-html, body {
+html, body, #app {
     margin: 0;
     padding: 0;
     min-width: 100vh;
