@@ -3,9 +3,6 @@
 @import "./primevue/tailwind.css";
 @import "tailwindcss/utilities";
 
-/*
-    Set colors
-*/
 /* Primary and Surface Palettes */
 :root {
     --p-primary-50: #ecfdf5;
@@ -101,7 +98,6 @@ html, body {
     background-color: var(--p-primary-contrast-color);
     color: var(--p-text-color);
 }
-
 
 
 
