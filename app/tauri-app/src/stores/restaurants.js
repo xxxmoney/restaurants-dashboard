@@ -59,6 +59,9 @@ export const useRestaurantsStore = defineStore('restaurants', () => {
                 return doc.documentElement.outerHTML;
             },
             onShow: async (iframe) => {
+                // Set html background to white
+                iframe.contentDocument.body.style.backgroundColor = 'white';
+
                 // Timeout
                 await new Promise(resolve => setTimeout(resolve, 500));
 
