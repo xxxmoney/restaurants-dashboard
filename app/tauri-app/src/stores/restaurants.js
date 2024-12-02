@@ -22,6 +22,16 @@ export const useRestaurantsStore = defineStore('restaurants', () => {
                 const marker = iframe.contentDocument.querySelector('.marker');
                 marker.click();
             },
+            onShow(iframe) {
+                if (!iframe?.contentDocument) {
+                    return;
+                }
+
+                // TODO: scroll onto bottom of image
+                const img = iframe.contentDocument.querySelector('img');
+
+                return {};
+            },
             isLoaded: false
         },
         {
