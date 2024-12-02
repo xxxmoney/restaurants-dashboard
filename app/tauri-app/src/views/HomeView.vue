@@ -23,7 +23,7 @@ const goToMenus = () => {
       <template #title>Webs</template>
       <template #content>
         <p class="m-0 h-full">
-          Explore restaurants' website, just click below, don't be shy!
+          Explore restaurants' website, just click here, don't be shy!
         </p>
       </template>
       <template #footer>
