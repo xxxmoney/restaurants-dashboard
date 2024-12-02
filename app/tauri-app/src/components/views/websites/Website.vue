@@ -58,7 +58,7 @@ onMounted(async () => {
       <div v-if="!restaurant.content" class="w-full h-full flex flex-row justify-center items-center font-bold">
         <Loading/>
       </div>
-      <iframe v-else ref="frames" :srcdoc="restaurant.content"
+      <iframe v-else ref="frames" :srcdoc="restaurant.content" :class="{'hidden': !isVisible}"
               @load="onRestaurantLoaded(restaurant, containerRef)"
               class="w-full h-full border-none"
               :style="{ zoom: restaurant.zoom }"

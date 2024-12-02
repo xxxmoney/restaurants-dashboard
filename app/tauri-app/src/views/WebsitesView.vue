@@ -1,5 +1,5 @@
 <script setup>
-import {ref, watch, onMounted, computed} from "vue";
+import {ref, onMounted, computed, onUnmounted, onBeforeUnmount} from "vue";
 import {useRestaurantsStore} from "@/stores/restaurants.js";
 import {storeToRefs} from "pinia";
 import Carousel from 'primevue/carousel';
@@ -27,21 +27,34 @@ function resetCarousel() {
   refreshKey.value++;
 }
 
+let interval = null;
+
 onMounted(() => {
   if (isMobile.value) {
     store.setMobileVisibleCount();
   } else {
     store.setDesktopVisibleCount();
   }
+
+  resetCarousel();
+
+  // Process scrolling queue
+  interval = setInterval(async () => {
+    const item = getItemFromScrollQueue();
+    if (item) {
+      // Timeout
+      await new Promise(resolve => setTimeout(resolve, 500));
+
+      scrollOntoItem(item);
+    }
+  }, 250);
 });
 
-// Process scrolling queue
-setInterval(() => {
-  const item = getItemFromScrollQueue();
-  if (item) {
-    scrollOntoItem(item);
+onBeforeUnmount(() => {
+  if (interval) {
+    clearInterval(interval);
   }
-}, 250);
+});
 
 </script>
 
