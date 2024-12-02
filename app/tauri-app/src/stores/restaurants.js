@@ -32,10 +32,15 @@ export const useRestaurantsStore = defineStore('restaurants', () => {
                 const doc = await getHtmlDocFromUrl(url);
                 return doc.documentElement.outerHTML;
             },
-            onShow: async (iframe) => {
+            onShow: (iframe) => {
                 // Focus on menu - second content element
                 const menu = iframe.contentDocument.querySelector('.content table');
-                scrollOntoItem(menu);
+
+                if (menu) {
+                    return {scrollInQueue: menu};
+                }
+
+                return {};
             },
             isLoaded: false
         },
@@ -65,8 +70,10 @@ export const useRestaurantsStore = defineStore('restaurants', () => {
                 const currentDayTitle = dayTitles.find(title => title.textContent.trim().toLocaleLowerCase().startsWith(currentDayString.toLowerCase()));
 
                 if (currentDayTitle) {
-                    scrollOntoItem(currentDayTitle);
+                    return {scrollInQueue: currentDayTitle};
                 }
+
+                return {};
             },
             isLoaded: false
         },
@@ -80,7 +87,7 @@ export const useRestaurantsStore = defineStore('restaurants', () => {
             },
             onShow: async (iframe) => {
                 // Timeout
-                await new Promise(resolve => setTimeout(resolve, 1000));
+                await new Promise(resolve => setTimeout(resolve, 500));
 
                 // Focus on menu
                 const menu = iframe.contentDocument.getElementById('mu-reservation');
@@ -93,6 +100,8 @@ export const useRestaurantsStore = defineStore('restaurants', () => {
                 if (currentDayLink) {
                     currentDayLink.click();
                 }
+
+                return {};
             },
             isLoaded: false
         },
@@ -100,6 +109,7 @@ export const useRestaurantsStore = defineStore('restaurants', () => {
     const currentPage = ref(0);
     const visibleCount = ref(0);
     const visibleCounts = computed(() => [1, restaurants.value.length]);
+    const scrollingQueue = ref([]);
 
     function setMobileVisibleCount() {
         visibleCount.value = 1;
@@ -122,9 +132,10 @@ export const useRestaurantsStore = defineStore('restaurants', () => {
         currentPage,
         visibleCount,
         visibleCounts,
+        scrollingQueue,
         getRestaurantIndex,
         isIndexVisible,
         setMobileVisibleCount,
-        setDesktopVisibleCount
+        setDesktopVisibleCount,
     }
 })

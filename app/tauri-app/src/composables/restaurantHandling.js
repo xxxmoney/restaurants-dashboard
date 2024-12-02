@@ -15,8 +15,10 @@ export const useRestaurantHandling = () => {
         const frame = container.querySelector('iframe');
 
         if (restaurant.onShow) {
-            await restaurant.onShow(frame);
+            return await restaurant.onShow(frame);
         }
+
+        return null;
     }
 
     async function loadRestaurant(restaurant, container) {
@@ -38,10 +40,36 @@ export const useRestaurantHandling = () => {
         }
     }
 
+    function addItemToScrollQueue(item, restaurant) {
+        const value = {
+            item,
+            index: store.getRestaurantIndex(restaurant)
+        };
+
+        store.scrollingQueue.push(value);
+    }
+
+    function getItemFromScrollQueue() {
+        // No item to scroll
+        if (store.scrollingQueue.length === 0) {
+            return null;
+        }
+
+        const {item, index} = store.scrollingQueue.shift();
+        // Not current page, should no be scrolled onto
+        if (store.isIndexVisible(index)) {
+            return item;
+        }
+
+        return null;
+    }
+
     return {
         onRestaurantLoaded,
         onRestaurantShow,
         loadRestaurant,
-        loadRestaurants
+        loadRestaurants,
+        addItemToScrollQueue,
+        getItemFromScrollQueue
     }
 }

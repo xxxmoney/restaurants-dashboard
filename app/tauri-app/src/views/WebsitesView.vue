@@ -6,9 +6,12 @@ import Carousel from 'primevue/carousel';
 import Select from 'primevue/select';
 import Website from "@/components/views/websites/Website.vue";
 import {useIsMobile} from "@/composables/isMobile.js";
+import {scrollOntoItem} from "@/helpers/webUtilsHelper.js";
+import {useRestaurantHandling} from "@/composables/restaurantHandling.js";
 
 const store = useRestaurantsStore();
-const {restaurants, visibleCount, visibleCounts} = storeToRefs(store);
+const {restaurants, visibleCount, visibleCounts, scrollingQueue} = storeToRefs(store);
+const {getItemFromScrollQueue} = useRestaurantHandling();
 const containersRef = ref([]);
 const refreshKey = ref(0);
 const {isMobile} = useIsMobile();
@@ -31,6 +34,14 @@ onMounted(() => {
     store.setDesktopVisibleCount();
   }
 });
+
+// Process scrolling queue
+setInterval(() => {
+  const item = getItemFromScrollQueue();
+  if (item) {
+    scrollOntoItem(item);
+  }
+}, 250);
 
 </script>
 

@@ -13,13 +13,17 @@ const containerRef = ref(null)
 
 const store = useRestaurantsStore();
 const {restaurants} = storeToRefs(store);
-const {loadRestaurant, onRestaurantLoaded, onRestaurantShow} = useRestaurantHandling();
+const {loadRestaurant, onRestaurantLoaded, onRestaurantShow, addItemToScrollQueue} = useRestaurantHandling();
 
 const restaurant = computed(() => restaurants.value[index]);
 const isVisible = computed(() => store.isIndexVisible(index));
 
 async function onShow() {
-  await onRestaurantShow(restaurant.value, containerRef.value);
+  const {scrollInQueue} = await onRestaurantShow(restaurant.value, containerRef.value);
+
+  if (scrollInQueue) {
+    addItemToScrollQueue(scrollInQueue, restaurant.value);
+  }
 }
 
 async function load() {
