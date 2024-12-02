@@ -56,12 +56,12 @@ export const useRestaurantsStore = defineStore('restaurants', () => {
                 const innerDoc = await getHtmlDocFromUrl(innerFrame.src, 'windows-1250');
                 innerFrame.srcdoc = innerDoc.documentElement.outerHTML;
 
+                // Set body background color as white
+                doc.body.style.backgroundColor = 'white';
+
                 return doc.documentElement.outerHTML;
             },
             onShow: async (iframe) => {
-                // Set html background to white
-                iframe.contentDocument.body.style.backgroundColor = 'white';
-
                 // Timeout
                 await new Promise(resolve => setTimeout(resolve, 500));
 
