@@ -1,5 +1,5 @@
 <script setup>
-import {ref, onMounted, computed, onUnmounted, onBeforeUnmount} from "vue";
+import {ref, onMounted, computed, watch, onBeforeUnmount} from "vue";
 import {useRestaurantsStore} from "@/stores/restaurants.js";
 import {storeToRefs} from "pinia";
 import Carousel from 'primevue/carousel';
@@ -15,6 +15,7 @@ const {getItemFromScrollQueue} = useRestaurantHandling();
 const containersRef = ref([]);
 const refreshKey = ref(0);
 const {isMobile} = useIsMobile();
+let interval = null;
 
 const currentPage = computed({
   get: () => store.currentPage,
@@ -27,9 +28,7 @@ function resetCarousel() {
   refreshKey.value++;
 }
 
-let interval = null;
-
-onMounted(() => {
+const setVisibleCountFromViewMode = () => {
   if (isMobile.value) {
     store.setMobileVisibleCount();
   } else {
@@ -37,6 +36,15 @@ onMounted(() => {
   }
 
   resetCarousel();
+}
+
+// Handle stuff when desktop/mobile view changes
+watch(isMobile, () => {
+  setVisibleCountFromViewMode();
+});
+
+onMounted(() => {
+  setVisibleCountFromViewMode();
 
   // Process scrolling queue
   interval = setInterval(async () => {
