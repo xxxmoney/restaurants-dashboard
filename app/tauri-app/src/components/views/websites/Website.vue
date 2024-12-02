@@ -47,28 +47,30 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div ref="containerRef" class="w-full h-full">
-    <h1 class="text-lg text-center mb-md">{{ restaurant.name }}</h1>
+  <div ref="containerRef" class="w-full h-full flex flex-col">
+    <h1 class="text-lg text-center mb-md flex-0">{{ restaurant.name }}</h1>
 
     <Button @click="load"
             label="Refresh" severity="secondary"
             class="absolute left-1/2 top-5xl -translate-x-1/2 transform"/>
 
-    <template v-if="restaurant.handler">
-      <div v-if="!restaurant.content" class="w-full h-full flex flex-row justify-center items-center font-bold">
-        <Loading/>
-      </div>
-      <iframe v-else ref="frames" :srcdoc="restaurant.content" :class="{'hidden': !isVisible}"
-              @load="onRestaurantLoaded(restaurant, containerRef)"
-              class="w-full h-full border-none"
-              :style="{ zoom: restaurant.zoom }"
-              sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-top-navigation allow-modals"></iframe>
-    </template>
-    <template v-else>
-      <iframe :src="restaurant.url" ref="frames" class="w-full h-full border-none"
-              @load="onRestaurantLoaded(restaurant, containerRef)"
-              :style="{ zoom: restaurant.zoom }" referrerpolicy="unsafe-url"
-              sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-top-navigation allow-modals"></iframe>
-    </template>
+    <div class="flex-1">
+      <template v-if="restaurant.handler">
+        <div v-if="!restaurant.content" class="w-full h-full flex flex-row justify-center items-center font-bold">
+          <Loading/>
+        </div>
+        <iframe v-else ref="frames" :srcdoc="restaurant.content" :class="{'hidden': !isVisible}"
+                @load="onRestaurantLoaded(restaurant, containerRef)"
+                class="w-full h-full border-none"
+                :style="{ zoom: restaurant.zoom }"
+                sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-top-navigation allow-modals"></iframe>
+      </template>
+      <template v-else>
+        <iframe :src="restaurant.url" ref="frames" class="w-full h-full border-none"
+                @load="onRestaurantLoaded(restaurant, containerRef)"
+                :style="{ zoom: restaurant.zoom }" referrerpolicy="unsafe-url"
+                sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-top-navigation allow-modals"></iframe>
+      </template>
+    </div>
   </div>
 </template>

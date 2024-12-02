@@ -68,7 +68,7 @@ onBeforeUnmount(() => {
               :numVisible="visibleCount"
               :numScroll="1" class="h-full">
       <template #item="{ index }">
-        <Website ref="containersRef" class="relative h-[95%]" :index="index"/>
+        <Website ref="containersRef" class="relative" :index="index"/>
       </template>
     </Carousel>
   </div>
