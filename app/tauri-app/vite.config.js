@@ -8,7 +8,7 @@ const host = process.env.TAURI_DEV_HOST;
 // https://vitejs.dev/config/
 export default defineConfig(async () => ({
     plugins: [vue()],
-    base: '/',
+    base: '/restaurants-dashboard/',
 
     resolve: {
         alias: {

@@ -18,7 +18,7 @@ const goToMenus = () => {
   <div class="grid gap-md grid-cols-2 md:grid-cols-4">
     <Card class="hero-card" @click="goToWebsites">
       <template #header>
-        <ImagePreview imageSrc="/images/restaurant.jpg"/>
+        <ImagePreview imageSrc="images/restaurant.jpg"/>
       </template>
       <template #title>Webs</template>
       <template #content>
@@ -33,7 +33,7 @@ const goToMenus = () => {
 
     <Card class="hero-card" @click="goToMenus">
       <template #header>
-        <ImagePreview imageSrc="/images/food.jpg"/>
+        <ImagePreview imageSrc="images/food.jpg"/>
       </template>
       <template #title>Menus</template>
       <template #content>
