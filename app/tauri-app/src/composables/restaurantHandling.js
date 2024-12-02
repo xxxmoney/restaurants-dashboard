@@ -18,7 +18,7 @@ export const useRestaurantHandling = () => {
             return await restaurant.onShow(frame);
         }
 
-        return null;
+        return {};
     }
 
     async function loadRestaurant(restaurant, container) {
