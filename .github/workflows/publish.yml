@@ -35,7 +35,7 @@ jobs:
         with:
           node-version: 20
           cache: 'npm'
-          path: './app/tauri-app/dist'
+          path: './app/tauri-app'
       - name: Install dependencies
         working-directory: './app/tauri-app'
         run: npm ci
