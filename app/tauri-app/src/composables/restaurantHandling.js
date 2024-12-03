@@ -1,7 +1,7 @@
-import {useRestaurantsStore} from "@/stores/restaurants.js";
+import {useWebStore} from "@/stores/webs.js";
 
 export const useRestaurantHandling = () => {
-    const store = useRestaurantsStore();
+    const store = useWebStore();
 
     async function onRestaurantLoaded(restaurant, container) {
         const frame = container.querySelector('iframe');
@@ -35,7 +35,7 @@ export const useRestaurantHandling = () => {
     }
 
     async function loadRestaurants(containers) {
-        for (const restaurant of store.restaurants) {
+        for (const restaurant of store.webs) {
             await loadRestaurant(restaurant, containers[store.getRestaurantIndex(restaurant)]);
         }
     }

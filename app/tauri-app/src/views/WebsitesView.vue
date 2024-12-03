@@ -1,6 +1,6 @@
 <script setup>
 import {ref, onMounted, computed, watch, onBeforeUnmount} from "vue";
-import {useRestaurantsStore} from "@/stores/restaurants.js";
+import {useWebStore} from "@/stores/webs.js";
 import {storeToRefs} from "pinia";
 import Carousel from 'primevue/carousel';
 import Select from 'primevue/select';
@@ -9,8 +9,8 @@ import {useIsMobile} from "@/composables/isMobile.js";
 import {scrollOntoItem} from "@/helpers/webUtilsHelper.js";
 import {useRestaurantHandling} from "@/composables/restaurantHandling.js";
 
-const store = useRestaurantsStore();
-const {restaurants, visibleCount, visibleCounts, scrollingQueue} = storeToRefs(store);
+const store = useWebStore();
+const {webs, visibleCount, visibleCounts} = storeToRefs(store);
 const {getItemFromScrollQueue} = useRestaurantHandling();
 const containersRef = ref([]);
 const refreshKey = ref(0);
@@ -72,7 +72,7 @@ onBeforeUnmount(() => {
       <Select v-model="visibleCount" :options="visibleCounts" @change="resetCarousel()"/>
     </div>
 
-    <Carousel v-if="visibleCount" :key="refreshKey" :value="restaurants" v-model:page="currentPage"
+    <Carousel v-if="visibleCount" :key="refreshKey" :value="webs" v-model:page="currentPage"
               :numVisible="visibleCount"
               :numScroll="1" class="h-full">
       <template #item="{ index }">
