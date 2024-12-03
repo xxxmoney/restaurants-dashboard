@@ -1,6 +1,6 @@
 import {computed, ref} from 'vue'
 import {defineStore} from 'pinia'
-import {restaurants} from "@/common/restaurantConstants.js";
+import {restaurants} from "@/common/constants/restaurantConstants.js";
 
 export const useWebStore = defineStore('webs', () => {
     const webs = ref([...restaurants])
