@@ -3,7 +3,7 @@ import {defineStore} from 'pinia'
 import {getHtmlDocFromUrl} from "@/helpers/webScraperHelper.js";
 import {scrollOntoItem} from "@/helpers/webUtilsHelper.js";
 
-export const useRestaurantsStore = defineStore('restaurants', () => {
+export const useWebStore = defineStore('restaurants', () => {
     const restaurants = ref([
         {
             name: 'U Šišků',

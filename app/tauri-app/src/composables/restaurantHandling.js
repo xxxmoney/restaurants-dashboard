@@ -1,7 +1,7 @@
-import {useRestaurantsStore} from "@/stores/restaurants.js";
+import {useWebStore} from "@/stores/webs.js";
 
 export const useRestaurantHandling = () => {
-    const store = useRestaurantsStore();
+    const store = useWebStore();
 
     async function onRestaurantLoaded(restaurant, container) {
         const frame = container.querySelector('iframe');

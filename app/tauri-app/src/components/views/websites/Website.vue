@@ -3,7 +3,7 @@ import {ref, computed, watch, onMounted} from "vue";
 import Loading from "@/components/common/Loading.vue";
 import Button from "primevue/button";
 import {useRestaurantHandling} from "@/composables/restaurantHandling.js";
-import {useRestaurantsStore} from "@/stores/restaurants.js";
+import {useWebStore} from "@/stores/webs.js";
 import {storeToRefs} from "pinia";
 
 const {index} = defineProps({
@@ -11,7 +11,7 @@ const {index} = defineProps({
 });
 const containerRef = ref(null)
 
-const store = useRestaurantsStore();
+const store = useWebStore();
 const {restaurants} = storeToRefs(store);
 const {loadRestaurant, onRestaurantLoaded, onRestaurantShow, addItemToScrollQueue} = useRestaurantHandling();
 
