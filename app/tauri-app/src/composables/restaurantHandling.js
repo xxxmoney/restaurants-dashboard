@@ -35,7 +35,7 @@ export const useRestaurantHandling = () => {
     }
 
     async function loadRestaurants(containers) {
-        for (const restaurant of store.restaurants) {
+        for (const restaurant of store.webs) {
             await loadRestaurant(restaurant, containers[store.getRestaurantIndex(restaurant)]);
         }
     }

@@ -10,7 +10,7 @@ import {scrollOntoItem} from "@/helpers/webUtilsHelper.js";
 import {useRestaurantHandling} from "@/composables/restaurantHandling.js";
 
 const store = useWebStore();
-const {restaurants, visibleCount, visibleCounts} = storeToRefs(store);
+const {webs, visibleCount, visibleCounts} = storeToRefs(store);
 const {getItemFromScrollQueue} = useRestaurantHandling();
 const containersRef = ref([]);
 const refreshKey = ref(0);
@@ -72,7 +72,7 @@ onBeforeUnmount(() => {
       <Select v-model="visibleCount" :options="visibleCounts" @change="resetCarousel()"/>
     </div>
 
-    <Carousel v-if="visibleCount" :key="refreshKey" :value="restaurants" v-model:page="currentPage"
+    <Carousel v-if="visibleCount" :key="refreshKey" :value="webs" v-model:page="currentPage"
               :numVisible="visibleCount"
               :numScroll="1" class="h-full">
       <template #item="{ index }">

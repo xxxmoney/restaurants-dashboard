@@ -12,10 +12,10 @@ const {index} = defineProps({
 const containerRef = ref(null)
 
 const store = useWebStore();
-const {restaurants} = storeToRefs(store);
+const {webs} = storeToRefs(store);
 const {loadRestaurant, onRestaurantLoaded, onRestaurantShow, addItemToScrollQueue} = useRestaurantHandling();
 
-const restaurant = computed(() => restaurants.value[index]);
+const restaurant = computed(() => webs.value[index]);
 const isVisible = computed(() => store.isIndexVisible(index));
 
 async function onShow() {
