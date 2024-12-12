@@ -4,12 +4,9 @@ import {Hono} from 'hono'
 const proxyRoute = new Hono()
 
 // Get proxied html
-proxyRoute.get('html', (c) => {
-    const html = ProxyService.getHtml()
-
-    return c.json([])
+proxyRoute.get('/', async (c) => {
+    return await ProxyService.fetch(c.req);
 })
-
 
 
 export { proxyRoute }

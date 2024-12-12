@@ -1,11 +1,11 @@
 
 // Configuration: Whitelist and Blacklist (not used in this version)
 // whitelist = [ "^http.?://www.zibri.org$", "zibri.org$", "test\\..*" ];  // regexp for whitelisted urls
-const blacklistUrls: string[] = [];           // regexp for blacklisted urls
-const whiteListUrls: string[] = [ ".*" ];   // regexp for whitelisted origins
+const blacklistUrls = [];           // regexp for blacklisted urls
+const whiteListUrls = [ ".*" ];   // regexp for whitelisted origins
 
 // Function to check if a given URI or origin is listed in the whitelist or blacklist
-function isUrlInList(uri: any, listing: any) {
+function isUrlInList(uri, listing) {
     console.log(uri)
 
     let isListed = false;
@@ -23,7 +23,7 @@ function isUrlInList(uri: any, listing: any) {
 }
 
 export const ProxyService = {
-    async fetch(request: Request) {
+    async fetch(request) {
         const event = { request: request };
 
         const isPreflightRequest = (event.request.method === "OPTIONS");
@@ -32,7 +32,7 @@ export const ProxyService = {
         const originUrlParams = new URLSearchParams(originUrl.search);
 
         // Function to modify headers to enable CORS
-        function setupCORSHeaders(headers: any) {
+        function setupCORSHeaders(headers) {
             headers.set("Access-Control-Allow-Origin", event.request.headers.get("origin"));
             if (isPreflightRequest) {
                 headers.set("Access-Control-Allow-Methods", event.request.headers.get("access-control-request-method"));
@@ -47,7 +47,7 @@ export const ProxyService = {
             return headers;
         }
 
-        const targetUrl = decodeURIComponent(decodeURIComponent(originUrlParams.get("url")!));
+        const targetUrl = decodeURIComponent(decodeURIComponent(originUrlParams.get("url")));
 
         const originHeader = event.request.headers.get("origin");
 
