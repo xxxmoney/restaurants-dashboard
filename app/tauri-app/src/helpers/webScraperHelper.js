@@ -1,4 +1,4 @@
-const PROXY_URL = 'https://proxy-worker.xxxmoney111.workers.dev';
+import { PROXY_URL } from "@/common/constants/commonConstants.js";
 
 const getHtmlDocFromUrl = async (url, charset = null, useProxy = true) => {
     const searchParamsObject = {
