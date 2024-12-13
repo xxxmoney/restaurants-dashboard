@@ -18,7 +18,7 @@ proxyRoute.get('/', async (c) => {
         return c.status(404);
     }
 
-    return c.text(html as string);
+    return c.text(html);
 })
 
 
