@@ -1,15 +1,20 @@
-import { ProxyService } from '../services/proxyService'
+import { ProxyService } from '../common/services/proxyService'
 import {Hono} from 'hono'
 
 const proxyRoute = new Hono()
 
-// Get proxied html
+// Gets proxied html
 proxyRoute.get('/', async (c) => {
     const url = c.req.param('url');
+    const charset = c.req.param('charset');
 
-    const html = await ProxyService.getHtml(url as string);
+    if (!url) {
+        return c.status(400);
+    }
 
-    if (html == null) {
+    const html = await ProxyService.getHtml(url, charset);
+
+    if (!html) {
         return c.status(404);
     }
 

@@ -52,7 +52,7 @@
 @import './popover';
 @import './tooltip';
 
-/* Menu */
+/* MenuService */
 @import './breadcrumb';
 @import './contextmenu';
 @import './dock';

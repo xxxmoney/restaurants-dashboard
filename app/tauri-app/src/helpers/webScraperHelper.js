@@ -1,15 +1,8 @@
-import { PROXY_URL } from "@/common/constants/commonConstants.js";
+import { ProxyService } from "@/common/apiServices/proxyService.js";
 
-const getHtmlDocFromUrl = async (url, charset = null, useProxy = true) => {
-    const searchParamsObject = {
-        url: url
-    };
-    if (charset) {
-        searchParamsObject.charset = charset;
-    }
-    const searchParams = new URLSearchParams(searchParamsObject);
-    const response = await fetch(useProxy ? `${PROXY_URL}?${searchParams}` : url);
-    const html = await response.text();
+const getHtmlDocFromUrl = async (url, charset = null) => {
+    const response = await ProxyService.getHtml(url, charset);
+    const html = await response.data;
 
     // Handle relative references in html
     const parser = new DOMParser();
