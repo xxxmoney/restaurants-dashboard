@@ -1,7 +1,7 @@
 import { ProxyService } from '../common/services/proxyService'
 import {Hono} from 'hono'
 
-const proxyRoute = new Hono()
+const proxyRoute = new Hono();
 
 // Gets proxied html
 proxyRoute.get('/', async (c) => {
@@ -18,7 +18,7 @@ proxyRoute.get('/', async (c) => {
         return c.status(404);
     }
 
-    return c.text(html);
+    return c.html(html);
 })
 
 
