@@ -8,8 +8,6 @@ proxyRoute.get('/', async (c) => {
     const url = c.req.query('url');
     const charset = c.req.query('charset');
 
-    console.log(c.req)
-
     if (!url) {
         return c.json({error: 'url is required'}, 400);
     }
