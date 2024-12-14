@@ -1,14 +1,14 @@
-import { api } from '@/axios';
+import {api} from '@/axios';
 
 export const ProxyService = {
     getHtml(url, charset = null) {
         const params = {
-            url
+            url: url
         }
         if (charset) {
             params.charset = charset;
         }
-        
-        return api.get(`/proxy`, { params: params });
+
+        return api.get(`/proxy`, {params: params});
     }
 }
