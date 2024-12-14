@@ -4,6 +4,8 @@ import {proxyRoute} from "./routes/proxy"
 import {logger} from 'hono/logger'
 
 const app = new Hono()
+
+// Logger middleware
 app.use(logger());
 
 // Allow any origin
