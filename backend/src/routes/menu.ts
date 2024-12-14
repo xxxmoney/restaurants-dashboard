@@ -10,8 +10,10 @@ menuRoute.get('/', (c) => {
 
 // Get menu by id
 menuRoute.get('/:id', (c) => {
+    const id = c.req.param('id');
+
     // TODO: Implement this
     return c.json({})
 });
 
-export { menuRoute }
+export {menuRoute}
