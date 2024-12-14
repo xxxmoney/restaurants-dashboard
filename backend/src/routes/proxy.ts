@@ -12,10 +12,16 @@ proxyRoute.get('/', async (c) => {
         return c.json({error: 'url is required'}, 400);
     }
 
-    const html = await ProxyService.getHtml(url, charset);
+    let html: string | undefined;
+
+    try {
+        html = await ProxyService.getHtml(url, charset);
+    } catch (e) {
+        console.error(e);
+    }
 
     if (!html) {
-        return c.notFound();
+        return c.json({error: 'Failed to get html'}, 500);
     }
 
     return c.html(html);
