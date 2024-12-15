@@ -27,7 +27,7 @@ async function onShow() {
 }
 
 async function load() {
-  await loadWeb(web.value, containerRef.value)
+  await loadWeb(web.value)
 
   if (isVisible.value) {
     await onShow();
@@ -55,22 +55,14 @@ onMounted(async () => {
             class="absolute left-1/2 top-5xl -translate-x-1/2 transform"/>
 
     <div class="flex-1">
-      <template v-if="web.handler">
-        <div v-if="!web.content" class="w-full h-full flex flex-row justify-center items-center font-bold">
-          <Loading/>
-        </div>
-        <iframe v-else ref="frames" :srcdoc="web.content" :class="{'hidden': !isVisible}"
-                @load="onWebLoaded(web, containerRef)"
-                class="w-full h-full border-none"
-                :style="{ zoom: web.zoom }"
-                sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-top-navigation allow-modals"></iframe>
-      </template>
-      <template v-else>
-        <iframe :src="web.url" ref="frames" class="w-full h-full border-none"
-                @load="onWebLoaded(web, containerRef)"
-                :style="{ zoom: web.zoom }" referrerpolicy="unsafe-url"
-                sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-top-navigation allow-modals"></iframe>
-      </template>
+      <div v-if="!web.content" class="w-full h-full flex flex-row justify-center items-center font-bold">
+        <Loading/>
+      </div>
+      <iframe v-else ref="frames" :srcdoc="web.content" :class="{'hidden': !isVisible}"
+              @load="onWebLoaded(web, containerRef)"
+              class="w-full h-full border-none"
+              :style="{ zoom: web.zoom }"
+              sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-top-navigation allow-modals"></iframe>
     </div>
   </div>
 </template>

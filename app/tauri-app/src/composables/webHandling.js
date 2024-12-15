@@ -16,17 +16,9 @@ export const useWebHandling = () => {
         return await WebService.getOnShow(web.id)(frame);
     }
 
-    async function loadWeb(web, container) {
-        if (web.handler) {
-            web.content = null;
-            web.content = await WebService.getHandler(web.id)(web.url);
-        } else {
-            const frame = container.querySelector('iframe');
-
-            // Refresh iframe
-            frame.src = '';
-            frame.src = web.url;
-        }
+    async function loadWeb(web) {
+        web.content = null;
+        web.content = await WebService.getHandler(web.id)(web.url);
     }
 
     function addItemToScrollQueue(item, web) {
