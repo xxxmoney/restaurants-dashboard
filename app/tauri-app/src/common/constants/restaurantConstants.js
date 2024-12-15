@@ -1,10 +1,13 @@
 import {getHtmlDocFromUrl} from "@/helpers/webScraperHelper.js";
 import {scrollOntoItem} from "@/helpers/webUtilsHelper.js";
+import {restaurantEnum} from '@/../../../shared/enums/restaurantEnum.js';
+import {RESTAURANTS} from "@/../../../shared/constants/restaurantConstants.js";
 
 const restaurants = [
     {
-        name: 'U Šišků',
-        url: 'https://www.restaurace-u-sisku.cz',
+        id: restaurantEnum.U_SISKU,
+        name: RESTAURANTS[restaurantEnum.U_SISKU].name,
+        url: RESTAURANTS[restaurantEnum.U_SISKU].url,
         zoom: 0.5,
         handler: async (url) => {
             const doc = await getHtmlDocFromUrl(url);
@@ -31,8 +34,9 @@ const restaurants = [
         },
     },
     {
-        name: 'Klika',
-        url: 'https://www.restauraceklika.cz',
+        id: restaurantEnum.KLIKA,
+        name: RESTAURANTS[restaurantEnum.KLIKA].name,
+        url: RESTAURANTS[restaurantEnum.KLIKA].url,
         zoom: 1,
         handler: async (url) => {
             const doc = await getHtmlDocFromUrl(url);
@@ -50,8 +54,9 @@ const restaurants = [
         },
     },
     {
-        name: 'Bar Red Hook',
-        url: 'http://www.restaurantbarredhook.cz/?Polední_menu',
+        id: restaurantEnum.BAR_RED_HOOK,
+        name: RESTAURANTS[restaurantEnum.BAR_RED_HOOK].name,
+        url: RESTAURANTS[restaurantEnum.BAR_RED_HOOK].url,
         zoom: 1,
         handler: async (url) => {
             const doc = await getHtmlDocFromUrl(url);
@@ -85,8 +90,9 @@ const restaurants = [
         },
     },
     {
-        name: 'Palatino (Dole)',
-        url: 'https://nominanza.com/index-pankrac.html#mu-reservation',
+        id: restaurantEnum.PALATINO,
+        name: RESTAURANTS[restaurantEnum.PALATINO].name,
+        url: RESTAURANTS[restaurantEnum.PALATINO].url,
         zoom: 0.75,
         handler: async (url) => {
             const doc = await getHtmlDocFromUrl(url);
@@ -112,11 +118,6 @@ const restaurants = [
         }
     },
 ];
-
-// Set Ids
-restaurants.forEach((restaurant, index) => {
-    restaurant.id = index + 1;
-});
 
 export {
     restaurants,
