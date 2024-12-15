@@ -1,7 +1,7 @@
-import { ProxyService } from "@/common/apiServices/proxyService.js";
+import {ProxyApiService} from "@/common/apiServices/proxyApiService.js";
 
 const getHtmlDocFromUrl = async (url, charset = null) => {
-    const response = await ProxyService.getHtml(url, charset);
+    const response = await ProxyApiService.getHtml(url, charset);
     const html = await response.data;
 
     // Handle relative references in html

@@ -1,6 +1,6 @@
 import {api} from '@/axios';
 
-export const ProxyService = {
+export const ProxyApiService = {
     getHtml(url, charset = null) {
         const params = {
             url: url
