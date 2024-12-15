@@ -4,7 +4,7 @@ import {WebService} from "@/common/services/webService.js";
 export const useRestaurantHandling = () => {
     const store = useWebStore();
 
-    async function onRestaurantLoaded(restaurant, container) {
+    async function onWebLoaded(restaurant, container) {
         const frame = container.querySelector('iframe');
 
         await WebService.getOnLoad(restaurant.id)(frame);
@@ -16,7 +16,7 @@ export const useRestaurantHandling = () => {
         return await WebService.getOnShow(restaurant.id)(frame);
     }
 
-    async function loadRestaurant(restaurant, container) {
+    async function loadWeb(restaurant, container) {
         if (restaurant.handler) {
             restaurant.content = null;
             restaurant.content = await WebService.getHandler(restaurant.id)(restaurant.url);
@@ -54,9 +54,9 @@ export const useRestaurantHandling = () => {
     }
 
     return {
-        onRestaurantLoaded,
+        onRestaurantLoaded: onWebLoaded,
         onRestaurantShow,
-        loadRestaurant,
+        loadRestaurant: loadWeb,
         addItemToScrollQueue,
         getItemFromScrollQueue
     }
