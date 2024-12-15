@@ -7,7 +7,7 @@ import Select from 'primevue/select';
 import Website from "@/components/views/websites/Website.vue";
 import {useIsMobile} from "@/composables/isMobile.js";
 import {scrollOntoItem} from "@/helpers/webUtilsHelper.js";
-import {useWebHandling} from "@/composables/restaurantHandling.js";
+import {useWebHandling} from "@/composables/webHandling.js";
 
 const store = useWebStore();
 const {webs, visibleCount, visibleCounts} = storeToRefs(store);
