@@ -48,7 +48,9 @@ onMounted(async () => {
 
 <template>
   <div ref="containerRef" class="w-full h-full flex flex-col">
-    <h1 class="text-lg text-center mb-md flex-0">{{ web.name }}</h1>
+    <h1 class="text-lg text-center mb-md flex-0">
+      <a :href="web.url" target="_blank">{{ web.name }}</a>
+    </h1>
 
     <Button @click="load"
             label="Refresh" severity="secondary"
