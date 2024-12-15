@@ -13,13 +13,13 @@ const containerRef = ref(null)
 
 const store = useWebStore();
 const {webs} = storeToRefs(store);
-const {loadRestaurant, onRestaurantLoaded, onRestaurantShow, addItemToScrollQueue} = useRestaurantHandling();
+const {loadWeb, onWebLoaded, onWebShow, addItemToScrollQueue} = useRestaurantHandling();
 
 const restaurant = computed(() => webs.value[index]);
 const isVisible = computed(() => store.isIndexVisible(index));
 
 async function onShow() {
-  const {scrollInQueue} = await onRestaurantShow(restaurant.value, containerRef.value);
+  const {scrollInQueue} = await onWebShow(restaurant.value, containerRef.value);
 
   if (scrollInQueue) {
     addItemToScrollQueue(scrollInQueue, restaurant.value);
@@ -27,7 +27,7 @@ async function onShow() {
 }
 
 async function load() {
-  await loadRestaurant(restaurant.value, containerRef.value)
+  await loadWeb(restaurant.value, containerRef.value)
 
   if (isVisible.value) {
     await onShow();
@@ -60,14 +60,14 @@ onMounted(async () => {
           <Loading/>
         </div>
         <iframe v-else ref="frames" :srcdoc="restaurant.content" :class="{'hidden': !isVisible}"
-                @load="onRestaurantLoaded(restaurant, containerRef)"
+                @load="onWebLoaded(restaurant, containerRef)"
                 class="w-full h-full border-none"
                 :style="{ zoom: restaurant.zoom }"
                 sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-top-navigation allow-modals"></iframe>
       </template>
       <template v-else>
         <iframe :src="restaurant.url" ref="frames" class="w-full h-full border-none"
-                @load="onRestaurantLoaded(restaurant, containerRef)"
+                @load="onWebLoaded(restaurant, containerRef)"
                 :style="{ zoom: restaurant.zoom }" referrerpolicy="unsafe-url"
                 sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-top-navigation allow-modals"></iframe>
       </template>

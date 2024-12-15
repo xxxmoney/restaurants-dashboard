@@ -31,7 +31,7 @@ export const useWebStore = defineStore('webs', () => {
         visibleCount,
         visibleCounts,
         scrollingQueue,
-        getRestaurantIndex,
+        getWebIndex: getRestaurantIndex,
         isIndexVisible,
         setMobileVisibleCount,
         setDesktopVisibleCount,

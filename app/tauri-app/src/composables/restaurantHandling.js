@@ -4,35 +4,35 @@ import {WebService} from "@/common/services/webService.js";
 export const useRestaurantHandling = () => {
     const store = useWebStore();
 
-    async function onWebLoaded(restaurant, container) {
+    async function onWebLoaded(web, container) {
         const frame = container.querySelector('iframe');
 
-        await WebService.getOnLoad(restaurant.id)(frame);
+        await WebService.getOnLoad(web.id)(frame);
     }
 
-    async function onRestaurantShow(restaurant, container) {
+    async function onWebShow(web, container) {
         const frame = container.querySelector('iframe');
 
-        return await WebService.getOnShow(restaurant.id)(frame);
+        return await WebService.getOnShow(web.id)(frame);
     }
 
-    async function loadWeb(restaurant, container) {
-        if (restaurant.handler) {
-            restaurant.content = null;
-            restaurant.content = await WebService.getHandler(restaurant.id)(restaurant.url);
+    async function loadWeb(web, container) {
+        if (web.handler) {
+            web.content = null;
+            web.content = await WebService.getHandler(web.id)(web.url);
         } else {
             const frame = container.querySelector('iframe');
 
             // Refresh iframe
             frame.src = '';
-            frame.src = restaurant.url;
+            frame.src = web.url;
         }
     }
 
-    function addItemToScrollQueue(item, restaurant) {
+    function addItemToScrollQueue(item, web) {
         const value = {
             item,
-            index: store.getRestaurantIndex(restaurant)
+            index: store.getWebIndex(web)
         };
 
         store.scrollingQueue.push(value);
@@ -54,9 +54,9 @@ export const useRestaurantHandling = () => {
     }
 
     return {
-        onRestaurantLoaded: onWebLoaded,
-        onRestaurantShow,
-        loadRestaurant: loadWeb,
+        onWebLoaded,
+        onWebShow,
+        loadWeb,
         addItemToScrollQueue,
         getItemFromScrollQueue
     }
