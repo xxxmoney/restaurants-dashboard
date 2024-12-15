@@ -1,6 +1,6 @@
 import {computed, ref} from 'vue'
 import {defineStore} from 'pinia'
-import {WEBS} from "@/common/constants/restaurantConstants.js";
+import {WEBS} from "@/common/constants/webConstants.js";
 
 export const useWebStore = defineStore('webs', () => {
     const webs = ref([...WEBS])
@@ -17,8 +17,8 @@ export const useWebStore = defineStore('webs', () => {
         visibleCount.value = webs.value.length;
     }
 
-    function getRestaurantIndex(restaurant) {
-        return webs.value.findIndex(r => r.name === restaurant.name);
+    function getWebIndex(web) {
+        return webs.value.findIndex(r => r.name === web.name);
     }
 
     function isIndexVisible(index) {
@@ -31,7 +31,7 @@ export const useWebStore = defineStore('webs', () => {
         visibleCount,
         visibleCounts,
         scrollingQueue,
-        getWebIndex: getRestaurantIndex,
+        getWebIndex,
         isIndexVisible,
         setMobileVisibleCount,
         setDesktopVisibleCount,

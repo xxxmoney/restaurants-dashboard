@@ -1,7 +1,7 @@
 import {useWebStore} from "@/stores/webs.js";
 import {WebService} from "@/common/services/webService.js";
 
-export const useRestaurantHandling = () => {
+export const useWebHandling = () => {
     const store = useWebStore();
 
     async function onWebLoaded(web, container) {

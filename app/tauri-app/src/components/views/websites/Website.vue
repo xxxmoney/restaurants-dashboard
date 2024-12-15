@@ -2,7 +2,7 @@
 import {ref, computed, watch, onMounted} from "vue";
 import Loading from "@/components/common/Loading.vue";
 import Button from "primevue/button";
-import {useRestaurantHandling} from "@/composables/restaurantHandling.js";
+import {useWebHandling} from "@/composables/restaurantHandling.js";
 import {useWebStore} from "@/stores/webs.js";
 import {storeToRefs} from "pinia";
 
@@ -13,21 +13,21 @@ const containerRef = ref(null)
 
 const store = useWebStore();
 const {webs} = storeToRefs(store);
-const {loadWeb, onWebLoaded, onWebShow, addItemToScrollQueue} = useRestaurantHandling();
+const {loadWeb, onWebLoaded, onWebShow, addItemToScrollQueue} = useWebHandling();
 
-const restaurant = computed(() => webs.value[index]);
+const web = computed(() => webs.value[index]);
 const isVisible = computed(() => store.isIndexVisible(index));
 
 async function onShow() {
-  const {scrollInQueue} = await onWebShow(restaurant.value, containerRef.value);
+  const {scrollInQueue} = await onWebShow(web.value, containerRef.value);
 
   if (scrollInQueue) {
-    addItemToScrollQueue(scrollInQueue, restaurant.value);
+    addItemToScrollQueue(scrollInQueue, web.value);
   }
 }
 
 async function load() {
-  await loadWeb(restaurant.value, containerRef.value)
+  await loadWeb(web.value, containerRef.value)
 
   if (isVisible.value) {
     await onShow();
@@ -48,27 +48,27 @@ onMounted(async () => {
 
 <template>
   <div ref="containerRef" class="w-full h-full flex flex-col">
-    <h1 class="text-lg text-center mb-md flex-0">{{ restaurant.name }}</h1>
+    <h1 class="text-lg text-center mb-md flex-0">{{ web.name }}</h1>
 
     <Button @click="load"
             label="Refresh" severity="secondary"
             class="absolute left-1/2 top-5xl -translate-x-1/2 transform"/>
 
     <div class="flex-1">
-      <template v-if="restaurant.handler">
-        <div v-if="!restaurant.content" class="w-full h-full flex flex-row justify-center items-center font-bold">
+      <template v-if="web.handler">
+        <div v-if="!web.content" class="w-full h-full flex flex-row justify-center items-center font-bold">
           <Loading/>
         </div>
-        <iframe v-else ref="frames" :srcdoc="restaurant.content" :class="{'hidden': !isVisible}"
-                @load="onWebLoaded(restaurant, containerRef)"
+        <iframe v-else ref="frames" :srcdoc="web.content" :class="{'hidden': !isVisible}"
+                @load="onWebLoaded(web, containerRef)"
                 class="w-full h-full border-none"
-                :style="{ zoom: restaurant.zoom }"
+                :style="{ zoom: web.zoom }"
                 sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-top-navigation allow-modals"></iframe>
       </template>
       <template v-else>
-        <iframe :src="restaurant.url" ref="frames" class="w-full h-full border-none"
-                @load="onWebLoaded(restaurant, containerRef)"
-                :style="{ zoom: restaurant.zoom }" referrerpolicy="unsafe-url"
+        <iframe :src="web.url" ref="frames" class="w-full h-full border-none"
+                @load="onWebLoaded(web, containerRef)"
+                :style="{ zoom: web.zoom }" referrerpolicy="unsafe-url"
                 sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-top-navigation allow-modals"></iframe>
       </template>
     </div>
