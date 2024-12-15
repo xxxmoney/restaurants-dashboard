@@ -26,7 +26,7 @@ for (const value of Object.values(restaurantEnum)) {
         case restaurantEnum.PALATINO:
             RESTAURANTS[value] = {
                 name: 'Palatino',
-                url: 'https://www.palatino.cz'
+                url: 'https://nominanza.com/index-pankrac.html'
             };
             break;
         default:
