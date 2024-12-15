@@ -1,9 +1,9 @@
 import {computed, ref} from 'vue'
 import {defineStore} from 'pinia'
-import {restaurants} from "@/common/constants/restaurantConstants.js";
+import {WEBS} from "@/common/constants/restaurantConstants.js";
 
 export const useWebStore = defineStore('webs', () => {
-    const webs = ref([...restaurants])
+    const webs = ref([...WEBS])
     const currentPage = ref(0);
     const visibleCount = ref(0);
     const visibleCounts = computed(() => [1, webs.value.length]);
