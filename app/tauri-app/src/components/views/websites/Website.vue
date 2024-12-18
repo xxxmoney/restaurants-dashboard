@@ -13,7 +13,7 @@ const containerRef = ref(null)
 
 const store = useWebStore();
 const {webs} = storeToRefs(store);
-const {loadWeb, onWebLoaded, onWebShow, addItemToScrollQueue} = useWebHandling();
+const {onWebLoaded, onWebShow, addItemToScrollQueue} = useWebHandling();
 
 const web = computed(() => webs.value[index]);
 const isVisible = computed(() => store.isIndexVisible(index));
@@ -27,7 +27,7 @@ async function onShow() {
 }
 
 async function load() {
-  await loadWeb(web.value)
+  await store.loadWeb(web.value.id)
 
   if (isVisible.value) {
     await onShow();

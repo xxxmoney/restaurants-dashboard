@@ -16,11 +16,6 @@ export const useWebHandling = () => {
         return await WebService.getOnShow(web.id)(frame);
     }
 
-    async function loadWeb(web) {
-        web.content = null;
-        web.content = await WebService.getHandler(web.id)(web.url);
-    }
-
     function addItemToScrollQueue(item, web) {
         const value = {
             item,
@@ -48,7 +43,6 @@ export const useWebHandling = () => {
     return {
         onWebLoaded,
         onWebShow,
-        loadWeb,
         addItemToScrollQueue,
         getItemFromScrollQueue
     }
