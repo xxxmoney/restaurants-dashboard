@@ -3,7 +3,7 @@ import {getHtmlDocFromUrl} from "../helpers/domParser.helper";
 import {RESTAURANTS} from "../../../../shared/constants/restaurant.constants";
 
 export const WebService = {
-    getWebHtml(enumValue: Number) {
+    getWebHtmlHandler(enumValue: Number) {
         switch (enumValue) {
             case restaurantEnum.U_SISKU:
                 return async () => {
