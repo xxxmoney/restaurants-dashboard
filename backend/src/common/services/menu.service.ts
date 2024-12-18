@@ -4,6 +4,15 @@ import {RESTAURANTS} from "../../../../shared/constants/restaurant.constants";
 import {Menu} from "../dto/menu";
 import {DateTime} from "luxon";
 
+function parseDate(text: string) {
+    const date = text.match(/\d{1,2}\.\d{1,2}\.\d{4}/g)![0];
+    return DateTime.fromFormat(date, 'd.M.yyyy');
+}
+
+function parsePrice(text: string) {
+    return parseInt(text.match(/\d+/g)![0]);
+}
+
 export const MenuService = {
     async getMenu(enumValue: number): Promise<Menu[]> {
         // @ts-ignore
@@ -13,19 +22,22 @@ export const MenuService = {
 
         const menus: Menu[] = [];
 
-        // @ts-ignore
-        const $ = await getHtmlDocFromUrl(RESTAURANTS[enumValue].url)
+        const $ =
+            // @ts-ignore
+            RESTAURANTS[enumValue].alternateUrl ?
+                // @ts-ignore
+                await getHtmlDocFromUrl(RESTAURANTS[enumValue].alternateUrl, RESTAURANTS[enumValue].alternateUrlCharset) :
+                // @ts-ignore
+                await getHtmlDocFromUrl(RESTAURANTS[enumValue].url, RESTAURANTS[enumValue].urlCharset);
 
         if (enumValue === restaurantEnum.U_SISKU) {
             // TODO
         } else if (enumValue === restaurantEnum.KLIKA) {
             const $content = $('.content').first();
-
             const $title = $content.find('strong').first();
 
             // Get date of current menu
-            const dateText = $title.text().replace('Menu', '').trim();
-            const date = DateTime.fromFormat(dateText, 'd.M.yyyy');
+            const date = parseDate($title.text());
 
             // Get menu items
             const items = $content.find('table tr').has('td').toArray();
@@ -36,14 +48,49 @@ export const MenuService = {
                 const name = $item.find('td').first().text().trim();
                 const priceText = $item.find('td').last().text().trim();
                 // Get number from price using regex
-                const price = parseInt(priceText.match(/\d+/g)![0]);
+                const price = parsePrice(priceText);
 
                 return {name, price};
             });
 
             menus.push({date, items: menuItems});
         } else if (enumValue === restaurantEnum.BAR_RED_HOOK) {
-            // TODO
+            const contents = $('.content').toArray();
+
+            contents.forEach((content) => {
+                const $content = $(content);
+                const $title = $content.find('h2').first();
+
+                // Find date in format dd.MM.yyyy using regex
+                const date = parseDate($title.text());
+
+                const foodItems = $content.find('.food').toArray();
+                const priceItems = $content.find('.prize').toArray();
+
+                if (foodItems.length !== priceItems.length) {
+                    throw new Error('Food and price items count does not match');
+                }
+
+                const count = foodItems.length;
+                // If count is 1, then there is no menu for that day
+                if (count === 1) {
+                    return;
+                }
+
+                const menuItems = foodItems.map((foodItem, index) => {
+                    const $foodItem = $(foodItem);
+                    const $priceItem = $(priceItems[index]);
+
+                    const name = $foodItem.text().trim();
+                    const price = parsePrice($priceItem.text());
+
+                    return {name, price};
+                });
+
+                menus.push({date, items: menuItems});
+            })
+
+
         } else if (enumValue === restaurantEnum.PALATINO) {
             // TODO
         }
