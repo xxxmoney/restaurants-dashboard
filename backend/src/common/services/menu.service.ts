@@ -39,7 +39,7 @@ export const MenuService = {
             const date = parseDate($title.text());
 
             // Get menu items
-            const items = $content.find('table tr').has('td').toArray();
+            const items = $content.find('table').first().find('tr').has('td').toArray();
 
             // Select menu items to correct format
             const menuItems = items.map(item => {
