@@ -10,6 +10,7 @@ import {MENUS} from "@/common/constants/menu.constants.js";
 import {computed, onMounted, ref} from "vue";
 import {formatDate, parseDate} from "@/common/helpers/date.helper.js";
 import {formatCurrency} from "../common/helpers/currency.helper.js";
+import WorkInProgress from "@/components/common/WorkInProgress.vue";
 
 const store = useMenuStore();
 const {restaurantId} = storeToRefs(store);
@@ -49,7 +50,10 @@ onMounted(async () => {
       <Button icon="pi pi-refresh" @click="loadMenus" :disabled="!restaurantId"/>
     </div>
 
-    <div v-if="menus !== null" class="flex flex-col justify-center gap">
+    <div v-if="menus === null" class="w-full h-full flex flex-col justify-center items-center">
+      <Loading/>
+    </div>
+    <div v-else-if="menus.length !== 0" class="flex flex-col justify-center gap">
       <DataTable v-model:expandedRows="expandedRows" :value="menus" dataKey="date" :rowClass="getRowClass">
         <Column expander style="width: 2rem"/>
 
@@ -71,8 +75,8 @@ onMounted(async () => {
         </template>
       </DataTable>
     </div>
-    <div v-else class="w-full h-full flex flex-col justify-center items-center">
-      <Loading/>
+    <div v-else class="w-full h-full flex flex-col">
+      <WorkInProgress/>
     </div>
 
   </div>
