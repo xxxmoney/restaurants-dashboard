@@ -1,6 +1,6 @@
 import {api} from '@/axios';
 
-export const MenuApiService = {
+export const MenuApi = {
     getMenu(restaurantId) {
         return api.get(`/`, {params: {id: restaurantId}});
     }
