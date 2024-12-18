@@ -6,7 +6,7 @@ import Carousel from 'primevue/carousel';
 import Select from 'primevue/select';
 import Website from "@/components/views/websites/Website.vue";
 import {useIsMobile} from "@/composables/isMobile.comp.js";
-import {scrollOntoItem} from "@/helpers/webUtils.helper.js";
+import {scrollOntoItem} from "@/common/helpers/webUtils.helper.js";
 import {useWebHandling} from "@/composables/webHandling.comp.js";
 
 const store = useWebStore();

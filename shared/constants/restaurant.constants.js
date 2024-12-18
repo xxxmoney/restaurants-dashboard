@@ -20,7 +20,9 @@ for (const value of Object.values(restaurantEnum)) {
         case restaurantEnum.BAR_RED_HOOK:
             RESTAURANTS[value] = {
                 name: 'Bar Red Hook',
-                url: 'http://www.restaurantbarredhook.cz/?Polední_menu'
+                url: 'http://www.restaurantbarredhook.cz/?Polední_menu',
+                alternateUrl: 'https://www.menicka.cz/api/iframe/?id=4486',
+                alternateUrlCharset: 'windows-1250'
             };
             break;
         case restaurantEnum.PALATINO:

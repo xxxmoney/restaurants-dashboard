@@ -2,8 +2,11 @@ import {Hono} from 'hono'
 import {logger} from 'hono/logger'
 import {menuRoute} from './routes/menu.route'
 import {websRoute} from "./routes/web.route";
+import {setup} from "./setup";
 
 const app = new Hono()
+
+setup();
 
 // Logger middleware
 app.use(logger());
