@@ -1,15 +1,8 @@
-const PROXY_URL = 'https://proxy-worker.xxxmoney111.workers.dev';
+import {ProxyApi} from "@/common/apiServices/proxy.api.js";
 
-const getHtmlDocFromUrl = async (url, charset = null, useProxy = true) => {
-    const searchParamsObject = {
-        url: url
-    };
-    if (charset) {
-        searchParamsObject.charset = charset;
-    }
-    const searchParams = new URLSearchParams(searchParamsObject);
-    const response = await fetch(useProxy ? `${PROXY_URL}?${searchParams}` : url);
-    const html = await response.text();
+const getHtmlDocFromUrl = async (url, charset = null) => {
+    const response = await ProxyApi.getHtml(url, charset);
+    const html = await response.data;
 
     // Handle relative references in html
     const parser = new DOMParser();
