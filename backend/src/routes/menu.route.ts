@@ -1,19 +1,15 @@
 import {Hono} from 'hono'
+import {MenuService} from "../common/services/menu.service";
 
 const menuRoute = new Hono()
 
-// Get all menus
-menuRoute.get('/', (c) => {
-    // TODO: Implement this
-    return c.json([])
-})
-
 // Get menu by id
-menuRoute.get('/:id', (c) => {
-    const id = c.req.param('id');
+menuRoute.get('/:id', async (c) => {
+    const id: number = parseInt(c.req.param('id'));
 
-    // TODO: Implement this
-    return c.json({})
+    const menus = await MenuService.getMenu(id);
+
+    return c.json(menus);
 });
 
 export {menuRoute}
