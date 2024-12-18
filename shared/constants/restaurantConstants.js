@@ -1,4 +1,4 @@
-import {restaurantEnum} from "../enums/restaurantEnum";
+import {restaurantEnum} from "../enums/restaurant.enum.js";
 
 const RESTAURANTS = {};
 

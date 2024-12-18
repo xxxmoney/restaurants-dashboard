@@ -1,4 +1,4 @@
-import {restaurantEnum} from "@/../../../shared/enums/restaurantEnum.js";
+import {restaurantEnum} from "root/shared/enums/restaurant.enum.js";
 import {getHtmlDocFromUrl} from "@/helpers/webScraperHelper.js";
 import {scrollOntoItem} from "@/helpers/webUtilsHelper.js";
 
