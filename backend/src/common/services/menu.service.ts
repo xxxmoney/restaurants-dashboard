@@ -2,6 +2,7 @@ import {restaurantEnum} from "../../../../shared/enums/restaurant.enum";
 import {getHtmlDocFromUrl} from "../helpers/domParser.helper";
 import {RESTAURANTS} from "../../../../shared/constants/restaurant.constants";
 import {Menu} from "../dto/menu";
+import {DateTime} from "luxon";
 
 export const MenuService = {
     async getMenu(enumValue: number): Promise<Menu[]> {
@@ -24,7 +25,7 @@ export const MenuService = {
 
             // Get date of current menu
             const dateText = $title.text().replace('Menu', '').trim();
-            const date = new Date(dateText);
+            const date = DateTime.fromFormat(dateText, 'd.M.yyyy');
 
             // Get menu items
             const items = $content.find('table tr').has('td').toArray();
@@ -39,9 +40,6 @@ export const MenuService = {
 
                 return {name, price};
             });
-
-            console.log(date)
-            console.log(menuItems)
 
             menus.push({date, items: menuItems});
         } else if (enumValue === restaurantEnum.BAR_RED_HOOK) {

@@ -1,10 +1,12 @@
+import {DateTime} from "luxon";
+
 export interface MenuItem {
     name: string;
     price: number;
 }
 
 export interface Menu {
-    date: Date;
+    date: DateTime;
     items: MenuItem[];
 }
 

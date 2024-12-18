@@ -6,11 +6,13 @@
   },
   "dependencies": {
     "cheerio": "^1.0.0",
-    "hono": "^4.6.12"
+    "hono": "^4.6.12",
+    "luxon": "^3.5.0"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20241112.0",
     "@types/jsdom": "^21.1.7",
+    "@types/luxon": "^3.4.2",
     "wrangler": "^3.88.0"
   }
 }
