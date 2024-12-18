@@ -1,12 +1,12 @@
-import {ProxyApi} from "@/common/apiServices/proxy.api.js";
+import {ProxyService} from "../services/proxy.service";
+import {JSDOM} from 'jsdom';
 
-const getHtmlDocFromUrl = async (url, charset = null) => {
-    const response = await ProxyApi.getHtml(url, charset);
-    const html = await response.data;
+const getHtmlDocFromUrl = async (url: string, charset: string | undefined = undefined): Promise<JSDOM> => {
+    const html = await ProxyService.getHtml(url, charset);
 
     // Handle relative references in html
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(html, 'text/html');
+    const dom = new JSDOM(html);
+    const doc = dom.window.document;
 
     // Get all link from head
     const links = doc.head.querySelectorAll('link');
@@ -40,7 +40,7 @@ const getHtmlDocFromUrl = async (url, charset = null) => {
     });
 
 
-    return doc;
+    return dom;
 }
 
 export {getHtmlDocFromUrl}

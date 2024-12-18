@@ -1,7 +1,7 @@
 import {Hono} from 'hono'
-import {menuRoute} from './routes/menu'
-import {proxyRoute} from "./routes/proxy"
 import {logger} from 'hono/logger'
+import {menuRoute} from './routes/menu.route'
+import {websRoute} from "./routes/web.route";
 
 const app = new Hono()
 
@@ -21,6 +21,7 @@ app.get('/', (c) => {
 
 // Routes
 app.route('/menus', menuRoute)
-app.route('/proxy', proxyRoute)
+app.route('/webs', websRoute)
+
 
 export default app

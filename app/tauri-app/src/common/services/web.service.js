@@ -3,41 +3,7 @@ import {getHtmlDocFromUrl} from "@/helpers/webScraper.helper.js";
 import {scrollOntoItem} from "@/helpers/webUtils.helper.js";
 
 export const WebService = {
-    getHandler(enumValue) {
-        switch (enumValue) {
-            case restaurantEnum.U_SISKU:
-                return async (url) => {
-                    const doc = await getHtmlDocFromUrl(url);
-                    return doc.documentElement.outerHTML;
-                }
-            case restaurantEnum.KLIKA:
-                return async (url) => {
-                    const doc = await getHtmlDocFromUrl(url);
-                    return doc.documentElement.outerHTML;
-                }
-            case restaurantEnum.BAR_RED_HOOK:
-                return async (url) => {
-                    const doc = await getHtmlDocFromUrl(url);
-
-                    // Set inner frame
-                    const innerFrame = doc.querySelector('iframe');
-                    const innerDoc = await getHtmlDocFromUrl(innerFrame.src, 'windows-1250');
-                    innerFrame.srcdoc = innerDoc.documentElement.outerHTML;
-
-                    // Set body background color as white
-                    doc.body.style.backgroundColor = 'white';
-
-                    return doc.documentElement.outerHTML;
-                }
-            case restaurantEnum.PALATINO:
-                return async (url) => {
-                    const doc = await getHtmlDocFromUrl(url);
-                    return doc.documentElement.outerHTML;
-                }
-            default:
-                throw new Error(`Restaurant with key ${enumValue} is not implemented`);
-        }
-    },
+    // getHandler moved to backend
 
     getOnLoad(enumValue) {
         switch (enumValue) {
