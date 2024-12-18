@@ -15,4 +15,8 @@ To enable tracking of file
 To run the app, simply run this:
 `npm run dev`
 
+## Publish with Github Pages
+
+To publish the app with GithubPages, simply run this:
+`npm run deploy`
 
