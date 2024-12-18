@@ -4,26 +4,23 @@ import {RESTAURANTS} from "../../../../shared/constants/restaurant.constants";
 import {CheerioAPI} from "cheerio";
 
 export const WebService = {
-    async getWebHtml(enumValue: Number) {
+    async getWebHtml(enumValue: number) {
         // @ts-ignore
         const $ = await getHtmlDocFromUrl(RESTAURANTS[enumValue].url);
 
         // Additional special handling
-        switch (enumValue) {
-            case restaurantEnum.BAR_RED_HOOK:
-                // @ts-ignore
-                const innerFrame = $('iframe').first();
-                const innerFrameSrc = innerFrame.attr('src');
+        if (enumValue === restaurantEnum.U_SISKU) {
+            // @ts-ignore
+            const innerFrame = $('iframe').first();
+            const innerFrameSrc = innerFrame.attr('src');
 
-                if (innerFrameSrc) {
-                    const $inner = await getHtmlDocFromUrl(innerFrameSrc, 'windows-1250');
-                    innerFrame.attr('srcdoc', $inner.html());
-                }
+            if (innerFrameSrc) {
+                const $inner = await getHtmlDocFromUrl(innerFrameSrc, 'windows-1250');
+                innerFrame.attr('srcdoc', $inner.html());
+            }
 
-                // Set background color so its visible
-                $('body').css('background-color', 'white');
-
-                break;
+            // Set background color so its visible
+            $('body').css('background-color', 'white');
         }
 
         return $.html();
