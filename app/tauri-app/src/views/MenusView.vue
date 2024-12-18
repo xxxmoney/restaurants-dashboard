@@ -10,7 +10,6 @@ import {MENUS} from "@/common/constants/menu.constants.js";
 import {computed, onMounted, ref} from "vue";
 import {formatDate, parseDate} from "@/helpers/date.helper.js";
 import {formatCurrency} from "../helpers/currency.helper.js";
-import {DATE_FORMAT} from "root/shared/constants/common.constants.js";
 
 const store = useMenuStore();
 const {restaurantId} = storeToRefs(store);
@@ -25,8 +24,12 @@ async function loadMenus() {
 
   // Open current day menu if present
   if (currentMenu.value) {
-    expandedRows.value[parseDate(currentMenu.value.date).toFormat(DATE_FORMAT)] = true;
+    expandedRows.value[currentMenu.value.date] = true;
   }
+}
+
+function getRowClass(data) {
+  return [{'!bg-green-400 !bg-opacity-40': data.date === currentMenu.value?.date}];
 }
 
 onMounted(async () => {
@@ -47,10 +50,10 @@ onMounted(async () => {
     </div>
 
     <div v-if="menus !== null" class="flex flex-col justify-center gap">
-      <DataTable v-model:expandedRows="expandedRows" :value="menus" dataKey="date">
+      <DataTable v-model:expandedRows="expandedRows" :value="menus" dataKey="date" :rowClass="getRowClass">
         <Column expander style="width: 2rem"/>
 
-        <Column field="date" header="Date">
+        <Column field="date" header="Date" sortable>
           <template #body="{ data }">
             <span class="text-lg font-bold">{{ formatDate(data.date) }}</span>
           </template>
@@ -58,8 +61,8 @@ onMounted(async () => {
 
         <template #expansion="{data}">
           <DataTable :value="data.items">
-            <Column field="name" header="Name"></Column>
-            <Column field="price" header="Price">
+            <Column field="name" header="Name" sortable></Column>
+            <Column field="price" header="Price" sortable>
               <template #body="{data}">
                 <span>{{ formatCurrency(data.price) }}</span>
               </template>
