@@ -5,10 +5,10 @@
 Debug mode is enabled in `commonContants.js` by setting `DEBUG` to `true`.
 
 To disable tracking of file:
-`git update-index --skip-worktree "src\common\constants\commonConstants.js"`
+`git update-index --skip-worktree "src\common\constants\common.constants.js"`
 
 To enable tracking of file
-`git update-index --no-skip-worktree "src\common\constants\commonConstants.js"`
+`git update-index --no-skip-worktree "src\common\constants\common.constants.js"`
 
 ## Running the app
 

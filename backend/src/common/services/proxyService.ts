@@ -1,4 +1,4 @@
-import { PROXY_URL } from "../constants/commonConstants";
+import {PROXY_URL} from "../constants/common.constants.js";
 
 export const ProxyService = {
     async getHtml(url: string, charset: string | undefined): Promise<string | undefined> {

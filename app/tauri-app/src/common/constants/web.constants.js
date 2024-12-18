@@ -1,5 +1,5 @@
 import {restaurantEnum} from 'root/shared/enums/restaurant.enum.js';
-import {RESTAURANTS} from "root/shared/constants/restaurantConstants.js";
+import {RESTAURANTS} from "root/shared/constants/restaurant.constants.js";
 
 const WEBS = [
     {
