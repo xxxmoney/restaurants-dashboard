@@ -36,14 +36,13 @@ export const MenuService = {
             const $content = $('.content').first();
             const $title = $content.find('strong').first();
 
-            // Get date of current menu
             const date = parseDate($title.text());
 
             // Get menu items
             const items = $content.find('table tr').has('td').toArray();
 
             // Select menu items to correct format
-            const menuItems = items.map((item) => {
+            const menuItems = items.map(item => {
                 const $item = $(item);
                 const name = $item.find('td').first().text().trim();
                 const priceText = $item.find('td').last().text().trim();
@@ -61,7 +60,6 @@ export const MenuService = {
                 const $content = $(content);
                 const $title = $content.find('h2').first();
 
-                // Find date in format dd.MM.yyyy using regex
                 const date = parseDate($title.text());
 
                 const foodItems = $content.find('.food').toArray();
@@ -92,7 +90,26 @@ export const MenuService = {
 
 
         } else if (enumValue === restaurantEnum.PALATINO) {
-            // TODO
+            const contents = [$('#pondeli').first(), $('#utery').first(), $('#streda').first(), $('#ctvrtek').first(), $('#patek').first()];
+
+            contents.forEach(($content) => {
+                const $title = $content.find('.fr-tab-den').first();
+
+                const date = parseDate($title.text());
+
+                const items = $content.find('.frl-table tr').toArray();
+
+                const menuItems = items.map(item => {
+                    const $item = $(item);
+                    const name = $item.find('td').first().contents().first().text().trim();
+                    const priceText = $item.find('td').last().text().trim();
+                    const price = parsePrice(priceText);
+
+                    return {name, price};
+                });
+
+                menus.push({date, items: menuItems});
+            })
         }
 
         return menus;
