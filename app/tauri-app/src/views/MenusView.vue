@@ -6,17 +6,33 @@ import Column from 'primevue/column';
 import {useMenuStore} from "@/stores/menu.store.js";
 import {storeToRefs} from "pinia";
 import {MENUS} from "@/common/constants/menu.constants.js";
-import {ref} from "vue";
-import {formatDate} from "@/helpers/date.helper.js";
+import {computed, onMounted, ref} from "vue";
+import {formatDate, parseDate} from "@/helpers/date.helper.js";
 import {formatCurrency} from "../helpers/currency.helper.js";
+import {DATE_FORMAT} from "root/shared/constants/common.constants.js";
 
 const store = useMenuStore();
 const {restaurantId} = storeToRefs(store);
 
 const {menus} = storeToRefs(store);
+const currentMenu = computed(() => store.getCurrentDayMenu());
 
 const expandedRows = ref({});
 
+async function loadMenus() {
+  await store.loadMenus();
+
+  // Open current day menu if present
+  if (currentMenu.value) {
+    expandedRows.value[parseDate(currentMenu.value.date).toFormat(DATE_FORMAT)] = true;
+  }
+}
+
+onMounted(async () => {
+  if (restaurantId.value) {
+    await loadMenus();
+  }
+});
 
 </script>
 
@@ -24,7 +40,7 @@ const expandedRows = ref({});
   <div class="flex flex-col gap-lg h-full">
     <div class="flex flex-row gap">
       <Select v-model="restaurantId" :options="MENUS" optionLabel="name" optionValue="id"
-              placeholder="Select restaurant" @change="store.loadMenus"/>
+              placeholder="Select restaurant" @change="loadMenus"/>
 
       <Button icon="pi pi-refresh" rounded raised/>
     </div>
@@ -51,7 +67,7 @@ const expandedRows = ref({});
         </template>
       </DataTable>
     </div>
-    <div v-else class="flex flex-col justify-center">
+    <div v-else class="w-full h-full flex flex-col justify-center items-center">
       <Loading/>
     </div>
 
