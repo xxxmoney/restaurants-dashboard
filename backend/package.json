@@ -5,8 +5,8 @@
     "deploy": "wrangler deploy --minify"
   },
   "dependencies": {
-    "hono": "^4.6.12",
-    "jsdom": "^25.0.1"
+    "cheerio": "^1.0.0",
+    "hono": "^4.6.12"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20241112.0",
