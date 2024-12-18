@@ -1,4 +1,4 @@
-import {useWebStore} from "@/stores/webs.js";
+import {useWebStore} from "@/stores/web.store.js";
 import {WebService} from "@/common/services/web.service.js";
 
 export const useWebHandling = () => {

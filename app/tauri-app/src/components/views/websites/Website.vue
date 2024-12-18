@@ -2,8 +2,8 @@
 import {ref, computed, watch, onMounted} from "vue";
 import Loading from "@/components/common/Loading.vue";
 import Button from "primevue/button";
-import {useWebHandling} from "@/composables/webHandling.js";
-import {useWebStore} from "@/stores/webs.js";
+import {useWebHandling} from "@/composables/webHandling.comp.js";
+import {useWebStore} from "@/stores/web.store.js";
 import {storeToRefs} from "pinia";
 
 const {index} = defineProps({

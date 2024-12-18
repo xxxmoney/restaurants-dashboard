@@ -1,6 +1,6 @@
 import {restaurantEnum} from "root/shared/enums/restaurant.enum.js";
-import {getHtmlDocFromUrl} from "@/helpers/webScraperHelper.js";
-import {scrollOntoItem} from "@/helpers/webUtilsHelper.js";
+import {getHtmlDocFromUrl} from "@/helpers/webScraper.helper.js";
+import {scrollOntoItem} from "@/helpers/webUtils.helper.js";
 
 export const WebService = {
     getHandler(enumValue) {

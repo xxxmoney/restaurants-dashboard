@@ -1,13 +1,13 @@
 <script setup>
 import {ref, onMounted, computed, watch, onBeforeUnmount} from "vue";
-import {useWebStore} from "@/stores/webs.js";
+import {useWebStore} from "@/stores/web.store.js";
 import {storeToRefs} from "pinia";
 import Carousel from 'primevue/carousel';
 import Select from 'primevue/select';
 import Website from "@/components/views/websites/Website.vue";
-import {useIsMobile} from "@/composables/isMobile.js";
-import {scrollOntoItem} from "@/helpers/webUtilsHelper.js";
-import {useWebHandling} from "@/composables/webHandling.js";
+import {useIsMobile} from "@/composables/isMobile.comp.js";
+import {scrollOntoItem} from "@/helpers/webUtils.helper.js";
+import {useWebHandling} from "@/composables/webHandling.comp.js";
 
 const store = useWebStore();
 const {webs, visibleCount, visibleCounts} = storeToRefs(store);
