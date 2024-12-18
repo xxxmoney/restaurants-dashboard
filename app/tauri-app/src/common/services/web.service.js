@@ -1,5 +1,5 @@
 import {restaurantEnum} from "root/shared/enums/restaurant.enum.js";
-import {scrollOntoItem} from "@/helpers/webUtils.helper.js";
+import {scrollOntoItem} from "@/common/helpers/webUtils.helper.js";
 
 export const WebService = {
     getOnLoad(enumValue) {

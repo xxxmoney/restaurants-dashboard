@@ -2,7 +2,7 @@ import {defineStore} from "pinia";
 import {ref} from "vue";
 import {MenuApi} from "@/common/apiServices/menu.api.js";
 import {DateTime} from "luxon";
-import {parseDate} from "@/helpers/date.helper.js";
+import {parseDate} from "@/common/helpers/date.helper.js";
 import {DATE_FORMAT} from "root/shared/constants/common.constants.js";
 
 export const useMenuStore = defineStore('menus', () => {
