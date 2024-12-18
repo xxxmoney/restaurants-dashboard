@@ -1,10 +1,7 @@
 import {restaurantEnum} from "root/shared/enums/restaurant.enum.js";
-import {getHtmlDocFromUrl} from "@/helpers/webScraper.helper.js";
 import {scrollOntoItem} from "@/helpers/webUtils.helper.js";
 
 export const WebService = {
-    // getHandler moved to backend
-
     getOnLoad(enumValue) {
         switch (enumValue) {
             case restaurantEnum.U_SISKU:
