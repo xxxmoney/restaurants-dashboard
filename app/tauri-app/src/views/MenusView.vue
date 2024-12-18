@@ -25,6 +25,7 @@ async function loadMenus() {
 
   // Open current day menu if present
   if (currentMenu.value) {
+    expandedRows.value = {};
     expandedRows.value[currentMenu.value.date] = true;
   }
 }
