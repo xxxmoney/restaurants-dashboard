@@ -1,4 +1,5 @@
 <script setup>
+import Button from 'primevue/button';
 import Select from 'primevue/select';
 import Loading from "@/components/common/Loading.vue"
 import DataTable from 'primevue/datatable';
@@ -38,15 +39,15 @@ onMounted(async () => {
 
 <template>
   <div class="flex flex-col gap-lg h-full">
-    <div class="flex flex-row gap">
+    <div class="flex flex-row gap-md">
       <Select v-model="restaurantId" :options="MENUS" optionLabel="name" optionValue="id"
               placeholder="Select restaurant" @change="loadMenus"/>
 
-      <Button icon="pi pi-refresh" rounded raised/>
+      <Button icon="pi pi-refresh" @click="loadMenus" :disabled="!restaurantId"/>
     </div>
 
     <div v-if="menus !== null" class="flex flex-col justify-center gap">
-      <DataTable v-model:expandedRows="expandedRows" :value="menus" dataKey="date" tableStyle="min-width: 60rem">
+      <DataTable v-model:expandedRows="expandedRows" :value="menus" dataKey="date">
         <Column expander style="width: 2rem"/>
 
         <Column field="date" header="Date">

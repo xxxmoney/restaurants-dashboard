@@ -19,6 +19,7 @@
     "axios": "^1.7.9",
     "luxon": "^3.5.0",
     "pinia": "^2.2.8",
+    "primeicons": "^7.0.0",
     "primevue": "^4.2.4",
     "tailwindcss-primeui": "^0.3.4",
     "vue": "^3.3.4",
