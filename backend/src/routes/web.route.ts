@@ -9,7 +9,8 @@ websRoute.get('/:id', async (c) => {
 
     return c.json({
         id: id,
-        html: await WebService.getWebHtml(id)
+        // @ts-ignore
+        html: await WebService.getWebHtml(id, c.env.PROXY)
     })
 });
 

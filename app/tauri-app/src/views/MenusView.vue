@@ -35,9 +35,7 @@ function getRowClass(data) {
 }
 
 onMounted(async () => {
-  if (restaurantId.value) {
-    await loadMenus();
-  }
+  await loadMenus();
 });
 
 </script>

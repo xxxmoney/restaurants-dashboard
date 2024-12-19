@@ -4,20 +4,16 @@ import {MenuApi} from "@/common/apiServices/menu.api.js";
 import {DateTime} from "luxon";
 import {parseDate} from "@/common/helpers/date.helper.js";
 import {DATE_FORMAT} from "root/shared/constants/common.constants.js";
+import {restaurantEnum} from "root/shared/enums/restaurant.enum.js";
 
 export const useMenuStore = defineStore('menus', () => {
     const menus = ref([]);
-    const restaurantId = ref(null);
+    const restaurantId = ref(restaurantEnum.U_SISKU);
 
     async function loadMenus() {
-        // In case of unselect
-        if (!restaurantId) {
-            menus.value = [];
-        } else {
-            menus.value = null;
-            const response = await MenuApi.getMenus(restaurantId.value);
-            menus.value = response.data
-        }
+        menus.value = null;
+        const response = await MenuApi.getMenus(restaurantId.value);
+        menus.value = response.data
     }
 
     function getCurrentDayMenu() {

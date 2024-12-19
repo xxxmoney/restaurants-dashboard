@@ -14,7 +14,7 @@ function parsePrice(text: string) {
 }
 
 export const MenuService = {
-    async getMenu(enumValue: number): Promise<Menu[]> {
+    async getMenu(enumValue: number, fetcher: Fetcher): Promise<Menu[]> {
         // @ts-ignore
         if (!Object.values(restaurantEnum).includes(enumValue)) {
             throw new Error('Invalid restaurant enum value');
@@ -26,9 +26,9 @@ export const MenuService = {
             // @ts-ignore
             RESTAURANTS[enumValue].alternateUrl ?
                 // @ts-ignore
-                await getHtmlDocFromUrl(RESTAURANTS[enumValue].alternateUrl, RESTAURANTS[enumValue].alternateUrlCharset) :
+                await getHtmlDocFromUrl(fetcher, RESTAURANTS[enumValue].alternateUrl, RESTAURANTS[enumValue].alternateUrlCharset) :
                 // @ts-ignore
-                await getHtmlDocFromUrl(RESTAURANTS[enumValue].url, RESTAURANTS[enumValue].urlCharset);
+                await getHtmlDocFromUrl(fetcher, RESTAURANTS[enumValue].url, RESTAURANTS[enumValue].urlCharset);
 
         if (enumValue === restaurantEnum.U_SISKU) {
             // TODO

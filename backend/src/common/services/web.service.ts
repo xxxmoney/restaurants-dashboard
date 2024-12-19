@@ -4,9 +4,9 @@ import {RESTAURANTS} from "../../../../shared/constants/restaurant.constants";
 import {CheerioAPI} from "cheerio";
 
 export const WebService = {
-    async getWebHtml(enumValue: number) {
+    async getWebHtml(enumValue: number, fetcher: Fetcher) {
         // @ts-ignore
-        const $ = await getHtmlDocFromUrl(RESTAURANTS[enumValue].url);
+        const $ = await getHtmlDocFromUrl(fetcher, RESTAURANTS[enumValue].url);
 
         // Additional special handling
         if (enumValue === restaurantEnum.U_SISKU) {
@@ -15,7 +15,7 @@ export const WebService = {
             const innerFrameSrc = innerFrame.attr('src');
 
             if (innerFrameSrc) {
-                const $inner = await getHtmlDocFromUrl(innerFrameSrc, 'windows-1250');
+                const $inner = await getHtmlDocFromUrl(fetcher, innerFrameSrc, 'windows-1250');
                 innerFrame.attr('srcdoc', $inner.html());
             }
 
