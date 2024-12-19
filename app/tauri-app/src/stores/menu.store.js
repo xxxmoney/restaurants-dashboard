@@ -10,14 +10,9 @@ export const useMenuStore = defineStore('menus', () => {
     const restaurantId = ref(null);
 
     async function loadMenus() {
-        // In case of unselect
-        if (!restaurantId) {
-            menus.value = [];
-        } else {
-            menus.value = null;
-            const response = await MenuApi.getMenus(restaurantId.value);
-            menus.value = response.data
-        }
+        menus.value = null;
+        const response = await MenuApi.getMenus(restaurantId.value);
+        menus.value = response.data
     }
 
     function getCurrentDayMenu() {

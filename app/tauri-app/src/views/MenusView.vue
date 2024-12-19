@@ -21,6 +21,11 @@ const currentMenu = computed(() => store.getCurrentDayMenu());
 const expandedRows = ref({});
 
 async function loadMenus() {
+  if (!restaurantId.value) {
+    menus.value = [];
+    return;
+  }
+
   await store.loadMenus();
 
   // Open current day menu if present
@@ -35,9 +40,7 @@ function getRowClass(data) {
 }
 
 onMounted(async () => {
-  if (restaurantId.value) {
-    await loadMenus();
-  }
+  await loadMenus();
 });
 
 </script>
@@ -46,7 +49,7 @@ onMounted(async () => {
   <div class="flex flex-col gap-lg h-full">
     <div class="flex flex-row gap-md">
       <Select v-model="restaurantId" :options="MENUS" optionLabel="name" optionValue="id"
-              placeholder="Select restaurant" @change="loadMenus"/>
+              placeholder="Select restaurant" showClear @change="loadMenus"/>
 
       <Button icon="pi pi-refresh" @click="loadMenus" :disabled="!restaurantId"/>
     </div>
@@ -77,7 +80,7 @@ onMounted(async () => {
       </DataTable>
     </div>
     <div v-else class="w-full h-full flex flex-col">
-      <WorkInProgress/>
+      NO MENUS
     </div>
 
   </div>
