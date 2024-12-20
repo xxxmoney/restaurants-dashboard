@@ -6,6 +6,10 @@ services = [
     { binding = "PROXY", service = "proxy-worker" }
 ]
 
+[[kv_namespaces]]
+binding = "kvCache"
+id = "ae211d2253364890bd9f190b83f50f6f"
+
 # compatibility_flags = [ "nodejs_compat" ]
 
 # [vars]
