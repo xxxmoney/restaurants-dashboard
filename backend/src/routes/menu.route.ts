@@ -1,5 +1,6 @@
 import {Hono} from 'hono'
 import {MenuService} from "../common/services/menu.service";
+import {getFetcher} from "../common/helpers/fetcher.helper";
 
 const menuRoute = new Hono()
 
@@ -16,9 +17,11 @@ menuRoute.get('/:id', async (c) => {
     }
 
     const id: number = parseInt(c.req.param('id'));
-    
+
     // @ts-ignore
-    const menus = await MenuService.getMenu(id, c.env.PROXY);
+    console.log(c.env.PROXY)
+    // @ts-ignore
+    const menus = await MenuService.getMenu(id, getFetcher(c.env));
     console.log('Caching value: ', menus);
     await kv.put(cacheKey, JSON.stringify(menus), {expirationTtl: 10});
 

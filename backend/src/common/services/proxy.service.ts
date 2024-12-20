@@ -9,7 +9,7 @@ export const ProxyService = {
             searchParamsObject.charset = charset;
         }
         const searchParams = new URLSearchParams(searchParamsObject);
-        const response = await fetcher.fetch(`${PROXY_URL}?${searchParams}`);
+        const response = await (fetcher ? fetcher.fetch(`${PROXY_URL}?${searchParams}`) : fetch(`${PROXY_URL}?${searchParams}`));
 
         return await response.text();
     }

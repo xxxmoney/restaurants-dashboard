@@ -1,5 +1,6 @@
 import {Hono} from 'hono'
 import {WebService} from "../common/services/web.service";
+import {getFetcher} from "../common/helpers/fetcher.helper";
 
 const websRoute = new Hono()
 
@@ -10,7 +11,7 @@ websRoute.get('/:id', async (c) => {
     return c.json({
         id: id,
         // @ts-ignore
-        html: await WebService.getWebHtml(id, c.env.PROXY)
+        html: await WebService.getWebHtml(id, getFetcher(c.env))
     })
 });
 
