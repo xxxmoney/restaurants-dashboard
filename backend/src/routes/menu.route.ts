@@ -22,7 +22,7 @@ menuRoute.get('/:id', async (c) => {
     // @ts-ignore
     console.log(c.env.PROXY)
     // @ts-ignore
-    const menus = await MenuService.getMenu(id, getFetcher(c.env));
+    const menus = await MenuService.getMenu(id, getFetcher(c));
     const menusJson = JSON.stringify(menus);
     console.log('Caching value: ', menusJson);
     await kv.put(cacheKey, menusJson, {expirationTtl: 60});

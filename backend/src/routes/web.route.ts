@@ -11,7 +11,7 @@ websRoute.get('/:id', async (c) => {
     return c.json({
         id: id,
         // @ts-ignore
-        html: await WebService.getWebHtml(id, getFetcher(c.env))
+        html: await WebService.getWebHtml(id, getFetcher(c))
     })
 });
 
