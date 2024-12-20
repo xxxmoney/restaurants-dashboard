@@ -6,7 +6,7 @@ const menuRoute = new Hono()
 // Get menu by id
 menuRoute.get('/:id', async (c) => {
     // @ts-ignore
-    const kv = c.env.kvCache;
+    const kv = c.env.KV_CACHE;
     const cacheKey = 'menu-get-id-' + c.req.param('id');
 
     const cachedValue = await kv.get(cacheKey);
