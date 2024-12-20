@@ -11,9 +11,9 @@ menuRoute.get('/:id', async (c) => {
     const cacheKey = 'menu-get-id-' + c.req.param('id');
 
     const cachedValue = await kv.get(cacheKey);
-    console.log('Cached Value: ', cachedValue);
     if (cachedValue) {
-        return c.json(JSON.parse(cachedValue));
+        const cachedValueParsed = JSON.parse(cachedValue);
+        return c.json(cachedValueParsed);
     }
 
     const id: number = parseInt(c.req.param('id'));
@@ -22,8 +22,9 @@ menuRoute.get('/:id', async (c) => {
     console.log(c.env.PROXY)
     // @ts-ignore
     const menus = await MenuService.getMenu(id, getFetcher(c.env));
-    console.log('Caching value: ', menus);
-    await kv.put(cacheKey, JSON.stringify(menus), {expirationTtl: 10});
+    const menusJson = JSON.stringify(menus);
+    console.log('Caching value: ', menusJson);
+    await kv.put(cacheKey, menusJson, {expirationTtl: 60});
 
     return c.json(menus);
 });
