@@ -1,31 +1,25 @@
 import {Hono} from 'hono'
 import {MenuService} from "../common/services/menu.service";
 import {getFetcher} from "../common/helpers/fetcher.helper";
+import { useEndpointCache } from "../common/composables/cache.comp";
 
 const menuRoute = new Hono()
 
 // Get menu by id
 menuRoute.get('/:id', async (c) => {
     // @ts-ignore
-    const kv = c.env.KV_CACHE;
-    const cacheKey = 'menu-get-id-' + c.req.param('id');
+    const cache = useEndpointCache(c);
 
-    // TODO: caching helper, expiration ttl to constants, etc
-    const cachedValue = await kv.get(cacheKey);
+    const cachedValue = await cache.get();
     if (cachedValue) {
-        const cachedValueParsed = JSON.parse(cachedValue);
-        return c.json(cachedValueParsed);
+        return c.json(cachedValue);
     }
 
     const id: number = parseInt(c.req.param('id'));
-
-    // @ts-ignore
-    console.log(c.env.PROXY)
     // @ts-ignore
     const menus = await MenuService.getMenu(id, getFetcher(c));
-    const menusJson = JSON.stringify(menus);
-    console.log('Caching value: ', menusJson);
-    await kv.put(cacheKey, menusJson, {expirationTtl: 60});
+    console.log('Caching value: ', JSON.stringify(menus));
+    await cache.set(menus);
 
     return c.json(menus);
 });
