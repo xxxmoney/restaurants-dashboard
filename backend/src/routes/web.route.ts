@@ -24,7 +24,6 @@ websRoute.get('/:id', async (c) => {
 
     return c.json({
         id: id,
-        // @ts-ignore
         html: html
     })
 });
