@@ -10,6 +10,7 @@ menuRoute.get('/:id', async (c) => {
     const kv = c.env.KV_CACHE;
     const cacheKey = 'menu-get-id-' + c.req.param('id');
 
+    // TODO: caching helper, expiration ttl to constants, etc
     const cachedValue = await kv.get(cacheKey);
     if (cachedValue) {
         const cachedValueParsed = JSON.parse(cachedValue);
