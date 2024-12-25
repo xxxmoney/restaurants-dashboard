@@ -6,6 +6,7 @@
     "test": "vitest"
   },
   "dependencies": {
+    "@google/generative-ai": "^0.21.0",
     "cheerio": "^1.0.0",
     "hono": "^4.6.12",
     "luxon": "^3.5.0"
