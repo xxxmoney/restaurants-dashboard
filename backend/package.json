@@ -2,7 +2,8 @@
   "name": "backend",
   "scripts": {
     "dev": "wrangler dev",
-    "deploy": "wrangler deploy --minify"
+    "deploy": "wrangler deploy --minify",
+    "test": "vitest"
   },
   "dependencies": {
     "cheerio": "^1.0.0",
@@ -10,9 +11,11 @@
     "luxon": "^3.5.0"
   },
   "devDependencies": {
+    "@cloudflare/vitest-pool-workers": "^0.5.40",
     "@cloudflare/workers-types": "^4.20241112.0",
     "@types/jsdom": "^21.1.7",
     "@types/luxon": "^3.4.2",
-    "wrangler": "^3.88.0"
+    "vitest": "2.1.8",
+    "wrangler": "^3.99.0"
   }
 }
