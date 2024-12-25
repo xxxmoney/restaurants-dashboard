@@ -16,7 +16,7 @@ export class GeminiService {
 
     public async text(prompt: string): Promise<string> {
         const content = await this.model.generateContent([prompt]);
-        return content.response.text();
+        return content.response.text().trim();
     }
 
     public async image(prompt: string, image: Image): Promise<string> {
@@ -28,6 +28,6 @@ export class GeminiService {
         }
 
         const content = await this.model.generateContent([prompt, imageData]);
-        return content.response.text();
+        return content.response.text().trim();
     }
 }
