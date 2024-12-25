@@ -6,26 +6,28 @@ import {GeminiService} from "../../../src/common/services/gemini.service";
 import {Context} from "hono";
 
 describe("prmpt", () => {
-    it("should respond with not null", async () => {
+    it("should respond with text YES", async () => {
         //
         // Arrange
         //
+
+        // @ts-ignore
+        const service = new GeminiService(env.GEMINI_KEY as string);
 
 
         //
         // Act
         //
 
-        const result = await GeminiService.prompt({env} as Context, "test");
+        const result = await service.prompt("Test prompt, only respond with one word, 'YES'");
+        const text = result.response.text();
 
 
         //
         // Assert
         //
 
-        //expect(result).toStrictEqual([]);
-        // Test result not empty
-        expect(result).not.toBeNull();
-
+        expect(text).not.toBeNull();
+        console.log(text)
     });
 });

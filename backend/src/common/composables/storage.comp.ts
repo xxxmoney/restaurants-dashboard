@@ -3,7 +3,7 @@ import {Context} from "hono";
 export function useStorage(context: Context, storageKey: string) {
     const kv = context.env.KV_STORAGE;
 
-    async function get<T>(): Promise<T | undefined> {
+    async function get<T>(): Promise<T> {
         console.info('Getting storage value for key: ', storageKey);
 
         const value = await kv.get(storageKey);

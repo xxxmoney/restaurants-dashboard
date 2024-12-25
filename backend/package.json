@@ -8,6 +8,7 @@
   "dependencies": {
     "@google/generative-ai": "^0.21.0",
     "cheerio": "^1.0.0",
+    "dotenv": "^16.4.7",
     "hono": "^4.6.12",
     "luxon": "^3.5.0"
   },

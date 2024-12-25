@@ -1,13 +1,15 @@
-import {Context} from "hono";
-import {useStorage} from "../composables/storage.comp";
-import {GEMINI_API_KEY} from "../constants/storageValues.constants";
+import {GenerateContentResult, GenerativeModel, GoogleGenerativeAI} from "@google/generative-ai";
+import {MODEL_NAME} from "../constants/gemini.constants";
 
-export const GeminiService = {
+export class GeminiService {
+    private readonly model: GenerativeModel | undefined;
 
-    async prompt(context: Context, prompt: string): Promise<any> {
-        const storage = useStorage(context, GEMINI_API_KEY);
+    constructor(apiKey: string) {
+        const generativeAI = new GoogleGenerativeAI(apiKey);
+        this.model = generativeAI.getGenerativeModel({model: MODEL_NAME});
+    }
 
-        // TODO: try prompting with gemini key
-        return []
+    public async prompt(prompt: string): Promise<GenerateContentResult> {
+        return await this.model!.generateContent([prompt]);
     }
 }
