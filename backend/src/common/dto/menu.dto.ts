@@ -5,9 +5,12 @@ export interface MenuItem {
     price: number;
 }
 
-export interface Menu {
+export interface MenuDto {
     date: DateTime;
     items: MenuItem[];
 }
 
+export interface Menus {
+    menus: MenuDto[];
+}
 

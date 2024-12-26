@@ -2,7 +2,7 @@ import {GenerateContentResult, GenerativeModel, GoogleGenerativeAI, Part} from "
 import {COMPLY_WITH_SCHEMA_PROMPT, DEFAULT_MIME_TYPE, MODEL_NAME} from "../constants/gemini.constants";
 import format from "string-format";
 import * as yup from 'yup';
-import {AnyObject, ObjectSchema} from "yup";
+import {AnyObject, ArraySchema, ObjectSchema} from "yup";
 
 interface Image {
     base64: string;

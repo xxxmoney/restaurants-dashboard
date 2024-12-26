@@ -1,8 +1,12 @@
 import {restaurantEnum} from "../../../../shared/enums/restaurant.enum";
 import {getHtmlDocFromUrl} from "../helpers/domParser.helper";
 import {RESTAURANTS} from "../../../../shared/constants/restaurant.constants";
-import {Menu} from "../dto/menu";
+import {MenuDto, Menus} from "../dto/menu.dto";
 import {DateTime} from "luxon";
+import {GeminiService} from "./gemini.service";
+import {arrayBufferToBase64} from "../helpers/buffer.helper";
+import {menusSchema} from "../schemas/menu.schema";
+import {MENU_PROMPTS} from "../constants/gemini.constants";
 
 function parseDate(text: string) {
     const date = text.match(/\d{1,2}\.\d{1,2}\.\d{4}/g)![0];
@@ -14,13 +18,13 @@ function parsePrice(text: string) {
 }
 
 export const MenuService = {
-    async getMenu(enumValue: number, fetcher: Fetcher): Promise<Menu[]> {
+    async getMenu(enumValue: number, fetcher: Fetcher, env: any): Promise<MenuDto[]> {
         // @ts-ignore
         if (!Object.values(restaurantEnum).includes(enumValue)) {
             throw new Error('Invalid restaurant enum value');
         }
 
-        const menus: Menu[] = [];
+        const menus: MenuDto[] = [];
 
         const $ =
             // @ts-ignore
@@ -31,7 +35,19 @@ export const MenuService = {
                 await getHtmlDocFromUrl(fetcher, RESTAURANTS[enumValue].url, RESTAURANTS[enumValue].urlCharset);
 
         if (enumValue === restaurantEnum.U_SISKU) {
-            // TODO
+            const $content = $('.media-container-row').first();
+            const $image = $content.find('img').first();
+
+            // Download image
+            const url = $image.attr('src')!;
+            const imageResponse = await fetch(url);
+            const imageBuffer = await imageResponse.arrayBuffer();
+            const imageBase64 = arrayBufferToBase64(imageBuffer);
+
+            // Get menus with gemini service
+            const service = new GeminiService(env.GEMINI_KEY);
+            const geminiResponse = await service.imageToJson<Menus>(MENU_PROMPTS[restaurantEnum.U_SISKU], menusSchema, {base64: imageBase64});
+            menus.push(...geminiResponse.json.menus);
         } else if (enumValue === restaurantEnum.KLIKA) {
             const $content = $('.content').first();
             const $title = $content.find('strong').first();
