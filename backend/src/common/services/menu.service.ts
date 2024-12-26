@@ -1,12 +1,11 @@
 import {restaurantEnum} from "../../../../shared/enums/restaurant.enum";
 import {getHtmlDocFromUrl} from "../helpers/domParser.helper";
 import {RESTAURANTS} from "../../../../shared/constants/restaurant.constants";
-import {Menu, Menus} from "../dto/menu";
+import {MenuDto, Menus} from "../dto/menu.dto";
 import {DateTime} from "luxon";
 import {GeminiService} from "./gemini.service";
 import {arrayBufferToBase64} from "../helpers/buffer.helper";
-import * as yup from "yup";
-import {menuSchema, menusSchema} from "../schemas/menu.schema";
+import {menusSchema} from "../schemas/menu.schema";
 
 function parseDate(text: string) {
     const date = text.match(/\d{1,2}\.\d{1,2}\.\d{4}/g)![0];
@@ -18,13 +17,13 @@ function parsePrice(text: string) {
 }
 
 export const MenuService = {
-    async getMenu(enumValue: number, fetcher: Fetcher, env: any): Promise<Menu[]> {
+    async getMenu(enumValue: number, fetcher: Fetcher, env: any): Promise<MenuDto[]> {
         // @ts-ignore
         if (!Object.values(restaurantEnum).includes(enumValue)) {
             throw new Error('Invalid restaurant enum value');
         }
 
-        const menus: Menu[] = [];
+        const menus: MenuDto[] = [];
 
         const $ =
             // @ts-ignore
