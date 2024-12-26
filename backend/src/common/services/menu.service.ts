@@ -1,11 +1,12 @@
 import {restaurantEnum} from "../../../../shared/enums/restaurant.enum";
 import {getHtmlDocFromUrl} from "../helpers/domParser.helper";
 import {RESTAURANTS} from "../../../../shared/constants/restaurant.constants";
-import {Menu, menuSchema} from "../dto/menu";
+import {Menu, Menus} from "../dto/menu";
 import {DateTime} from "luxon";
 import {GeminiService} from "./gemini.service";
 import {arrayBufferToBase64} from "../helpers/buffer.helper";
 import * as yup from "yup";
+import {menuSchema, menusSchema} from "../schemas/menu.schema";
 
 function parseDate(text: string) {
     const date = text.match(/\d{1,2}\.\d{1,2}\.\d{4}/g)![0];
@@ -44,12 +45,10 @@ export const MenuService = {
             const imageBase64 = arrayBufferToBase64(imageBuffer);
 
             // Get menus with gemini service
-            const schema = yup.array().of(menuSchema);
             const service = new GeminiService(env.GEMINI_KEY);
-             
-            const menus = await service.imageToJson<Menu>('', menuSchema, {base64: imageBase64});
 
-
+            const geminiResponse = await service.imageToJson<Menus>('', menusSchema, {base64: imageBase64});
+            menus.push(...geminiResponse.json.menus);
         } else if (enumValue === restaurantEnum.KLIKA) {
             const $content = $('.content').first();
             const $title = $content.find('strong').first();

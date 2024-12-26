@@ -4,7 +4,7 @@ import {
 import {describe, it, expect} from "vitest";
 import {GeminiService} from "../../../src/common/services/gemini.service"
 import * as yup from 'yup';
-import {luxonDateTimeSchema} from "../../../src/common/dto/luxon";
+import {luxonDateTimeSchema} from "../../../src/common/schemas/luxon.schema";
 import {DateTime} from "luxon";
 
 describe("textToText", () => {
