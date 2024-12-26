@@ -4,6 +4,8 @@ import {
 import {describe, it, expect} from "vitest";
 import {GeminiService} from "../../../src/common/services/gemini.service"
 import * as yup from 'yup';
+import {luxonDateTimeSchema} from "../../../src/common/dto/luxon";
+import {DateTime} from "luxon";
 
 describe("textToText", () => {
     it("should respond with text 'YES'", async () => {
@@ -119,6 +121,7 @@ describe("imageToJson", () => {
             breed: string,
             color: string,
             age: number,
+            date: DateTime,
             stats: {
                 attack: number,
                 defense: number,
@@ -135,6 +138,7 @@ describe("imageToJson", () => {
             breed: yup.string().required(),
             color: yup.string().required(),
             age: yup.number().required(),
+            date: luxonDateTimeSchema.required(),
             stats: yup.object({
                 attack: yup.number().required(),
                 defense: yup.number().required(),

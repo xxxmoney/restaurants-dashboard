@@ -1,8 +1,11 @@
 import {restaurantEnum} from "../../../../shared/enums/restaurant.enum";
 import {getHtmlDocFromUrl} from "../helpers/domParser.helper";
 import {RESTAURANTS} from "../../../../shared/constants/restaurant.constants";
-import {Menu} from "../dto/menu";
+import {Menu, menuSchema} from "../dto/menu";
 import {DateTime} from "luxon";
+import {GeminiService} from "./gemini.service";
+import {arrayBufferToBase64} from "../helpers/buffer.helper";
+import * as yup from "yup";
 
 function parseDate(text: string) {
     const date = text.match(/\d{1,2}\.\d{1,2}\.\d{4}/g)![0];
@@ -14,7 +17,7 @@ function parsePrice(text: string) {
 }
 
 export const MenuService = {
-    async getMenu(enumValue: number, fetcher: Fetcher): Promise<Menu[]> {
+    async getMenu(enumValue: number, fetcher: Fetcher, env: any): Promise<Menu[]> {
         // @ts-ignore
         if (!Object.values(restaurantEnum).includes(enumValue)) {
             throw new Error('Invalid restaurant enum value');
@@ -31,7 +34,22 @@ export const MenuService = {
                 await getHtmlDocFromUrl(fetcher, RESTAURANTS[enumValue].url, RESTAURANTS[enumValue].urlCharset);
 
         if (enumValue === restaurantEnum.U_SISKU) {
-            // TODO
+            const $content = $('.media-container-row').first();
+            const $image = $content.find('img').first();
+
+            // Download image
+            const url = $image.attr('src')!;
+            const imageResponse = await fetch(url);
+            const imageBuffer = await imageResponse.arrayBuffer();
+            const imageBase64 = arrayBufferToBase64(imageBuffer);
+
+            // Get menus with gemini service
+            const schema = yup.array().of(menuSchema);
+            const service = new GeminiService(env.GEMINI_KEY);
+             
+            const menus = await service.imageToJson<Menu>('', menuSchema, {base64: imageBase64});
+
+
         } else if (enumValue === restaurantEnum.KLIKA) {
             const $content = $('.content').first();
             const $title = $content.find('strong').first();
