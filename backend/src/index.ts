@@ -9,7 +9,24 @@ const app = new Hono()
 setup();
 
 // Logger middleware
-app.use(logger());
+app.use('*', logger());
+
+// Error handling
+app.onError((error, c) => {
+    console.error('An error occurred:', error)
+
+    const response = {
+        message: error.message,
+        request: {
+            url: c.req.url,
+            method: c.req.method
+        },
+        stack: error.stack
+    };
+
+    c.status(500)
+    return c.json(response)
+});
 
 // Allow any origin
 app.use('*', async (c, next) => {
