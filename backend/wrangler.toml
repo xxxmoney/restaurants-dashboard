@@ -1,7 +1,9 @@
 name = "restaurants-backend"
 main = "src/index.ts"
 compatibility_date = "2024-12-03"
+compatibility_flags = ["nodejs_compat"]
 
+[env.not.miniflare]
 services = [
     { binding = "PROXY", service = "proxy-worker" }
 ]
@@ -9,6 +11,10 @@ services = [
 [[kv_namespaces]]
 binding = "KV_CACHE"
 id = "ae211d2253364890bd9f190b83f50f6f"
+
+[[kv_namespaces]]
+binding = "KV_STORAGE"
+id = "34e791ca02b446029a6506438a570d21"
 
 # compatibility_flags = [ "nodejs_compat" ]
 
