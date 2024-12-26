@@ -46,7 +46,6 @@ export const MenuService = {
 
             // Get menus with gemini service
             const service = new GeminiService(env.GEMINI_KEY);
-
             const geminiResponse = await service.imageToJson<Menus>(MENU_PROMPTS[restaurantEnum.U_SISKU], menusSchema, {base64: imageBase64});
             menus.push(...geminiResponse.json.menus);
         } else if (enumValue === restaurantEnum.KLIKA) {
