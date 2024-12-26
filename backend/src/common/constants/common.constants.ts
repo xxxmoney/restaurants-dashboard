@@ -1,4 +1,4 @@
-const IS_DEBUG = false;
+import {IS_DEBUG} from "../../../../shared/constants/common.constants";
 
 export const USE_REMOTE_PROXY = false;
 
