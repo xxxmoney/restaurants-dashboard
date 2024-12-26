@@ -6,6 +6,7 @@ import {DateTime} from "luxon";
 import {GeminiService} from "./gemini.service";
 import {arrayBufferToBase64} from "../helpers/buffer.helper";
 import {menusSchema} from "../schemas/menu.schema";
+import {MENU_PROMPTS} from "../constants/gemini.constants";
 
 function parseDate(text: string) {
     const date = text.match(/\d{1,2}\.\d{1,2}\.\d{4}/g)![0];
@@ -46,7 +47,7 @@ export const MenuService = {
             // Get menus with gemini service
             const service = new GeminiService(env.GEMINI_KEY);
 
-            const geminiResponse = await service.imageToJson<Menus>('', menusSchema, {base64: imageBase64});
+            const geminiResponse = await service.imageToJson<Menus>(MENU_PROMPTS[restaurantEnum.U_SISKU], menusSchema, {base64: imageBase64});
             menus.push(...geminiResponse.json.menus);
         } else if (enumValue === restaurantEnum.KLIKA) {
             const $content = $('.content').first();
