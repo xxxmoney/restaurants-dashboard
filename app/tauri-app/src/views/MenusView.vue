@@ -10,7 +10,6 @@ import {MENUS} from "@/common/constants/menu.constants.js";
 import {computed, onMounted, ref} from "vue";
 import {formatDate, parseDate} from "@/common/helpers/date.helper.js";
 import {formatCurrency} from "../common/helpers/currency.helper.js";
-import WorkInProgress from "@/components/common/WorkInProgress.vue";
 
 const store = useMenuStore();
 const {restaurantId} = storeToRefs(store);
@@ -75,7 +74,7 @@ onMounted(async () => {
       </DataTable>
     </div>
     <div v-else class="w-full h-full flex flex-col">
-      <WorkInProgress/>
+      <!--      TODO: maybe some text that there are no menus?-->
     </div>
 
   </div>
