@@ -104,3 +104,7 @@ iframe {
     border: none;
     overflow: auto;
 }
+
+.border-content {
+    @apply border-[color:--p-content-border-color]
+}

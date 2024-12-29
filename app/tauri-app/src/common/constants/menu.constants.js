@@ -1,7 +1,7 @@
 import {restaurantEnum} from "root/shared/enums/restaurant.enum.js";
 import {RESTAURANTS} from "root/shared/constants/restaurant.constants.js";
 
-const MENUS = [
+export const MENUS = [
     {
         id: restaurantEnum.U_SISKU,
         name: RESTAURANTS[restaurantEnum.U_SISKU].name,
@@ -20,6 +20,4 @@ const MENUS = [
     },
 ];
 
-export {
-    MENUS,
-}
+export const MENUS_PER_ROW = 4;
