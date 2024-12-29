@@ -21,7 +21,9 @@ const {selectedIds} = storeToRefs(store);
     </div>
 
     <div class="grid gap-xl grid-cols-1 md:gap-md md:grid-cols-4">
-      <Menus v-for="id in selectedIds" :key="`menus-${id}`" :restaurantId="id"/>
+      <div v-for="id in selectedIds" :key="`menus-${id}`">
+        <Menus :restaurantId="id"/>
+      </div>
     </div>
   </div>
 </template>

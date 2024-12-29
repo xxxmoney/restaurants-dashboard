@@ -44,7 +44,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="flex flex-col gap-md px-sm py-md border-content border-2 rounded-lg">
+  <div class="flex flex-col gap-md px-sm py-lg border-content border-e-0 border-l-0 border-2 rounded-lg">
     <div class="relative flex flex-row justify-center items-center min-h-10">
       <a :href="restaurant.url" target="_blank">{{ restaurant.name }}</a>
 
