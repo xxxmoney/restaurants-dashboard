@@ -9,6 +9,8 @@ import Button from "primevue/button";
 const store = useMenuStore();
 const {selectedIds} = storeToRefs(store);
 
+const itemsPerRow = 4;
+
 </script>
 
 <template>
@@ -20,10 +22,10 @@ const {selectedIds} = storeToRefs(store);
                    placeholder="Select restaurant" filter showClear/>
     </div>
 
-    <div class="grid gap-xl grid-cols-1 md:gap-md md:grid-cols-4">
-      <div v-for="id in selectedIds" :key="`menus-${id}`">
+    <div class="grid gap-xl grid-cols-1 md:gap-md" :class="`md:grid-cols-${itemsPerRow}`">
+      <template v-for="id in selectedIds">
         <Menus :restaurantId="id"/>
-      </div>
+      </template>
     </div>
   </div>
 </template>
