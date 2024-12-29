@@ -71,7 +71,9 @@ onMounted(async () => {
         </Column>
 
         <template #expansion="{data}">
-          <DataTable :value="data.items">
+          <Empty v-if="data.items.length === 0"/>
+
+          <DataTable v-else :value="data.items">
             <Column field="name" header="Name" sortable></Column>
             <Column field="price" header="Price" sortable>
               <template #body="{data}">
