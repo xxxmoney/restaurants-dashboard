@@ -3,6 +3,7 @@ import {COMPLY_WITH_SCHEMA_PROMPT, DEFAULT_MIME_TYPE, MODEL_NAME} from "../const
 import format from "string-format";
 import * as yup from 'yup';
 import {AnyObject, ArraySchema, ObjectSchema} from "yup";
+import {IS_DEBUG} from "../../../../shared/constants/common.constants";
 
 interface Image {
     base64: string;
@@ -56,10 +57,14 @@ export class GeminiService {
     }
 
     private async generateContent(request: (string | Part)[]): Promise<GenerateContentResult> {
-        console.log('Gemini request:', request);
+        if (IS_DEBUG) {
+            console.info('Gemini request:', request);
+        }
         const content = await this.model.generateContent(request);
-        console.log('Gemini response:', content);
-        console.log('Gemini response text:', content.response.text());
+        if (IS_DEBUG) {
+            console.info('Gemini response:', content);
+            console.info('Gemini response text:', content.response.text());
+        }
 
         return content;
     }
