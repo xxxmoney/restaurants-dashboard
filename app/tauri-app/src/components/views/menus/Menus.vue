@@ -48,7 +48,7 @@ onMounted(async () => {
     <div class="relative flex flex-row justify-center items-center min-h-10">
       <a :href="restaurant.url" target="_blank">{{ restaurant.name }}</a>
 
-      <Button @click="loadMenus" icon="pi pi-refresh" class="absolute right-0"/>
+      <Button @click="loadMenus" icon="pi pi-refresh" class="absolute left-0"/>
     </div>
 
     <!-- There are no menus-->

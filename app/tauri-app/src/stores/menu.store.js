@@ -24,6 +24,11 @@ export const useMenuStore = defineStore('menus', () => {
         menusByRestaurant.value[restaurantId] = response.data
     }
 
+    async function loadAllMenus() {
+        const promises = restaurantIds.map(id => loadMenus(id));
+        await Promise.all(promises);
+    }
+
     function getCurrentDayMenu(restaurantId) {
         const today = DateTime.now().toFormat(DATE_FORMAT);
         return menusByRestaurant.value[restaurantId]?.find(menu => parseDate(menu.date).toFormat(DATE_FORMAT) === today);
@@ -34,6 +39,7 @@ export const useMenuStore = defineStore('menus', () => {
 
         getMenus,
         loadMenus,
+        loadAllMenus,
         getCurrentDayMenu
     }
 })
