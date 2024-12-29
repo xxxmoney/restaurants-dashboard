@@ -20,6 +20,10 @@ export default {
                 '6xl': '4rem',
                 '7xl': '5rem',
             },
+            colors: {
+                "primary-color": "var(--p-primary-color)",
+                "secondary-color": "var(--p-secondary-color)"
+            },
         },
     },
     plugins: [require('tailwindcss-primeui')],

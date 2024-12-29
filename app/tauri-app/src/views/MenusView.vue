@@ -20,7 +20,7 @@ const {selectedIds} = storeToRefs(store);
                    placeholder="Select restaurant" filter showClear/>
     </div>
 
-    <div class="grid gap-md grid-cols-1 md:grid-cols-4">
+    <div class="grid gap-xl grid-cols-1 md:gap-md md:grid-cols-4">
       <Menus v-for="id in selectedIds" :key="`menus-${id}`" :restaurantId="id"/>
     </div>
   </div>
