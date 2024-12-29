@@ -5,12 +5,10 @@ import {storeToRefs} from "pinia";
 import {MENUS} from "@/common/constants/menu.constants.js";
 import Menus from "@/components/views/menus/Menus.vue";
 import Button from "primevue/button";
+import {MENUS_PER_ROW} from "@/common/constants/menu.constants.js";
 
 const store = useMenuStore();
 const {selectedIds} = storeToRefs(store);
-
-const itemsPerRow = 4;
-
 </script>
 
 <template>
@@ -22,7 +20,7 @@ const itemsPerRow = 4;
                    placeholder="Select restaurant" filter showClear/>
     </div>
 
-    <div class="grid gap-xl grid-cols-1 md:gap-md" :class="`md:grid-cols-${itemsPerRow}`">
+    <div class="grid gap-xl grid-cols-1 md:gap-md" :class="`md:grid-cols-${MENUS_PER_ROW}`">
       <template v-for="id in selectedIds">
         <Menus :restaurantId="id"/>
       </template>
