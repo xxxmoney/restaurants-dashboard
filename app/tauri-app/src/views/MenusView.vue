@@ -11,7 +11,7 @@ const {selectedIds} = storeToRefs(store);
 </script>
 
 <template>
-  <div class="flex flex-col gap-lg h-full">
+  <div class="flex flex-col gap-xl h-full">
     <div class="flex flex-row gap-md">
       <MultiSelect v-model="selectedIds" :options="MENUS" optionLabel="name" optionValue="id"
                    placeholder="Select restaurant" filter showClear/>

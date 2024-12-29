@@ -8,6 +8,7 @@ import {useMenuStore} from "@/stores/menu.store.js";
 import {computed, onMounted, ref} from "vue";
 import {formatDate} from "@/common/helpers/date.helper.js";
 import {formatCurrency} from "@/common/helpers/currency.helper.js";
+import {RESTAURANTS} from "root/shared/constants/restaurant.constants.js";
 
 const {restaurantId} = defineProps({
   restaurantId: {
@@ -17,6 +18,7 @@ const {restaurantId} = defineProps({
 });
 const store = useMenuStore();
 
+const restaurant = computed(() => RESTAURANTS[restaurantId]);
 const menus = computed(() => store.getMenus(restaurantId));
 const currentMenu = computed(() => store.getCurrentDayMenu(restaurantId));
 
@@ -42,13 +44,15 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div>
-    <div>
-      <Button icon="pi pi-refresh" @click="loadMenus" :disabled="!restaurantId"/>
+  <div class="flex flex-col gap-md">
+    <div class="relative flex flex-row justify-center items-center min-h-10">
+      <a :href="restaurant.url" target="_blank">{{ restaurant.name }}</a>
+
+      <Button @click="loadMenus" icon="pi pi-refresh" class="absolute right-0"/>
     </div>
 
     <!-- There are no menus-->
-    <div v-if="menus?.length === 0" class="w-full h-full flex flex-col px-md py-lg">
+    <div v-if="menus?.length === 0" class="w-full h-full flex flex-col">
       <Empty/>
     </div>
     <!-- Menus loading-->
