@@ -4,6 +4,7 @@ import Select from 'primevue/select';
 import Loading from "@/components/common/Loading.vue"
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
+import Empty from "@/components/common/Empty.vue";
 import {useMenuStore} from "@/stores/menu.store.js";
 import {storeToRefs} from "pinia";
 import {MENUS} from "@/common/constants/menu.constants.js";
@@ -48,9 +49,11 @@ onMounted(async () => {
       <Button icon="pi pi-refresh" @click="loadMenus" :disabled="!restaurantId"/>
     </div>
 
+    <!-- Menus loading-->
     <div v-if="menus === null" class="w-full h-full flex flex-col justify-center items-center">
       <Loading/>
     </div>
+    <!-- Menus loaded and present-->
     <div v-else-if="menus.length !== 0" class="flex flex-col justify-center gap">
       <DataTable v-model:expandedRows="expandedRows" :value="menus" dataKey="date" :rowClass="getRowClass">
         <Column expander style="width: 2rem"/>
@@ -73,8 +76,9 @@ onMounted(async () => {
         </template>
       </DataTable>
     </div>
+    <!-- There are no menus-->
     <div v-else class="w-full h-full flex flex-col">
-      <!--      TODO: maybe some text that there are no menus?-->
+      <Empty/>
     </div>
 
   </div>
