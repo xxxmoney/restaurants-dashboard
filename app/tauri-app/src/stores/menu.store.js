@@ -7,26 +7,33 @@ import {DATE_FORMAT} from "root/shared/constants/common.constants.js";
 import {restaurantEnum} from "root/shared/enums/restaurant.enum.js";
 
 export const useMenuStore = defineStore('menus', () => {
-    const menus = ref([]);
-    const restaurantId = ref(restaurantEnum.U_SISKU);
+    const restaurantIds = Object.values(restaurantEnum);
 
-    async function loadMenus() {
-        menus.value = null;
-        const response = await MenuApi.getMenus(restaurantId.value);
-        menus.value = response.data
+    // Object with keys as restaurant id and value of menu array
+    const menusByRestaurant = ref(Object.fromEntries(restaurantIds.map(id => [id, null])));
+    // Which restaurants to show
+    const selectedIds = ref(restaurantIds);
+
+    function getMenus(restaurantId) {
+        return menusByRestaurant.value[restaurantId];
     }
 
-    function getCurrentDayMenu() {
+    async function loadMenus(restaurantId) {
+        menusByRestaurant.value[restaurantId] = null;
+        const response = await MenuApi.getMenus(restaurantId);
+        menusByRestaurant.value[restaurantId] = response.data
+    }
+
+    function getCurrentDayMenu(restaurantId) {
         const today = DateTime.now().toFormat(DATE_FORMAT);
-        return menus.value.find(menu => parseDate(menu.date).toFormat(DATE_FORMAT) === today);
+        return menusByRestaurant.value[restaurantId]?.find(menu => parseDate(menu.date).toFormat(DATE_FORMAT) === today);
     }
 
     return {
-        menus,
-        restaurantId,
+        selectedIds,
 
+        getMenus,
         loadMenus,
-
         getCurrentDayMenu
     }
 })
