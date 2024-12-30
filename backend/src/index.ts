@@ -39,7 +39,7 @@ app.use('*', async (c, next) => {
 
 // Default get response
 app.get('/', (c) => {
-    return c.text('Hello, Hono Here!')
+    return c.text('Hello, Hono Backend Here!')
 });
 
 // Routes
