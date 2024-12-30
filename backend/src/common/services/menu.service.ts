@@ -128,6 +128,9 @@ export const MenuService = {
             })
         }
 
+        // Order menus by date descending
+        menus.sort((a, b) => a.date.toMillis() - b.date.toMillis());
+
         return menus;
     }
 }
