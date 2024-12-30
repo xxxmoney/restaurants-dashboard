@@ -3,13 +3,16 @@ import {logger} from 'hono/logger'
 import {menuRoute} from './routes/menu.route'
 import {websRoute} from "./routes/web.route";
 import {setup} from "./setup";
+import {IS_DEBUG} from "../../shared/constants/common.constants";
 
 const app = new Hono()
 
 setup();
 
 // Logger middleware
-app.use('*', logger());
+if (IS_DEBUG) {
+    app.use('*', logger());
+}
 
 // Error handling
 app.onError((error, c) => {
