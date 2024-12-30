@@ -2,8 +2,8 @@ import {ProxyService} from "../services/proxy.service";
 import * as cheerio from 'cheerio';
 import {CheerioAPI} from "cheerio";
 
-const getHtmlDocFromUrl = async (fetcher: Fetcher, url: string, charset: string | undefined = undefined): Promise<CheerioAPI> => {
-    const html = await ProxyService.getHtml(fetcher, url, charset);
+const getHtmlDocFromUrl = async (url: string, charset?: string, fetcher?: Fetcher): Promise<CheerioAPI> => {
+    const html = await ProxyService.getHtml(url, charset, fetcher);
 
     // Load HTML into Cheerio
     const $ = cheerio.load(html as string);

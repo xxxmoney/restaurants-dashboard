@@ -17,7 +17,7 @@ menuRoute.get('/:id', async (c) => {
 
     const id: number = parseInt(c.req.param('id'));
     // @ts-ignore
-    const menus = await MenuService.getMenu(id, getFetcher(c), c.env);
+    const menus = await MenuService.getMenu(id, c.env, getFetcher(c));
     await cache.set(menus);
 
     return c.json(menus);

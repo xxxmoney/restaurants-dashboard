@@ -1,7 +1,7 @@
 import {PROXY_URL, REMOTE_PROXY_URL} from "../constants/common.constants.js";
 
 export const ProxyService = {
-    async getHtml(fetcher: Fetcher, url: string, charset: string | undefined): Promise<string | undefined> {
+    async getHtml(url: string, charset?: string, fetcher?: Fetcher): Promise<string | undefined> {
         const searchParamsObject: Record<string, string> = {
             url: url,
         };

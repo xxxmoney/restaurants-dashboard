@@ -1,30 +1,28 @@
 import {describe, expect, it} from "vitest";
-import {GeminiService} from "../../../src/common/services/gemini.service";
 import {env} from "cloudflare:test";
+import {MenuService} from "../../../src/common/services/menu.service";
+import {restaurantEnum} from "../../../../shared/enums/restaurant.enum";
 
 
-describe("textToText", () => {
-    it("should respond with text 'YES'", async () => {
+describe("getMenu", () => {
+    it("should get menu", async () => {
         //
         // Arrange
         //
-
-        // @ts-ignore
-        const service = new GeminiService(env.GEMINI_KEY);
-
+        const restaurantId = restaurantEnum.KLIKA;
 
         //
         // Act
         //
 
-        const result = await service.textToText("Test prompt, only respond with one word: 'YES'");
+        const result = await MenuService.getMenu(restaurantId, env);
 
 
         //
         // Assert
         //
 
-        expect(result.text).toBe("YES");
-        console.log(result.text)
+        expect(result).not.null;
+        console.log(JSON.stringify(result, null, 2));
     });
 });
