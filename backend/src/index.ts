@@ -1,5 +1,6 @@
 import {Hono} from 'hono'
 import {logger} from 'hono/logger'
+import {cors} from 'hono/cors'
 import {menuRoute} from './routes/menu.route'
 import {websRoute} from "./routes/web.route";
 import {setup} from "./setup";
@@ -32,10 +33,11 @@ app.onError((error, c) => {
 });
 
 // Allow any origin
-app.use('*', async (c, next) => {
-    await next()
-    c.res.headers.set('Access-Control-Allow-Origin', '*')
-});
+app.use('*', cors({
+    origin: '*',
+    allowMethods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowHeaders: ['Content-Type', 'Authorization'],
+}))
 
 // Default get response
 app.get('/', (c) => {
