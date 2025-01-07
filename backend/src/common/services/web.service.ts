@@ -23,8 +23,6 @@ export const WebService = {
 
                 innerFrame.attr('srcdoc', $inner.html());
             }
-
-
         }
 
         return $.html();

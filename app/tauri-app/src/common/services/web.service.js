@@ -4,14 +4,14 @@ import {scrollOntoItem} from "@/common/helpers/webUtils.helper.js";
 export const WebService = {
     getOnLoad(enumValue) {
         switch (enumValue) {
-            case restaurantEnum.U_SISKU:
+            case restaurantEnum.CINKY_LINKY:
                 return (iframe) => {
                     if (!iframe?.contentDocument) {
                         return;
                     }
 
                     // Click on menu
-                    const marker = iframe.contentDocument.querySelector('.marker');
+                    const marker = iframe.contentDocument.querySelector('.elementor-button-link');
                     marker.click();
                 }
             // Not required, default is empty function
@@ -23,7 +23,7 @@ export const WebService = {
 
     getOnShow(enumValue) {
         switch (enumValue) {
-            case restaurantEnum.U_SISKU:
+            case restaurantEnum.CINKY_LINKY:
                 return async (iframe) => {
                     if (!iframe?.contentDocument) {
                         return;

@@ -3,8 +3,8 @@ import {RESTAURANTS} from "root/shared/constants/restaurant.constants.js";
 
 export const MENUS = [
     {
-        id: restaurantEnum.U_SISKU,
-        name: RESTAURANTS[restaurantEnum.U_SISKU].name,
+        id: restaurantEnum.CINKY_LINKY,
+        name: RESTAURANTS[restaurantEnum.CINKY_LINKY].name,
     },
     {
         id: restaurantEnum.KLIKA,
