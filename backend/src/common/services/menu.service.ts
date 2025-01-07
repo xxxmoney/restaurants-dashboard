@@ -34,7 +34,7 @@ export const MenuService = {
                 // @ts-ignore
                 await getHtmlDocFromUrl(fetcher, RESTAURANTS[enumValue].url, RESTAURANTS[enumValue].urlCharset);
 
-        if (enumValue === restaurantEnum.U_SISKU) {
+        if (enumValue === restaurantEnum.CINKY_LINKY) {
             const $content = $('.media-container-row').first();
             const $image = $content.find('img').first();
 
@@ -46,7 +46,7 @@ export const MenuService = {
 
             // Get menus with gemini service
             const service = new GeminiService(env.GEMINI_KEY);
-            const geminiResponse = await service.imageToJson<Menus>(MENU_PROMPTS[restaurantEnum.U_SISKU], menusSchema, {base64: imageBase64});
+            const geminiResponse = await service.imageToJson<Menus>(MENU_PROMPTS[restaurantEnum.CINKY_LINKY], menusSchema, {base64: imageBase64});
             menus.push(...geminiResponse.json.menus);
         } else if (enumValue === restaurantEnum.KLIKA) {
             const $content = $('.content').first();
