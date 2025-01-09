@@ -11,7 +11,7 @@ export const WebService = {
         $('body').attr('style', 'background-color: white;');
 
         // Additional special handling
-        if (enumValue === restaurantEnum.U_SISKU) {
+        if (enumValue === restaurantEnum.CINKY_LINKY) {
             // @ts-ignore
             const innerFrame = $('iframe').first();
             const innerFrameSrc = innerFrame.attr('src');
@@ -23,8 +23,6 @@ export const WebService = {
 
                 innerFrame.attr('srcdoc', $inner.html());
             }
-
-
         }
 
         return $.html();

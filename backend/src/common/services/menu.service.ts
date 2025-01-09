@@ -34,19 +34,23 @@ export const MenuService = {
                 // @ts-ignore
                 await getHtmlDocFromUrl(fetcher, RESTAURANTS[enumValue].url, RESTAURANTS[enumValue].urlCharset);
 
-        if (enumValue === restaurantEnum.U_SISKU) {
-            const $content = $('.media-container-row').first();
-            const $image = $content.find('img').first();
+        if (enumValue === restaurantEnum.CINKY_LINKY) {
+            // @ts-ignore
+            const webUrl = RESTAURANTS[enumValue].url;
 
-            // Download image
-            const url = $image.attr('src')!;
-            const imageResponse = await fetch(url);
+            // Url for menu image is in defined format, so we can construct it
+            const date = DateTime.now();
+            const workWeekStartDate = date.startOf('week');
+            const workWeekEndDate = workWeekStartDate.plus({days: 4});
+
+            const imageUrl = `${webUrl}/wp-content/uploads/${date.toFormat('yyyy')}/${date.toFormat('MM')}/poledni-menu-${workWeekStartDate.toFormat('d')}-${workWeekEndDate.toFormat('d')}-${date.toFormat('M')}-${date.toFormat('yyyy')}-${date.toFormat('M')}-scaled.jpg`;
+            const imageResponse = await fetch(imageUrl);
             const imageBuffer = await imageResponse.arrayBuffer();
             const imageBase64 = arrayBufferToBase64(imageBuffer);
 
             // Get menus with gemini service
             const service = new GeminiService(env.GEMINI_KEY);
-            const geminiResponse = await service.imageToJson<Menus>(MENU_PROMPTS[restaurantEnum.U_SISKU], menusSchema, {base64: imageBase64});
+            const geminiResponse = await service.imageToJson<Menus>(MENU_PROMPTS[restaurantEnum.CINKY_LINKY], menusSchema, {base64: imageBase64});
             menus.push(...geminiResponse.json.menus);
         } else if (enumValue === restaurantEnum.KLIKA) {
             const $content = $('.content').first();

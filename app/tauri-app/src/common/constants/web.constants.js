@@ -3,9 +3,9 @@ import {RESTAURANTS} from "root/shared/constants/restaurant.constants.js";
 
 const WEBS = [
     {
-        id: restaurantEnum.U_SISKU,
-        name: RESTAURANTS[restaurantEnum.U_SISKU].name,
-        url: RESTAURANTS[restaurantEnum.U_SISKU].url,
+        id: restaurantEnum.CINKY_LINKY,
+        name: RESTAURANTS[restaurantEnum.CINKY_LINKY].name,
+        url: RESTAURANTS[restaurantEnum.CINKY_LINKY].url,
         zoom: 0.5,
     },
     {
