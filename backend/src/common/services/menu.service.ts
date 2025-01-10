@@ -132,6 +132,11 @@ export const MenuService = {
             })
         }
 
+        // Hotfix - set year of all menus to current year
+        menus.forEach(menu => {
+            menu.date = menu.date.set({year: DateTime.now().year});
+        });
+
         return menus;
     }
 }
