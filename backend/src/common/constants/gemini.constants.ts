@@ -8,5 +8,5 @@ export const DEFAULT_MIME_TYPE = 'image/jpeg';
 export const COMPLY_WITH_SCHEMA_PROMPT = '{0}; Satisfy the previous prompt while returning only JSON that complies with the following YUP schema strictly: {1}';
 
 export const MENU_PROMPTS = {
-    [restaurantEnum.CINKY_LINKY]: `Using the provided screenshot of menu from the restaurant U Sisku, importantly take into account that current year is ${DateTime.now().year} - so if in any case year is missing in menu, use the current year, return the menus for each day, if there are none, return empty, stick strictly to what is only visible in the screenshot`,
+    [restaurantEnum.CINKY_LINKY]: `Using the provided screenshot of menu from the restaurant U Sisku, make sure that the year of the dates of menus is ${DateTime.now().year}!, return the menus for each day, if there are none, return empty, stick strictly to what is only visible in the screenshot`,
 }
