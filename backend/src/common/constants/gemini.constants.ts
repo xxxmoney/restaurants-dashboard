@@ -1,7 +1,7 @@
 import {restaurantEnum} from "../../../../shared/enums/restaurant.enum";
 import {DateTime} from "luxon";
 
-export const MODEL_NAME = 'gemini-2.0-flash-exp';
+export const MODEL_NAME = 'gemini-1.5-flash-8b';
 
 export const DEFAULT_MIME_TYPE = 'image/jpeg';
 
