@@ -5,10 +5,10 @@ const RESTAURANTS = {};
 // Handle every enum case
 for (const value of Object.values(restaurantEnum)) {
     switch (value) {
-        case restaurantEnum.U_SISKU:
+        case restaurantEnum.CINKY_LINKY:
             RESTAURANTS[value] = {
-                name: 'U Šišků',
-                url: 'https://www.restaurace-u-sisku.cz'
+                name: 'Cinky Linky',
+                url: 'https://cinkylinky.cz'
             };
             break;
         case restaurantEnum.KLIKA:

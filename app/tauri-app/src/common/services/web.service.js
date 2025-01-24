@@ -4,16 +4,6 @@ import {scrollOntoItem} from "@/common/helpers/webUtils.helper.js";
 export const WebService = {
     getOnLoad(enumValue) {
         switch (enumValue) {
-            case restaurantEnum.U_SISKU:
-                return (iframe) => {
-                    if (!iframe?.contentDocument) {
-                        return;
-                    }
-
-                    // Click on menu
-                    const marker = iframe.contentDocument.querySelector('.marker');
-                    marker.click();
-                }
             // Not required, default is empty function
             default:
                 return () => {
@@ -23,14 +13,20 @@ export const WebService = {
 
     getOnShow(enumValue) {
         switch (enumValue) {
-            case restaurantEnum.U_SISKU:
+            case restaurantEnum.CINKY_LINKY:
                 return async (iframe) => {
                     if (!iframe?.contentDocument) {
                         return;
                     }
 
-                    // TODO: scroll onto bottom of image
-                    const img = iframe.contentDocument.querySelector('img');
+                    // Timeout
+                    await new Promise(resolve => setTimeout(resolve, 1000));
+
+                    // Click on menu
+                    const links = Array.from(iframe.contentDocument.querySelectorAll('.elementor-button-link'));
+                    console.log(links)
+                    const marker = links[1];
+                    marker.click();
 
                     return {};
                 }
