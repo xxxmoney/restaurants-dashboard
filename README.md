@@ -11,7 +11,7 @@ Consists of 3 main parts:
 - Backend: Hono Cloudflare
 - Proxy - Legacy Cloudflare
 
-Each parts has its own README - check them out for more details.
+Each parts have its own README - check them out for more details.
 
 ## Quick Start - Run all projects
 
