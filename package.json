@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "description": "Simple restaurant menus overview app.\r Built with Tauri, so there is support for browser, desktop and mobile.",
   "scripts": {
-    "dev:frontend": "cd app/tauri-app && npm install && npm run start",
-    "dev:backend": "cd backend && npm install && npm run start",
-    "dev:proxy": "cd proxy && npm install && npm run start",
+    "dev:frontend": "cd app/tauri-app && npm install && npm run dev",
+    "dev:backend": "cd backend && npm install && npm run dev",
+    "dev:proxy": "cd proxy && npm install && npm run dev",
     "dev": "npm-run-all --parallel dev:*"
   },
   "repository": {
