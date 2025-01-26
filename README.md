@@ -19,3 +19,12 @@ Install packages: `npm install`
 
 Run all projects: `npm run dev`
 
+## Quick Start - Run Each Project
+
+Frontend: `npm run dev:frontend`
+
+Backend: `npm run dev:backend`
+
+Proxy: `npm run dev:proxy`
+
+
