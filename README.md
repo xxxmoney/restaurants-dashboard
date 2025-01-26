@@ -16,5 +16,6 @@ Each parts has its own README - check them out for more details.
 ## Quick Start - Run all projects
 
 Install packages: `npm install`
+
 Run all projects: `npm run dev`
 
