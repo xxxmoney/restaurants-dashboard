@@ -6,21 +6,9 @@ import {restaurantEnum} from "../../../../shared/enums/restaurant.enum";
 
 describe("getMenu", () => {
     it("should get menu", async () => {
-        //
-        // Arrange
-        //
         const restaurantId = restaurantEnum.KLIKA;
 
-        //
-        // Act
-        //
-
         const result = await MenuService.getMenu(restaurantId, env);
-
-
-        //
-        // Assert
-        //
 
         expect(result).not.null;
         console.log(JSON.stringify(result, null, 2));
