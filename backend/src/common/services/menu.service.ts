@@ -1,7 +1,7 @@
 import {restaurantEnum} from "../../../../shared/enums/restaurant.enum";
 import {getHtmlDocFromUrl} from "../helpers/domParser.helper";
 import {RESTAURANTS} from "../../../../shared/constants/restaurant.constants";
-import {MenuDto, Menus} from "../dto/menu.dto";
+import {Menu, Menus} from "../dto/menu";
 import {DateTime} from "luxon";
 import {GeminiService} from "./gemini.service";
 import {arrayBufferToBase64} from "../helpers/buffer.helper";
@@ -19,47 +19,7 @@ function parsePrice(text: string) {
 }
 
 export const MenuService = {
-    async getMenu(enumValue: number, env: any, fetcher?: Fetcher): Promise<MenuDto[]> {
-        // @ts-ignore
-        if (!Object.values(restaurantEnum).includes(enumValue)) {
-            throw new Error('Invalid restaurant enum value');
-        }
-
-        const menus: MenuDto[] = [];
-
-        const $ = await this.getCheerioApi(enumValue, fetcher);
-
-        if (enumValue === restaurantEnum.CINKY_LINKY) {
-            await this.getCinkyLinkyMenu(menus, env);
-        } else if (enumValue === restaurantEnum.KLIKA) {
-            this.getKlikaMenu($, menus);
-        } else if (enumValue === restaurantEnum.BAR_RED_HOOK) {
-            this.getBarRedHookMenu($, menus);
-        } else if (enumValue === restaurantEnum.PALATINO) {
-            this.getPalatinoMenu($, menus);
-        }
-
-        // Hotfix - set year of all menus to current year
-        menus.forEach(menu => {
-            menu.date = menu.date.set({year: DateTime.now().year});
-        });
-
-        // Order menus by date descending
-        menus.sort((a, b) => a.date.toMillis() - b.date.toMillis());
-
-        return menus;
-    },
-
-    async getCheerioApi(enumValue: number, fetcher: Fetcher<undefined, never> | undefined) {
-        // @ts-ignore
-        return RESTAURANTS[enumValue].alternateUrl ?
-            // @ts-ignore
-            await getHtmlDocFromUrl(RESTAURANTS[enumValue].alternateUrl, RESTAURANTS[enumValue].alternateUrlCharset, fetcher) :
-            // @ts-ignore
-            await getHtmlDocFromUrl(RESTAURANTS[enumValue].url, RESTAURANTS[enumValue].urlCharset, fetcher);
-    },
-
-    async getCinkyLinkyMenu(menus: MenuDto[], env: any) {
+    async getCinkyLinkyMenu(menus: Menu[], env: any) {
         // @ts-ignore
         const webUrl = RESTAURANTS[restaurantEnum.CINKY_LINKY].url;
 
@@ -79,7 +39,7 @@ export const MenuService = {
         menus.push(...geminiResponse.json.menus);
     },
 
-    getKlikaMenu($: CheerioAPI, menus: MenuDto[]) {
+    getKlikaMenu($: CheerioAPI, menus: Menu[]) {
         const $content = $('.content').first();
         const $title = $content.find('strong').first();
 
@@ -102,7 +62,7 @@ export const MenuService = {
         menus.push({date, items: menuItems});
     },
 
-    getBarRedHookMenu($: CheerioAPI, menus: MenuDto[]) {
+    getBarRedHookMenu($: CheerioAPI, menus: Menu[]) {
         const contents = $('.content').toArray();
 
         contents.forEach((content) => {
@@ -138,7 +98,7 @@ export const MenuService = {
         })
     },
 
-    getPalatinoMenu($: CheerioAPI, menus: MenuDto[]) {
+    getPalatinoMenu($: CheerioAPI, menus: Menu[]) {
         const contents = [$('#pondeli').first(), $('#utery').first(), $('#streda').first(), $('#ctvrtek').first(), $('#patek').first()];
 
         contents.forEach(($content) => {
