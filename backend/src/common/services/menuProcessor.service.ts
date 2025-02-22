@@ -1,12 +1,13 @@
-import {Menu, Menus} from "../dto/menu";
+import {CategorizedMenu, Menu} from "../dto/menu";
 import {restaurantEnum} from "../../../../shared/enums/restaurant.enum";
 import {DateTime} from "luxon";
 import {RESTAURANTS} from "../../../../shared/constants/restaurant.constants";
 import {getHtmlDocFromUrl} from "../helpers/domParser.helper";
 import {MenuService} from "./menu.service";
+import {MenuCategorizer} from "./menuCategorizer.service";
 
 export const MenuProcessor = {
-    async getProcessedMenu(enumValue: number, env: any, fetcher?: Fetcher): Promise<Menu[]> {
+    async getProcessedMenu(enumValue: number, env: any, fetcher?: Fetcher): Promise<CategorizedMenu[]> {
         // @ts-ignore
         if (!Object.values(restaurantEnum).includes(enumValue)) {
             throw new Error('Invalid restaurant enum value');
@@ -34,7 +35,9 @@ export const MenuProcessor = {
         // Order menus by date descending
         menus.sort((a, b) => a.date.toMillis() - b.date.toMillis());
 
-        return menus;
+        // Apply menu categorization
+        const {categorizedMenus} = await MenuCategorizer.categorizeMenus({menus: menus}, env);
+        return categorizedMenus;
     },
 
     async getCheerioApi(enumValue: number, fetcher: Fetcher<undefined, never> | undefined) {

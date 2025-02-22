@@ -2,6 +2,7 @@ import {Hono} from 'hono'
 import {MenuService} from "../common/services/menu.service";
 import {getFetcher} from "../common/helpers/fetcher.helper";
 import {useEndpointCache} from "../common/composables/cache.comp";
+import {MenuProcessor} from "../common/services/menuProcessor.service";
 
 const menuRoute = new Hono()
 
@@ -17,7 +18,7 @@ menuRoute.get('/:id', async (c) => {
 
     const id: number = parseInt(c.req.param('id'));
     // @ts-ignore
-    const menus = await MenuService.getMenu(id, c.env, getFetcher(c));
+    const menus = await MenuProcessor.getProcessedMenu(id, c.env, getFetcher(c));
     await cache.set(menus);
 
     return c.json(menus);
