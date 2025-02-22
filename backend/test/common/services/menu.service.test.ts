@@ -5,14 +5,14 @@ import {restaurantEnum} from "../../../../shared/enums/restaurant.enum";
 
 
 describe("getMenu", () => {
-    it("should get menu cinky linky", async () => {
+    it("should get menu cinky linky (long running)", async () => {
         const restaurantId = restaurantEnum.CINKY_LINKY;
 
         const result = await MenuService.getMenu(restaurantId, env);
 
         expect(result).not.null;
         console.log(JSON.stringify(result, null, 2));
-    });
+    }, 20000);
 
     it("should get menu klika", async () => {
         const restaurantId = restaurantEnum.KLIKA;
