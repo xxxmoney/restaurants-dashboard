@@ -71,16 +71,22 @@ onMounted(async () => {
         </Column>
 
         <template #expansion="{data}">
-          <Empty v-if="data.items.length === 0"/>
+          <Empty v-if="data.categorizedItems.length === 0"/>
 
-          <DataTable v-else :value="data.items">
-            <Column field="name" header="Name" sortable></Column>
-            <Column field="price" header="Price" sortable>
-              <template #body="{data}">
-                <span>{{ formatCurrency(data.price) }}</span>
-              </template>
-            </Column>
-          </DataTable>
+          <div v-else>
+            <div v-for="categorizedItem in data.categorizedItems" :key="categorizedItem.category">
+              <span>{{ categorizedItem.category }}</span>
+
+              <DataTable :value="categorizedItem.items">
+                <Column field="name" header="Name" sortable></Column>
+                <Column field="price" header="Price" sortable>
+                  <template #body="{data}">
+                    <span>{{ formatCurrency(data.price) }}</span>
+                  </template>
+                </Column>
+              </DataTable>
+            </div>
+          </div>
         </template>
       </DataTable>
     </div>
