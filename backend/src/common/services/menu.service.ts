@@ -61,7 +61,7 @@ export const MenuService = {
 
     async getCinkyLinkyMenu(menus: MenuDto[], env: any) {
         // @ts-ignore
-        const webUrl = RESTAURANTS[enumValue].url;
+        const webUrl = RESTAURANTS[restaurantEnum.CINKY_LINKY].url;
 
         // Url for menu image is in defined format, so we can construct it
         const date = DateTime.now();
