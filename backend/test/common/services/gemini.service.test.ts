@@ -6,6 +6,7 @@ import {GeminiService} from "../../../src/common/services/gemini.service"
 import * as yup from 'yup';
 import {luxonDateTimeSchema} from "../../../src/common/schemas/luxon.schema";
 import {DateTime} from "luxon";
+import {LONG_RUNNING_TEST_TIMEOUT} from "../../constants";
 
 describe("textToText", () => {
     it("should respond with text 'YES'", async () => {
@@ -52,7 +53,7 @@ describe("imageToText", () => {
 
         expect(result.text).toBe("Cat");
         console.log(result.text)
-    });
+    }, {timeout: LONG_RUNNING_TEST_TIMEOUT});
 });
 
 describe("imageToJson", () => {
@@ -101,5 +102,5 @@ describe("imageToJson", () => {
 
         expect(result.json).not.toBeNull();
         console.log(result.json)
-    });
+    }, {timeout: LONG_RUNNING_TEST_TIMEOUT});
 });

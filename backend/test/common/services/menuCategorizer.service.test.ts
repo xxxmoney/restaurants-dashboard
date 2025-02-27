@@ -4,6 +4,7 @@ import {Menus} from "../../../src/common/dto/menu";
 import {DateTime} from "luxon";
 import {MenuCategorizer} from "../../../src/common/services/menuCategorizer.service";
 import * as matchers from 'expect-matchers';
+import {LONG_RUNNING_TEST_TIMEOUT} from "../../constants";
 
 describe("categorizeMenus", () => {
     beforeAll(() => {
@@ -57,6 +58,6 @@ describe("categorizeMenus", () => {
         expect(result).not.null;
         expect(categories).toIncludeSameMembers(expected);
         console.log(JSON.stringify(result, null, 2));
-    });
+    }, {timeout: LONG_RUNNING_TEST_TIMEOUT});
 
 });

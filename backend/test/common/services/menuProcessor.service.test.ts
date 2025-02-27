@@ -2,6 +2,7 @@ import {describe, expect, it} from "vitest";
 import {env} from "cloudflare:test";
 import {restaurantEnum} from "../../../../shared/enums/restaurant.enum";
 import {MenuProcessor} from "../../../src/common/services/menuProcessor.service";
+import {LONG_RUNNING_TEST_TIMEOUT} from "../../constants";
 
 
 describe("getMenu", () => {
@@ -12,7 +13,7 @@ describe("getMenu", () => {
 
         expect(result).not.null;
         console.log(JSON.stringify(result, null, 2));
-    }, 20000);
+    }, LONG_RUNNING_TEST_TIMEOUT);
 
     it("should get menu klika", async () => {
         const restaurantId = restaurantEnum.KLIKA;
