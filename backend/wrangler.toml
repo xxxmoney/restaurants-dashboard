@@ -3,6 +3,8 @@ main = "src/index.ts"
 compatibility_date = "2024-12-03"
 compatibility_flags = ["nodejs_compat"]
 
+# Uncommnent for tests to work
+#[env.not.miniflare]
 services = [
     { binding = "PROXY", service = "proxy-worker" }
 ]

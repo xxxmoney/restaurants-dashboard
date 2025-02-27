@@ -4,9 +4,9 @@ import {RESTAURANTS} from "../../../../shared/constants/restaurant.constants";
 import {CheerioAPI} from "cheerio";
 
 export const WebService = {
-    async getWebHtml(enumValue: number, fetcher: Fetcher) {
+    async getWebHtml(enumValue: number, fetcher?: Fetcher) {
         // @ts-ignore
-        const $ = await getHtmlDocFromUrl(fetcher, RESTAURANTS[enumValue].url);
+        const $ = await getHtmlDocFromUrl(RESTAURANTS[enumValue].url, fetcher);
         // Set background color so its visible
         $('body').attr('style', 'background-color: white;');
 
@@ -17,7 +17,7 @@ export const WebService = {
             const innerFrameSrc = innerFrame.attr('src');
 
             if (innerFrameSrc) {
-                const $inner = await getHtmlDocFromUrl(fetcher, innerFrameSrc, 'windows-1250');
+                const $inner = await getHtmlDocFromUrl(innerFrameSrc, 'windows-1250', fetcher);
                 // Set background color so its visible
                 $inner('body').attr('style', 'background-color: white;');
 

@@ -34,7 +34,14 @@ export function useCache(context: Context, cacheKey: string, expirationTtl: numb
         await kv.put(cacheKey, jsonValue, {expirationTtl});
     }
 
-    return {get, set};
+    async function clear(): Promise<void> {
+        if (IS_DEBUG) {
+            console.info('Clearing cache for key: ', cacheKey);
+        }
+        await kv.delete(cacheKey);
+    }
+
+    return {get, set, clear};
 }
 
 export function useEndpointCache(context: Context, expirationTtl: number = 60) {

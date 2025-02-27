@@ -2,6 +2,7 @@
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import Button from "primevue/button";
+import {Divider} from "primevue";
 import Empty from "@/components/common/Empty.vue";
 import Loading from "@/components/common/Loading.vue";
 import {useMenuStore} from "@/stores/menu.store.js";
@@ -71,16 +72,23 @@ onMounted(async () => {
         </Column>
 
         <template #expansion="{data}">
-          <Empty v-if="data.items.length === 0"/>
+          <Empty v-if="data.categorizedItems.length === 0"/>
 
-          <DataTable v-else :value="data.items">
-            <Column field="name" header="Name" sortable></Column>
-            <Column field="price" header="Price" sortable>
-              <template #body="{data}">
-                <span>{{ formatCurrency(data.price) }}</span>
-              </template>
-            </Column>
-          </DataTable>
+          <template v-else>
+            <div class="flex flex-col" v-for="categorizedItem in data.categorizedItems">
+              <span class="p-lg text-lg font-bold">{{ categorizedItem.category }}</span>
+              <Divider class="mt-0"/>
+
+              <DataTable :value="categorizedItem.items" sortField="price" :sortOrder="1">
+                <Column field="name" header="Name"></Column>
+                <Column field="price" header="Price" headerClass="w-1/3" sortable>
+                  <template #body="{data}">
+                    <span>{{ formatCurrency(data.price) }}</span>
+                  </template>
+                </Column>
+              </DataTable>
+            </div>
+          </template>
         </template>
       </DataTable>
     </div>

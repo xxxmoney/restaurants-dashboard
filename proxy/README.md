@@ -1,12 +1,16 @@
-# Cloudflare Worker with Hono Readme
+# Proxy - Legacy Cloudflare Worker
+
+## Prerequisites
+
+Install packages:
+`npm install`
 
 ## Running the app
 
 To run the app, simply run this:
 `npm run dev`
 
-## Publish with Wrangler
+## Publish to Cloudflare Workers
 
-To publish the worker with Wrangler, simply run this:
+To publish, simply run this:
 `npm run deploy`
-

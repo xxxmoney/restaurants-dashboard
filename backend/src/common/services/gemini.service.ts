@@ -1,5 +1,5 @@
 import {GenerateContentResult, GenerativeModel, GoogleGenerativeAI, Part} from "@google/generative-ai";
-import {COMPLY_WITH_SCHEMA_PROMPT, DEFAULT_MIME_TYPE, MODEL_NAME} from "../constants/gemini.constants";
+import {PROMPT_TO_JSON, DEFAULT_MIME_TYPE, MODEL_NAME, PROMPT_JSON_TO_JSON} from "../constants/gemini.constants";
 import format from "string-format";
 import * as yup from 'yup';
 import {AnyObject, ArraySchema, ObjectSchema} from "yup";
@@ -51,9 +51,15 @@ export class GeminiService {
         this.model = generativeAI.getGenerativeModel({model: MODEL_NAME});
     }
 
-    private getJsonPrompt<T extends AnyObject>(prompt: string, schema: ObjectSchema<T>): string {
+    private getTextToJsonPrompt<T extends AnyObject>(prompt: string, schema: ObjectSchema<T>): string {
         const serializedSchema = JSON.stringify(schema.describe().fields);
-        return format(COMPLY_WITH_SCHEMA_PROMPT, prompt, serializedSchema);
+        return format(PROMPT_TO_JSON, prompt, serializedSchema);
+    }
+
+    private getJsonToJsonPrompt<T extends AnyObject, K extends AnyObject>(prompt: string, schema: ObjectSchema<T>, input: K): string {
+        const serializedInput = JSON.stringify(input);
+        const serializedSchema = JSON.stringify(schema.describe().fields);
+        return format(PROMPT_JSON_TO_JSON, prompt, serializedInput, serializedSchema);
     }
 
     private async generateContent(request: (string | Part)[]): Promise<GenerateContentResult> {
@@ -75,7 +81,11 @@ export class GeminiService {
     }
 
     public async textToJson<T extends AnyObject>(prompt: string, schema: ObjectSchema<T>): Promise<JsonResponse<T>> {
-        return new JsonResponse(await this.textToText(this.getJsonPrompt(prompt, schema)), schema);
+        return new JsonResponse(await this.textToText(this.getTextToJsonPrompt(prompt, schema)), schema);
+    }
+
+    public async jsonToJson<K extends AnyObject, T extends AnyObject>(prompt: string, schema: ObjectSchema<T>, input: K): Promise<JsonResponse<T>> {
+        return new JsonResponse(await this.textToText(this.getJsonToJsonPrompt(prompt, schema, input)), schema);
     }
 
     public async imageToText(prompt: string, image: Image): Promise<TextReponse> {
@@ -91,7 +101,7 @@ export class GeminiService {
     }
 
     public async imageToJson<T extends AnyObject>(prompt: string, schema: ObjectSchema<T>, image: Image): Promise<JsonResponse<T>> {
-        return new JsonResponse(await this.imageToText(this.getJsonPrompt(prompt, schema), image), schema);
+        return new JsonResponse(await this.imageToText(this.getTextToJsonPrompt(prompt, schema), image), schema);
     }
 
 }
