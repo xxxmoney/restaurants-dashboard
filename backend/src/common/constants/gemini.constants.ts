@@ -1,6 +1,6 @@
 import {restaurantEnum} from "../../../../shared/enums/restaurant.enum";
 
-export const MODEL_NAME = 'gemini-2.0-flash-lite-preview-02-05';
+export const MODEL_NAME = 'gemini-2.0-flash-lite';
 
 export const DEFAULT_MIME_TYPE = 'image/jpeg';
 
