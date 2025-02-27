@@ -17,12 +17,17 @@ menuRoute.get('/:id', async (c) => {
         return c.json(cachedValue);
     }
 
-    const id: number = parseInt(c.req.param('id'));
-    // @ts-ignore
-    const menus = await MenuProcessor.getProcessedMenu(id, c.env, getFetcher(c));
-    await cache.set(menus);
+    try {
+        const id: number = parseInt(c.req.param('id'));
+        // @ts-ignore
+        const menus = await MenuProcessor.getProcessedMenu(id, c.env, getFetcher(c));
+        await cache.set(menus);
 
-    return c.json(menus);
+        return c.json(menus);
+    } finally {
+        // Clear cache
+        await cache.clear();
+    }
 });
 
 export {menuRoute}
