@@ -1,5 +1,4 @@
 import {restaurantEnum} from "../../../../shared/enums/restaurant.enum";
-import {getHtmlDocFromUrl} from "../helpers/domParser.helper";
 import {RESTAURANTS} from "../../../../shared/constants/restaurant.constants";
 import {Menu, Menus} from "../dto/menu";
 import {DateTime} from "luxon";
