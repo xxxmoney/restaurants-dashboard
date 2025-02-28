@@ -121,9 +121,8 @@ export const MenuService = {
     },
 
     getSalandaMenu($: CheerioAPI, menus: Menu[]) {
-        // TODO: Implement Salanda menu parsing
-        //const contents = $('#poledni-menu #priceTable ').toArray();
         const selectorPrefix = '#poledni-menu #priceTable #collapse';
+        const blacklistWord = 'TÝDENNÍ STÁLICE';
         const getItem = (dayNumber: number) => $(`${selectorPrefix}${dayNumber}`).first();
         const contents = [getItem(1), getItem(2), getItem(3), getItem(4), getItem(5)];
 
@@ -139,7 +138,7 @@ export const MenuService = {
                 const price = parsePrice(priceText);
 
                 return {name, price};
-            });
+            }).filter(item => !item.name.includes(blacklistWord));
 
             menus.push({date, items: menuItems});
         })
