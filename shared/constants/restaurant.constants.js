@@ -31,6 +31,12 @@ for (const value of Object.values(restaurantEnum)) {
                 url: 'https://nominanza.com/index-pankrac.html'
             };
             break;
+        case restaurantEnum.SALANDA:
+            RESTAURANTS[value] = {
+                name: 'Šalanda',
+                url: 'https://www.restauracesalanda.cz/cs/salanda/pankrac#poledni-menu'
+            };
+            break;
         default:
             // Throw exception, every restaurant should be implemented
             throw new Error(`Restaurant with key ${value} is not implemented`);

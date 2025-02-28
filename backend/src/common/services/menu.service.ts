@@ -120,5 +120,11 @@ export const MenuService = {
         })
     },
 
+    getSalandaMenu($: CheerioAPI, menus: Menu[]) {
+        // TODO: Implement Salanda menu parsing
+
+        throw new Error('Not implemented');
+    }
+
 
 }
