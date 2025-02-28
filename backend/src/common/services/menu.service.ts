@@ -6,7 +6,7 @@ import {GeminiService} from "./gemini.service";
 import {arrayBufferToBase64} from "../helpers/buffer.helper";
 import {menusSchema} from "../schemas/menu.schema";
 import {MENU_PROMPTS} from "../constants/gemini.constants";
-import {CheerioAPI} from "cheerio";
+import {Cheerio, CheerioAPI} from "cheerio";
 
 function parseDate(text: string) {
     const date = text.match(/\d{1,2}\.\d{1,2}\.\d{4}/g)![0];
@@ -122,8 +122,27 @@ export const MenuService = {
 
     getSalandaMenu($: CheerioAPI, menus: Menu[]) {
         // TODO: Implement Salanda menu parsing
+        //const contents = $('#poledni-menu #priceTable ').toArray();
+        const selectorPrefix = '#poledni-menu #priceTable #collapse';
+        const getItem = (dayNumber: number) => $(`${selectorPrefix}${dayNumber}`).first();
+        const contents = [getItem(1), getItem(2), getItem(3), getItem(4), getItem(5)];
 
-        throw new Error('Not implemented');
+        contents.forEach(($content, index) => {
+            const date = DateTime.now().startOf('week').plus({days: index});
+
+            const items = $content.find('table > tbody > tr').toArray();
+
+            const menuItems = items.map(item => {
+                const $item = $(item);
+                const name = $item.find('td > strong').first().text().trim();
+                const priceText = $item.find('td > strong').last().text().trim();
+                const price = parsePrice(priceText);
+
+                return {name, price};
+            });
+
+            menus.push({date, items: menuItems});
+        })
     }
 
 
