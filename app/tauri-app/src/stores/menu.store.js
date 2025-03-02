@@ -22,8 +22,13 @@ export const useMenuStore = defineStore('menus', () => {
 
     async function loadMenus(restaurantId) {
         menusByRestaurant.value[restaurantId] = null;
-        const response = await MenuApi.getMenus(restaurantId);
-        menusByRestaurant.value[restaurantId] = response.data
+        try {
+            const response = await MenuApi.getMenus(restaurantId);
+            menusByRestaurant.value[restaurantId] = response.data
+        } catch (e) {
+            menusByRestaurant.value[restaurantId] = undefined;
+            throw e;
+        }
     }
 
     async function loadAllMenus() {

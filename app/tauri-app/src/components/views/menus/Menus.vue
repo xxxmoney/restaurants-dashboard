@@ -10,6 +10,8 @@ import {computed, onMounted, ref} from "vue";
 import {formatDate} from "@/common/helpers/date.helper.js";
 import {formatCurrency} from "@/common/helpers/currency.helper.js";
 import {RESTAURANTS} from "root/shared/constants/restaurant.constants.js";
+import {useCustomToast} from "@/composables/customToast.comp.js";
+import Dead from "@/components/common/Dead.vue";
 
 const {restaurantId} = defineProps({
   restaurantId: {
@@ -18,6 +20,7 @@ const {restaurantId} = defineProps({
   }
 });
 const store = useMenuStore();
+const {showErrorToast} = useCustomToast();
 
 const restaurant = computed(() => RESTAURANTS[restaurantId]);
 const menus = computed(() => store.getMenus(restaurantId));
@@ -26,7 +29,11 @@ const currentMenu = computed(() => store.getCurrentDayMenu(restaurantId));
 const expandedRows = ref({});
 
 async function loadMenus() {
-  await store.loadMenus(restaurantId);
+  try {
+    await store.loadMenus(restaurantId);
+  } catch (e) {
+    showErrorToast(`Failed to load menus for '${RESTAURANTS[restaurantId].name}'`);
+  }
 
   // Open current day menu if present
   if (currentMenu.value) {
@@ -52,12 +59,16 @@ onMounted(async () => {
       <Button @click="loadMenus" icon="pi pi-refresh" class="absolute left-0"/>
     </div>
 
+    <!-- There was an error-->
+    <div v-if="menus === undefined" class="w-full h-full flex flex-col">
+      <Dead/>
+    </div>
     <!-- There are no menus-->
-    <div v-if="menus?.length === 0" class="w-full h-full flex flex-col">
+    <div v-else-if="menus?.length === 0" class="w-full h-full flex flex-col">
       <Empty/>
     </div>
     <!-- Menus loading-->
-    <div v-else-if="!menus" class="w-full h-full flex flex-col justify-center items-center">
+    <div v-else-if="menus === null" class="w-full h-full flex flex-col justify-center items-center">
       <Loading/>
     </div>
     <!-- Menus loaded and present-->
