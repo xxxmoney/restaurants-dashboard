@@ -26,6 +26,12 @@ const WEBS = [
         url: RESTAURANTS[restaurantEnum.PALATINO].url,
         zoom: 0.75,
     },
+    {
+        id: restaurantEnum.SALANDA,
+        name: RESTAURANTS[restaurantEnum.SALANDA].name,
+        url: RESTAURANTS[restaurantEnum.SALANDA].url,
+        zoom: 1,
+    },
 ];
 
 export {

@@ -5,6 +5,11 @@ import {categorizedMenusSchema} from "../schemas/menu.schema";
 
 export const MenuCategorizer = {
     async categorizeMenus(menus: Menus, env: any): Promise<CategorizedMenus> {
+        // There are no menus, do not categorize
+        if (menus.menus.length === 0) {
+            return {categorizedMenus: []};
+        }
+
         const service = new GeminiService(env.GEMINI_KEY);
         const geminiResponse = await service.jsonToJson<Menus, CategorizedMenus>(MENU_CATEGORIZATION_PROMPT, categorizedMenusSchema, menus);
 
