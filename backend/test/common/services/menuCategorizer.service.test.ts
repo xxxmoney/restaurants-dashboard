@@ -12,7 +12,7 @@ describe("categorizeMenus", () => {
     });
 
     it("should categorize menus to main typical categories", async () => {
-        const expected = ['Polévky', 'Hlavní jídla', 'Saláty'];
+        const expected = ['Polévky', 'Hlavní jídla', 'Saláty', 'Dezerty'];
 
         const menus = {
             menus: [
@@ -61,4 +61,15 @@ describe("categorizeMenus", () => {
         expect(categories).toIncludeSameMembers(expected);
     }, {timeout: LONG_RUNNING_TEST_TIMEOUT});
 
+    it("should NOT categorize when menus empty", async () => {
+        const menus = {
+            menus: []
+        } as Menus;
+
+        const result = await MenuCategorizer.categorizeMenus(menus, env);
+        console.log(JSON.stringify(result, null, 2));
+
+        expect(result).not.null;
+        expect(result.categorizedMenus).to.be.empty
+    }, {timeout: LONG_RUNNING_TEST_TIMEOUT});
 });

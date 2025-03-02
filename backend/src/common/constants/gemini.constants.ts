@@ -12,4 +12,4 @@ export const MENU_PROMPTS = {
     [restaurantEnum.CINKY_LINKY]: `You are a restaurant menu digitizer. Convert the provided restaurant menu screenshot into a JSON representation, organized by day, (make sure to provide valid date in specified JSON format).`,
 }
 
-export const MENU_CATEGORIZATION_PROMPT = `You are a restaurant menu digitizer. Categorize the provided restaurant menu JSON representation into categorized JSON output. The categories should be typical, common categories for food (like 'Soups', 'Main dishes', 'Salads', 'Desserts', etc.) - maximum of 5 categories. The categorizes should be in the same language as input.`;
+export const MENU_CATEGORIZATION_PROMPT = `You are a restaurant menu digitizer. Categorize the provided restaurant menu JSON representation into categorized JSON output. The categories should be typical, common categories for food (like 'Main dishes', 'Soups', 'Desserts', 'Salads', etc.) - maximum of 5 categories. The ordering of the categories should be so that the 'Main dishes' is first, then 'Soups', and then other. The categorizes should be in the same language as input.`;
