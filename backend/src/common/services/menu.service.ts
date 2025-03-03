@@ -6,7 +6,7 @@ import {GeminiService} from "./gemini.service";
 import {arrayBufferToBase64} from "../helpers/buffer.helper";
 import {menusSchema} from "../schemas/menu.schema";
 import {MENU_PROMPTS} from "../constants/gemini.constants";
-import {Cheerio, CheerioAPI} from "cheerio";
+import {CheerioAPI} from "cheerio";
 
 function parseDate(text: string) {
     const date = text.match(/\d{1,2}\.\d{1,2}\.\d{4}/g)![0];
@@ -27,7 +27,7 @@ export const MenuService = {
         const workWeekStartDate = date.startOf('week');
         const workWeekEndDate = workWeekStartDate.plus({days: 4});
 
-        const imageUrl = `${webUrl}/wp-content/uploads/${date.toFormat('yyyy')}/${date.toFormat('MM')}/poledni-menu-${workWeekStartDate.toFormat('d')}-${workWeekEndDate.toFormat('d')}-${date.toFormat('M')}-${date.toFormat('yyyy')}-scaled.jpg`;
+        const imageUrl = `${webUrl}/wp-content/uploads/${date.toFormat('yyyy')}/${date.toFormat('MM')}/poledni-menu-${workWeekStartDate.toFormat('dd')}-${workWeekEndDate.toFormat('dd')}-${date.toFormat('M')}-${date.toFormat('yyyy')}-scaled.jpg`;
         const imageResponse = await fetch(imageUrl);
         const imageBuffer = await imageResponse.arrayBuffer();
         const imageBase64 = arrayBufferToBase64(imageBuffer);
@@ -133,7 +133,7 @@ export const MenuService = {
 
             const menuItems = items.map(item => {
                 const $item = $(item);
-                
+
                 const name = $item.find('td > strong').first().text().trim();
                 const priceText = $item.find('td > strong').last().text().trim();
 
