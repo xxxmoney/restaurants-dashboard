@@ -1,6 +1,6 @@
 import {restaurantEnum} from "../../../../shared/enums/restaurant.enum";
 import {RESTAURANTS} from "../../../../shared/constants/restaurant.constants";
-import {Menu, Menus} from "../dto/menu";
+import {Menu, MenuItem, Menus} from "../dto/menu";
 import {DateTime} from "luxon";
 import {GeminiService} from "./gemini.service";
 import {arrayBufferToBase64} from "../helpers/buffer.helper";
@@ -133,12 +133,18 @@ export const MenuService = {
 
             const menuItems = items.map(item => {
                 const $item = $(item);
+                
                 const name = $item.find('td > strong').first().text().trim();
                 const priceText = $item.find('td > strong').last().text().trim();
+
+                if (!name || !priceText) {
+                    return null;
+                }
+
                 const price = parsePrice(priceText);
 
                 return {name, price};
-            }).filter(item => !item.name.includes(blacklistWord));
+            }).filter(item => item && !item.name.includes(blacklistWord)) as MenuItem[];
 
             menus.push({date, items: menuItems});
         })
