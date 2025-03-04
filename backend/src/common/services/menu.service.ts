@@ -7,6 +7,8 @@ import {arrayBufferToBase64} from "../helpers/buffer.helper";
 import {menusSchema} from "../schemas/menu.schema";
 import {MENU_PROMPTS} from "../constants/gemini.constants";
 import {CheerioAPI} from "cheerio";
+import format from "string-format";
+import {DATE_FORMAT} from "../../../../shared/constants/common.constants";
 
 function parseDate(text: string) {
     const date = text.match(/\d{1,2}\.\d{1,2}\.\d{4}/g)![0];
@@ -34,7 +36,8 @@ export const MenuService = {
 
         // Get menus with gemini service
         const service = new GeminiService(env.GEMINI_KEY);
-        const geminiResponse = await service.imageToJson<Menus>(MENU_PROMPTS[restaurantEnum.CINKY_LINKY], menusSchema, {base64: imageBase64});
+        const prompt = format(MENU_PROMPTS[restaurantEnum.CINKY_LINKY], workWeekStartDate.toFormat(DATE_FORMAT), workWeekEndDate.toFormat(DATE_FORMAT), DATE_FORMAT);
+        const geminiResponse = await service.imageToJson<Menus>(prompt, menusSchema, {base64: imageBase64});
         menus.push(...geminiResponse.json.menus);
     },
 
