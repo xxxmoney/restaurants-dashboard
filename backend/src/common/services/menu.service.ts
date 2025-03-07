@@ -155,15 +155,68 @@ export const MenuService = {
     },
 
     async getVozovnaPankracMenu($: CheerioAPI, menus: Menu[]) {
-        const menuLink = $('.menu-downloads a').first().attr('href');
+        //const menuUrl = $('.menu-downloads a').first().attr('href');
+
+        // TODO: Figure out how to get link from spa, for now, static link url
+        const menuUrl = 'https://cdn.website.dish.co/media/6e/28/8856125/Aktualni-nabidka.pdf';
 
         // Fetch the pdf from link
-        const pdfResponse = await fetch(menuLink!);
-        const pdfBuffer = await pdfResponse.arrayBuffer();
+        const pdfResponse = await fetch(menuUrl);
+        const pdfBuffer = new Uint8Array(await pdfResponse.arrayBuffer());
         const pdfFile = await parsePdf(pdfBuffer);
 
-        // TODO: get menu from parsed pdf
-        throw new Error('Not implemented');
+        const dayValues = ['Pondělí', 'Úterý', 'Středa', 'Čtvrtek', 'Pátek'];
+
+        // Push empty menu items for each day
+        const date = DateTime.now().startOf('week');
+        dayValues.forEach((_, index) => {
+            menus.push({date: date.plus({days: index}), items: []});
+        });
+
+        throw new Error('Not implemented yet');
+        // TODO: fix below - does not add current item
+
+        let dayIndex: number | null = null;
+        const currentItem = {name: '', price: -1};
+        pdfFile.pages[0].contents.forEach((content) => {
+            const parsedContent = content.replace(',-', '');
+
+            // Increment day count if text is a day value
+            const nextDayIndex = dayIndex ? dayIndex + 1 : 0;
+            if (parsedContent === dayValues[nextDayIndex]) {
+                // Check if parsing of previous item is finished
+                if (currentItem.name !== '' || currentItem.price !== -1) {
+                    throw new Error('Previous item not finished parsing');
+                }
+
+                dayIndex = nextDayIndex;
+                return;
+            }
+
+            // Skip if days not started yet
+            if (!dayIndex) {
+                return;
+            }
+
+            // Check if can parse price
+            const parsedNumber = parseInt(parsedContent, 10);
+            if (!isNaN(parsedNumber)) {
+                currentItem.price = parsedNumber;
+
+                // Current item is finished parsing, push it to menu
+                console.log(JSON.stringify(currentItem));
+                menus[dayIndex].items.push({...currentItem});
+
+                // Reset current item as preparation for next item
+                currentItem.name = '';
+                currentItem.price = -1;
+                return;
+            }
+
+            // Still parsing current item's name (can be multiple parts)
+            currentItem.name += parsedContent;
+        });
+
     }
 
 

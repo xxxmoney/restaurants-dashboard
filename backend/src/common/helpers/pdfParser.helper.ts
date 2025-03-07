@@ -19,8 +19,9 @@ export async function parsePdf(pdfBuffer: Uint8Array): Promise<Pdf> {
         const contents = textContent.items
             // Need to get str from each item, had to use this hacky way
             .map(item => (item as any).str as string)
+            .map(str => str.trim())
             // Filter out empty strings
-            .filter(str => str.trim().length > 0);
+            .filter(str => str.length > 0);
 
         output.pages.push({
             pageNumber: i,
