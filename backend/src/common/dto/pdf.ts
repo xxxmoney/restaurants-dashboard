@@ -1,6 +1,6 @@
 export interface PdfPage {
     pageNumber: number;
-    content: string;
+    contents: string[];
 }
 
 export interface Pdf {

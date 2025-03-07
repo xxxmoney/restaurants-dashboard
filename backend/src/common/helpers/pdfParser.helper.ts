@@ -1,7 +1,7 @@
 import {resolvePDFJS} from 'pdfjs-serverless'
 import {Pdf, PdfPage} from "../dto/pdf";
 
-export async function parsePdf(pdfBuffer: ArrayBuffer): Promise<Pdf> {
+export async function parsePdf(pdfBuffer: Uint8Array): Promise<Pdf> {
     const {getDocument} = await resolvePDFJS();
     const doc = await getDocument(pdfBuffer).promise;
 
@@ -16,11 +16,15 @@ export async function parsePdf(pdfBuffer: ArrayBuffer): Promise<Pdf> {
     for (let i = 1; i <= doc.numPages; i++) {
         const page = await doc.getPage(i);
         const textContent = await page.getTextContent();
-        const contents = textContent.items.map(item => item).join(' ');
+        const contents = textContent.items
+            // Need to get str from each item, had to use this hacky way
+            .map(item => (item as any).str as string)
+            // Filter out empty strings
+            .filter(str => str.trim().length > 0);
 
         output.pages.push({
             pageNumber: i,
-            content: contents
+            contents: contents
         });
     }
 
