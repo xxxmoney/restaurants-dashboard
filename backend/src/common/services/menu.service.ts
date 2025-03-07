@@ -9,6 +9,7 @@ import {MENU_PROMPTS} from "../constants/gemini.constants";
 import {CheerioAPI} from "cheerio";
 import format from "string-format";
 import {DATE_FORMAT} from "../../../../shared/constants/common.constants";
+import {parsePdf} from "../helpers/pdfParser.helper";
 
 function parseDate(text: string) {
     const date = text.match(/\d{1,2}\.\d{1,2}\.\d{4}/g)![0];
@@ -151,6 +152,18 @@ export const MenuService = {
 
             menus.push({date, items: menuItems});
         })
+    },
+
+    async getVozovnaPankracMenu($: CheerioAPI, menus: Menu[]) {
+        const menuLink = $('.menu-downloads a').first().attr('href');
+
+        // Fetch the pdf from link
+        const pdfResponse = await fetch(menuLink!);
+        const pdfBuffer = await pdfResponse.arrayBuffer();
+        const pdfFile = await parsePdf(pdfBuffer);
+
+        // TODO: get menu from parsed pdf
+        throw new Error('Not implemented');
     }
 
 

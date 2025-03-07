@@ -27,6 +27,8 @@ export const MenuProcessor = {
             MenuService.getPalatinoMenu($, menus);
         } else if (enumValue === restaurantEnum.SALANDA) {
             MenuService.getSalandaMenu($, menus);
+        } else if (enumValue === restaurantEnum.VOZOVNA_PANKRAC) {
+            await MenuService.getVozovnaPankracMenu($, menus);
         }
 
         // Hotfix - set year of all menus to current year
