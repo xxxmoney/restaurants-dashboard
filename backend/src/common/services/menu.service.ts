@@ -10,6 +10,7 @@ import {CheerioAPI} from "cheerio";
 import format from "string-format";
 import {DATE_FORMAT} from "../../../../shared/constants/common.constants";
 import {parsePdf} from "../helpers/pdfParser.helper";
+import {array} from "yup";
 
 function parseDate(text: string) {
     const date = text.match(/\d{1,2}\.\d{1,2}\.\d{4}/g)![0];
@@ -165,58 +166,53 @@ export const MenuService = {
         const pdfBuffer = new Uint8Array(await pdfResponse.arrayBuffer());
         const pdfFile = await parsePdf(pdfBuffer);
 
-        const dayValues = ['Pondělí', 'Úterý', 'Středa', 'Čtvrtek', 'Pátek'];
+        const contentsByDay: Record<string, string[]> = {
+            'Pondělí': [],
+            'Úterý': [],
+            'Středa': [],
+            'Čtvrtek': [],
+            'Pátek': []
+        }
+        const days = Object.keys(contentsByDay);
 
-        // Push empty menu items for each day
-        const date = DateTime.now().startOf('week');
-        dayValues.forEach((_, index) => {
-            menus.push({date: date.plus({days: index}), items: []});
-        });
-
-        throw new Error('Not implemented yet');
-        // TODO: fix below - does not add current item
-
+        // Select string contents of menus per each day
         let dayIndex: number | null = null;
-        const currentItem = {name: '', price: -1};
         pdfFile.pages[0].contents.forEach((content) => {
             const parsedContent = content.replace(',-', '');
 
-            // Increment day count if text is a day value
-            const nextDayIndex = dayIndex ? dayIndex + 1 : 0;
-            if (parsedContent === dayValues[nextDayIndex]) {
-                // Check if parsing of previous item is finished
-                if (currentItem.name !== '' || currentItem.price !== -1) {
-                    throw new Error('Previous item not finished parsing');
-                }
-
-                dayIndex = nextDayIndex;
+            if (days.includes(parsedContent)) {
+                dayIndex = days.indexOf(parsedContent);
                 return;
             }
 
-            // Skip if days not started yet
             if (!dayIndex) {
                 return;
             }
 
-            // Check if can parse price
-            const parsedNumber = parseInt(parsedContent, 10);
-            if (!isNaN(parsedNumber)) {
-                currentItem.price = parsedNumber;
-
-                // Current item is finished parsing, push it to menu
-                console.log(JSON.stringify(currentItem));
-                menus[dayIndex].items.push({...currentItem});
-
-                // Reset current item as preparation for next item
-                currentItem.name = '';
-                currentItem.price = -1;
-                return;
-            }
-
-            // Still parsing current item's name (can be multiple parts)
-            currentItem.name += parsedContent;
+            contentsByDay[days[dayIndex]].push(parsedContent);
         });
 
+        // Parse menu items from string contents of each day
+        const date = DateTime.now().startOf('week');
+        days.forEach((day, index) => {
+            menus[index] = {date: date.plus({days: index}), items: []};
+
+            const currentItem = {name: '', price: -1};
+            contentsByDay[day].forEach(content => {
+                const price = parseInt(content);
+                if (!isNaN(price)) {
+                    currentItem.price = price;
+                    // Got price for current item, push its values and reset current item
+                    menus[index].items.push({...currentItem});
+
+                    // Reset current item
+                    currentItem.name = '';
+                    currentItem.price = -1;
+                } else {
+                    currentItem.name += content;
+                }
+            });
+        })
     }
 
 
