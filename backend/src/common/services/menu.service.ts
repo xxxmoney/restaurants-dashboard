@@ -180,15 +180,18 @@ export const MenuService = {
         pdfFile.pages[0].contents.forEach((content) => {
             const parsedContent = content.replace(',-', '');
 
+            // Can start getting string contents for specific day
             if (days.includes(parsedContent)) {
                 dayIndex = days.indexOf(parsedContent);
                 return;
             }
 
+            // Didn't start getting string contents for specific day
             if (!dayIndex) {
                 return;
             }
 
+            // Push string content for specific day
             contentsByDay[days[dayIndex]].push(parsedContent);
         });
 
@@ -197,9 +200,11 @@ export const MenuService = {
         days.forEach((day, index) => {
             menus[index] = {date: date.plus({days: index}), items: []};
 
+            // Parse menu items from string contents for day by index
             const currentItem = {name: '', price: -1};
             contentsByDay[day].forEach(content => {
                 const price = parseInt(content);
+                // String is number, so its price - can finalize current item
                 if (!isNaN(price)) {
                     currentItem.price = price;
                     // Got price for current item, push its values and reset current item
@@ -208,6 +213,7 @@ export const MenuService = {
                     // Reset current item
                     currentItem.name = '';
                     currentItem.price = -1;
+                    // String is not number, so its name (or part of name) - add to current item's name
                 } else {
                     currentItem.name += content;
                 }
