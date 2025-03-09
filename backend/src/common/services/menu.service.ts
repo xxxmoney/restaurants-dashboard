@@ -159,7 +159,7 @@ export const MenuService = {
         //const menuUrl = $('.menu-downloads a').first().attr('href');
 
         // TODO: Figure out how to get link from spa, for now, static link url
-        const menuUrl = 'https://cdn.website.dish.co/media/6e/28/8856125/Aktualni-nabidka.pdf';
+        const menuUrl = 'https://cdn.website.dish.co/media/ef/17/8875980/Aktualni-nabidka.pdf';
 
         // Fetch the pdf from link
         const pdfResponse = await fetch(menuUrl);
