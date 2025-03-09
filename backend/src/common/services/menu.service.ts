@@ -187,7 +187,7 @@ export const MenuService = {
             }
 
             // Didn't start getting string contents for specific day
-            if (!dayIndex) {
+            if (dayIndex === null) {
                 return;
             }
 
