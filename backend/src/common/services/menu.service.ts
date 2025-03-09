@@ -69,13 +69,11 @@ export const MenuService = {
             const date = wekkStartDate.plus({days: i});
 
             menus.push({
-                date: wekkStartDate.plus({days: i}),
+                date: date,
                 // Only fot menu items for one day, so if date is not same as menu date, items are empty
-                items: date === menuDate ? menuItems : []
+                items: date.equals(menuDate) ? menuItems : []
             });
         }
-
-        menus.push({date: menuDate, items: menuItems});
     },
 
     getBarRedHookMenu($: CheerioAPI, menus: Menu[]) {
