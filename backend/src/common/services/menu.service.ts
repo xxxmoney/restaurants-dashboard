@@ -47,7 +47,7 @@ export const MenuService = {
         const $content = $('.content').first();
         const $title = $content.find('strong').first();
 
-        const date = parseDate($title.text());
+        const menuDate = parseDate($title.text());
 
         // Get menu items
         const items = $content.find('table').first().find('tr').has('td').toArray();
@@ -63,7 +63,19 @@ export const MenuService = {
             return {name, price};
         });
 
-        menus.push({date, items: menuItems});
+        // Include all days of work week
+        const wekkStartDate = menuDate.startOf('week');
+        for (let i = 0; i < 5; i++) {
+            const date = wekkStartDate.plus({days: i});
+
+            menus.push({
+                date: wekkStartDate.plus({days: i}),
+                // Only fot menu items for one day, so if date is not same as menu date, items are empty
+                items: date === menuDate ? menuItems : []
+            });
+        }
+
+        menus.push({date: menuDate, items: menuItems});
     },
 
     getBarRedHookMenu($: CheerioAPI, menus: Menu[]) {
@@ -131,8 +143,9 @@ export const MenuService = {
         const getItem = (dayNumber: number) => $(`${selectorPrefix}${dayNumber}`).first();
         const contents = [getItem(1), getItem(2), getItem(3), getItem(4), getItem(5)];
 
+        const weekStartDate = DateTime.now().startOf('week');
         contents.forEach(($content, index) => {
-            const date = DateTime.now().startOf('week').plus({days: index});
+            const date = weekStartDate.plus({days: index});
 
             const items = $content.find('table > tbody > tr').toArray();
 
@@ -151,7 +164,7 @@ export const MenuService = {
                 return {name, price};
             }).filter(item => item && !item.name.includes(blacklistWord)) as MenuItem[];
 
-            menus.push({date, items: menuItems});
+            menus.push({date: date, items: menuItems});
         })
     },
 
@@ -196,9 +209,9 @@ export const MenuService = {
         });
 
         // Parse menu items from string contents of each day
-        const date = DateTime.now().startOf('week');
+        const weekStartDate = DateTime.now().startOf('week');
         days.forEach((day, index) => {
-            menus[index] = {date: date.plus({days: index}), items: []};
+            menus[index] = {date: weekStartDate.plus({days: index}), items: []};
 
             // Parse menu items from string contents for day by index
             const currentItem = {name: '', price: -1};
