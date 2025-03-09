@@ -13,7 +13,7 @@ describe("getMenu", () => {
 
         expect(result).not.null;
         console.log(JSON.stringify(result, null, 2));
-    }, { timeout: LONG_RUNNING_TEST_TIMEOUT });
+    }, {timeout: LONG_RUNNING_TEST_TIMEOUT});
 
     it("should get menu klika", async () => {
         const restaurantId = restaurantEnum.KLIKA;
@@ -22,7 +22,7 @@ describe("getMenu", () => {
 
         expect(result).not.null;
         console.log(JSON.stringify(result, null, 2));
-    }, { timeout: LONG_RUNNING_TEST_TIMEOUT });
+    }, {timeout: LONG_RUNNING_TEST_TIMEOUT});
 
     it("should get menu red hook", async () => {
         const restaurantId = restaurantEnum.BAR_RED_HOOK;
@@ -31,7 +31,7 @@ describe("getMenu", () => {
 
         expect(result).not.null;
         console.log(JSON.stringify(result, null, 2));
-    }, { timeout: LONG_RUNNING_TEST_TIMEOUT });
+    }, {timeout: LONG_RUNNING_TEST_TIMEOUT});
 
     it("should get menu palatino", async () => {
         const restaurantId = restaurantEnum.PALATINO;
@@ -40,7 +40,7 @@ describe("getMenu", () => {
 
         expect(result).not.null;
         console.log(JSON.stringify(result, null, 2));
-    }, { timeout: LONG_RUNNING_TEST_TIMEOUT });
+    }, {timeout: LONG_RUNNING_TEST_TIMEOUT});
 
     it("should get menu salanda", async () => {
         const restaurantId = restaurantEnum.SALANDA;
@@ -49,6 +49,15 @@ describe("getMenu", () => {
 
         expect(result).not.null;
         console.log(JSON.stringify(result, null, 2));
-    }, { timeout: LONG_RUNNING_TEST_TIMEOUT });
+    }, {timeout: LONG_RUNNING_TEST_TIMEOUT});
+
+    it("should get menu vozovna pankrac", async () => {
+        const restaurantId = restaurantEnum.VOZOVNA_PANKRAC;
+
+        const result = await MenuProcessor.getProcessedMenu(restaurantId, env);
+
+        expect(result).not.null;
+        console.log(JSON.stringify(result, null, 2));
+    }, {timeout: LONG_RUNNING_TEST_TIMEOUT});
 
 });

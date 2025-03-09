@@ -9,6 +9,8 @@ import {MENU_PROMPTS} from "../constants/gemini.constants";
 import {CheerioAPI} from "cheerio";
 import format from "string-format";
 import {DATE_FORMAT} from "../../../../shared/constants/common.constants";
+import {parsePdf} from "../helpers/pdfParser.helper";
+import {array} from "yup";
 
 function parseDate(text: string) {
     const date = text.match(/\d{1,2}\.\d{1,2}\.\d{4}/g)![0];
@@ -45,7 +47,7 @@ export const MenuService = {
         const $content = $('.content').first();
         const $title = $content.find('strong').first();
 
-        const date = parseDate($title.text());
+        const menuDate = parseDate($title.text());
 
         // Get menu items
         const items = $content.find('table').first().find('tr').has('td').toArray();
@@ -61,7 +63,17 @@ export const MenuService = {
             return {name, price};
         });
 
-        menus.push({date, items: menuItems});
+        // Include all days of work week
+        const wekkStartDate = menuDate.startOf('week');
+        for (let i = 0; i < 5; i++) {
+            const date = wekkStartDate.plus({days: i});
+
+            menus.push({
+                date: date,
+                // Only fot menu items for one day, so if date is not same as menu date, items are empty
+                items: date.equals(menuDate) ? menuItems : []
+            });
+        }
     },
 
     getBarRedHookMenu($: CheerioAPI, menus: Menu[]) {
@@ -129,8 +141,9 @@ export const MenuService = {
         const getItem = (dayNumber: number) => $(`${selectorPrefix}${dayNumber}`).first();
         const contents = [getItem(1), getItem(2), getItem(3), getItem(4), getItem(5)];
 
+        const weekStartDate = DateTime.now().startOf('week');
         contents.forEach(($content, index) => {
-            const date = DateTime.now().startOf('week').plus({days: index});
+            const date = weekStartDate.plus({days: index});
 
             const items = $content.find('table > tbody > tr').toArray();
 
@@ -149,7 +162,73 @@ export const MenuService = {
                 return {name, price};
             }).filter(item => item && !item.name.includes(blacklistWord)) as MenuItem[];
 
-            menus.push({date, items: menuItems});
+            menus.push({date: date, items: menuItems});
+        })
+    },
+
+    async getVozovnaPankracMenu($: CheerioAPI, menus: Menu[]) {
+        //const menuUrl = $('.menu-downloads a').first().attr('href');
+
+        // TODO: Figure out how to get link from spa, for now, static link url
+        const menuUrl = 'https://cdn.website.dish.co/media/ef/17/8875980/Aktualni-nabidka.pdf';
+
+        // Fetch the pdf from link
+        const pdfResponse = await fetch(menuUrl);
+        const pdfBuffer = new Uint8Array(await pdfResponse.arrayBuffer());
+        const pdfFile = await parsePdf(pdfBuffer);
+
+        const contentsByDay: Record<string, string[]> = {
+            'Pondělí': [],
+            'Úterý': [],
+            'Středa': [],
+            'Čtvrtek': [],
+            'Pátek': []
+        }
+        const days = Object.keys(contentsByDay);
+
+        // Select string contents of menus per each day
+        let dayIndex: number | null = null;
+        pdfFile.pages[0].contents.forEach((content) => {
+            const parsedContent = content.replace(',-', '');
+
+            // Can start getting string contents for specific day
+            if (days.includes(parsedContent)) {
+                dayIndex = days.indexOf(parsedContent);
+                return;
+            }
+
+            // Didn't start getting string contents for specific day
+            if (dayIndex === null) {
+                return;
+            }
+
+            // Push string content for specific day
+            contentsByDay[days[dayIndex]].push(parsedContent);
+        });
+
+        // Parse menu items from string contents of each day
+        const weekStartDate = DateTime.now().startOf('week');
+        days.forEach((day, index) => {
+            menus[index] = {date: weekStartDate.plus({days: index}), items: []};
+
+            // Parse menu items from string contents for day by index
+            const currentItem = {name: '', price: -1};
+            contentsByDay[day].forEach(content => {
+                const price = parseInt(content);
+                // String is number, so its price - can finalize current item
+                if (!isNaN(price)) {
+                    currentItem.price = price;
+                    // Got price for current item, push its values and reset current item
+                    menus[index].items.push({...currentItem});
+
+                    // Reset current item
+                    currentItem.name = '';
+                    currentItem.price = -1;
+                    // String is not number, so its name (or part of name) - add to current item's name
+                } else {
+                    currentItem.name += content;
+                }
+            });
         })
     }
 
