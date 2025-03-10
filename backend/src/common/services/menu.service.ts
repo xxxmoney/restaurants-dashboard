@@ -18,7 +18,9 @@ function parseDate(text: string) {
 }
 
 function parsePrice(text: string) {
-    return parseInt(text.match(/\d+/g)![0]);
+    const match = text.match(/\d+/g);
+
+    return match ? parseInt(match[0]) : -1;
 }
 
 export const MenuService = {

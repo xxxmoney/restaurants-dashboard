@@ -12,6 +12,7 @@ import {formatCurrency} from "@/common/helpers/currency.helper.js";
 import {RESTAURANTS} from "root/shared/constants/restaurant.constants.js";
 import {useCustomToast} from "@/composables/customToast.comp.js";
 import Dead from "@/components/common/Dead.vue";
+import {CURRENCY, CURRENCY_SYMBOL} from "@/common/constants/common.constants.js";
 
 const {restaurantId} = defineProps({
   restaurantId: {
@@ -94,7 +95,8 @@ onMounted(async () => {
                 <Column field="name" header="Name"></Column>
                 <Column field="price" header="Price" headerClass="w-1/3" sortable>
                   <template #body="{data}">
-                    <span>{{ formatCurrency(data.price) }}</span>
+                    <span v-if="data.price === -1">? {{ CURRENCY_SYMBOL }}</span>
+                    <span v-else>{{ formatCurrency(data.price) }}</span>
                   </template>
                 </Column>
               </DataTable>
