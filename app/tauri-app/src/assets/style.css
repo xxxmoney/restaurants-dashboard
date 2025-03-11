@@ -95,6 +95,8 @@ html, body, #app {
     font-size: 14px;
     line-height: 1.5;
 
+    overflow-x: hidden;
+
     /* Set the colors */
     background-color: var(--p-primary-contrast-color);
     color: var(--p-text-color);

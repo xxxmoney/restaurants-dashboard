@@ -16,8 +16,10 @@ const {selectedIds} = storeToRefs(store);
     <div class="flex flex-row gap-md">
       <Button @click="store.loadAllMenus()" icon="pi pi-refresh"/>
 
-      <MultiSelect v-model="selectedIds" :options="MENUS" optionLabel="name" optionValue="id"
-                   placeholder="Select restaurant" filter showClear/>
+      <div class="max-w-full md:max-w-64 pr-4">
+        <MultiSelect v-model="selectedIds" :options="MENUS" optionLabel="name" optionValue="id"
+                     placeholder="Select restaurant" class="max-w-full" filter showClear/>
+      </div>
     </div>
 
     <div class="grid gap-xl grid-cols-1 md:gap-md" :class="`md:grid-cols-${MENUS_PER_ROW}`">
