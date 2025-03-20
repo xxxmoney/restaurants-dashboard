@@ -54,10 +54,11 @@ onMounted(async () => {
 
 <template>
   <div class="flex flex-col gap-md px-sm py-lg border-content border-e-0 border-l-0 border-2 rounded-lg">
-    <div class="relative flex flex-row justify-center items-center min-h-10">
-      <a :href="restaurant.url" target="_blank">{{ restaurant.name }}</a>
+    <div
+        class="sticky top-0 z-10 py-xl mx-xs rounded-xl background-primary-contrast-brighter flex flex-row justify-center items-center min-h-10">
+      <a class="font-bold text-xl" :href="restaurant.url" target="_blank">{{ restaurant.name }}</a>
 
-      <Button @click="loadMenus" icon="pi pi-refresh" class="absolute left-0"/>
+      <Button @click="loadMenus" icon="pi pi-refresh" class="absolute left-md z-10"/>
     </div>
 
     <!-- There was an error-->
@@ -92,7 +93,7 @@ onMounted(async () => {
               <Divider class="mt-0"/>
 
               <DataTable :value="categorizedItem.items" sortField="price" :sortOrder="1">
-                <Column field="name" header="Name"></Column>
+                <Column field="name" header="Name"/>
                 <Column field="price" header="Price" headerClass="w-1/3" sortable>
                   <template #body="{data}">
                     <span v-if="data.price === -1">? {{ CURRENCY_SYMBOL }}</span>

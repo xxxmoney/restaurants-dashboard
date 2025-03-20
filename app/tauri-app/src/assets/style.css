@@ -36,6 +36,7 @@
 :root {
     --p-primary-color: var(--p-primary-500);
     --p-primary-contrast-color: var(--p-surface-0);
+    --p-primary-contrast-color-brighter: var(--p-surface-800);
     --p-primary-hover-color: var(--p-primary-600);
     --p-primary-active-color: var(--p-primary-700);
     --p-content-border-color: var(--p-surface-200);
@@ -98,6 +99,10 @@ html, body, #app {
     /* Set the colors */
     background-color: var(--p-primary-contrast-color);
     color: var(--p-text-color);
+}
+
+.background-primary-contrast-brighter {
+    background-color: var(--p-primary-contrast-color-brighter);
 }
 
 iframe {
