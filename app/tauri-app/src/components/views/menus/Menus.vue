@@ -54,10 +54,11 @@ onMounted(async () => {
 
 <template>
   <div class="flex flex-col gap-md px-sm py-lg border-content border-e-0 border-l-0 border-2 rounded-lg">
-    <div class="sticky top-md z-10 flex flex-row justify-center items-center min-h-10">
+    <div
+        class="sticky top-0 z-10 py-xl mx-xs rounded-xl background-primary-contrast-brighter flex flex-row justify-center items-center min-h-10">
       <a class="" :href="restaurant.url" target="_blank">{{ restaurant.name }}</a>
 
-      <Button @click="loadMenus" icon="pi pi-refresh" class="absolute left-0 z-10"/>
+      <Button @click="loadMenus" icon="pi pi-refresh" class="absolute left-md z-10"/>
     </div>
 
     <!-- There was an error-->
