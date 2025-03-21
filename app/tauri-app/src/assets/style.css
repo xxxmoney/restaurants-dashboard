@@ -36,7 +36,7 @@
 :root {
     --p-primary-color: var(--p-primary-500);
     --p-primary-contrast-color: var(--p-surface-0);
-    --p-primary-contrast-color-brighter: var(--p-surface-800);
+    --p-primary-contrast-color-brighter: var(--p-surface-100);
     --p-primary-hover-color: var(--p-primary-600);
     --p-primary-active-color: var(--p-primary-700);
     --p-content-border-color: var(--p-surface-200);
@@ -64,6 +64,7 @@
     :root {
         --p-primary-color: var(--p-primary-400);
         --p-primary-contrast-color: var(--p-surface-900);
+        --p-primary-contrast-color-brighter: var(--p-surface-800);
         --p-primary-hover-color: var(--p-primary-300);
         --p-primary-active-color: var(--p-primary-200);
         --p-content-border-color: var(--p-surface-700);
