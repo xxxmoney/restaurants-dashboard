@@ -33,7 +33,8 @@ export const MenuService = {
         const workWeekStartDate = date.startOf('week');
         const workWeekEndDate = workWeekStartDate.plus({days: 4});
 
-        const imageUrl = `${webUrl}/wp-content/uploads/${date.toFormat('yyyy')}/${date.toFormat('MM')}/poledni-menu-${workWeekStartDate.toFormat('dd')}-${workWeekEndDate.toFormat('dd')}-${date.toFormat('M')}-${date.toFormat('yyyy')}-scaled.jpg`;
+        const imageUrl = `${webUrl}/wp-content/uploads/${date.toFormat('yyyy')}/${date.toFormat('MM')}/poledni-menu-${workWeekStartDate.toFormat('d')}_${workWeekStartDate.toFormat('M')}-${workWeekEndDate.toFormat('d')}_${workWeekEndDate.toFormat('M')}-${date.toFormat('yyyy')}-scaled.jpg`;
+        console.log(imageUrl);
         const imageResponse = await fetch(imageUrl);
         const imageBuffer = await imageResponse.arrayBuffer();
         const imageBase64 = arrayBufferToBase64(imageBuffer);
