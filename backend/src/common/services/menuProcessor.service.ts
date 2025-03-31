@@ -1,55 +1,53 @@
 import {CategorizedMenu, Menu} from "../dto/menu";
 import {restaurantEnum} from "../../../../shared/enums/restaurant.enum";
 import {DateTime} from "luxon";
-import {RESTAURANTS} from "../../../../shared/constants/restaurant.constants";
-import {getHtmlDocFromUrl} from "../helpers/domParser.helper";
-import {MenuService} from "./menu.service";
 import {MenuCategorizer} from "./menuCategorizer.service";
+import {MenuService} from "./menus/menu.types";
+import {CinkyLinkyMenuService} from "./menus/cinkyLinky.menu.service";
+import {KlikaMenuService} from "./menus/klika.menu.service";
+import {BarRedHookMenuService} from "./menus/barRedHook.menu.service";
+import {PalatinoMenuService} from "./menus/palatino.menu.service";
+import {SalandaMenuService} from "./menus/salanda.menu.service";
+import {VozovnaPankracMenuService} from "./menus/vozovnaPankrac.menu.service";
 
 export const MenuProcessor = {
     async getProcessedMenu(enumValue: number, env: any, fetcher?: Fetcher): Promise<CategorizedMenu[]> {
-        // @ts-ignore
-        if (!Object.values(restaurantEnum).includes(enumValue)) {
-            throw new Error('Invalid restaurant enum value');
+        let menuService: MenuService;
+
+        switch (enumValue) {
+            case restaurantEnum.CINKY_LINKY:
+                menuService = new CinkyLinkyMenuService(env) as MenuService;
+                break;
+            case restaurantEnum.KLIKA:
+                menuService = new KlikaMenuService(fetcher) as MenuService;
+                break;
+            case restaurantEnum.BAR_RED_HOOK:
+                menuService = new BarRedHookMenuService(fetcher) as MenuService;
+                break;
+            case restaurantEnum.PALATINO:
+                menuService = new PalatinoMenuService(fetcher) as MenuService;
+                break;
+            case restaurantEnum.SALANDA:
+                menuService = new SalandaMenuService(fetcher) as MenuService;
+                break;
+            case restaurantEnum.VOZOVNA_PANKRAC:
+                menuService = new VozovnaPankracMenuService(fetcher) as MenuService;
+                break;
+            default:
+                throw new Error('Invalid restaurant enum value');
         }
 
-        const menus: Menu[] = [];
-
-        const $ = await this.getCheerioApi(enumValue, fetcher);
-
-        if (enumValue === restaurantEnum.CINKY_LINKY) {
-            await MenuService.getCinkyLinkyMenu(menus, env);
-        } else if (enumValue === restaurantEnum.KLIKA) {
-            MenuService.getKlikaMenu($, menus);
-        } else if (enumValue === restaurantEnum.BAR_RED_HOOK) {
-            MenuService.getBarRedHookMenu($, menus);
-        } else if (enumValue === restaurantEnum.PALATINO) {
-            MenuService.getPalatinoMenu($, menus);
-        } else if (enumValue === restaurantEnum.SALANDA) {
-            MenuService.getSalandaMenu($, menus);
-        } else if (enumValue === restaurantEnum.VOZOVNA_PANKRAC) {
-            await MenuService.getVozovnaPankracMenu($, menus);
-        }
+        const menus = await menuService.getMenus();
 
         // Hotfix - set year of all menus to current year
         menus.forEach(menu => {
             menu.date = menu.date.set({year: DateTime.now().year});
         });
-
         // Order menus by date descending
         menus.sort((a, b) => a.date.toMillis() - b.date.toMillis());
 
         // Apply menu categorization
         const {categorizedMenus} = await MenuCategorizer.categorizeMenus({menus: menus}, env);
         return categorizedMenus;
-    },
-
-    async getCheerioApi(enumValue: number, fetcher: Fetcher<undefined, never> | undefined) {
-        // @ts-ignore
-        return RESTAURANTS[enumValue].alternateUrl ?
-            // @ts-ignore
-            await getHtmlDocFromUrl(RESTAURANTS[enumValue].alternateUrl, RESTAURANTS[enumValue].alternateUrlCharset, fetcher) :
-            // @ts-ignore
-            await getHtmlDocFromUrl(RESTAURANTS[enumValue].url, RESTAURANTS[enumValue].urlCharset, fetcher);
-    },
+    }
 }
