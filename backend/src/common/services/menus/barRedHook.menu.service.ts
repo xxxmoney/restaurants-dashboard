@@ -11,8 +11,8 @@ export class BarRedHookMenuService implements MenuService {
         this.fetcher = fetcher;
     }
 
-    getMenu(): Promise<Menu[]> {
-        const {$} = useCheerio(this.fetcher, restaurantEnum.BAR_RED_HOOK);
+    async getMenu(): Promise<Menu[]> {
+        const {$} = await useCheerio(this.fetcher, restaurantEnum.BAR_RED_HOOK);
 
         const contents = $('.content').toArray();
 
@@ -50,6 +50,6 @@ export class BarRedHookMenuService implements MenuService {
             menus.push({date, items: menuItems});
         });
 
-        return Promise.resolve(menus);
+        return menus;
     }
 }

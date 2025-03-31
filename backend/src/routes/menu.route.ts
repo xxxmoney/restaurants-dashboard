@@ -1,5 +1,4 @@
 import {Hono} from 'hono'
-import {MenuService} from "../common/services/menu.service";
 import {getFetcher} from "../common/helpers/fetcher.helper";
 import {useEndpointCache} from "../common/composables/cache.comp";
 import {MenuProcessor} from "../common/services/menuProcessor.service";
@@ -16,7 +15,7 @@ menuRoute.get('/:id', async (c) => {
     if (cachedValue) {
         return c.json(cachedValue);
     }
-    
+
     const id: number = parseInt(c.req.param('id'));
     // @ts-ignore
     const menus = await MenuProcessor.getProcessedMenu(id, c.env, getFetcher(c));

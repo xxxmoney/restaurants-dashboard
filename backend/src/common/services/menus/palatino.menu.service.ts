@@ -11,8 +11,8 @@ export class PalatinoMenuService implements MenuService {
         this.fetcher = fetcher;
     }
 
-    getMenu(): Promise<Menu[]> {
-        const {$} = useCheerio(this.fetcher, restaurantEnum.PALATINO);
+    async getMenu(): Promise<Menu[]> {
+        const {$} = await useCheerio(this.fetcher, restaurantEnum.PALATINO);
 
         const contents = [$('#pondeli').first(), $('#utery').first(), $('#streda').first(), $('#ctvrtek').first(), $('#patek').first()];
 
@@ -37,6 +37,6 @@ export class PalatinoMenuService implements MenuService {
             menus.push({date, items: menuItems});
         });
 
-        return Promise.resolve(menus);
+        return menus;
     }
 }

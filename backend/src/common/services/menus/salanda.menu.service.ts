@@ -12,8 +12,8 @@ export class SalandaMenuService implements MenuService {
         this.fetcher = fetcher;
     }
 
-    getMenu(): Promise<Menu[]> {
-        const {$} = useCheerio(this.fetcher, restaurantEnum.SALANDA);
+    async getMenu(): Promise<Menu[]> {
+        const {$} = await useCheerio(this.fetcher, restaurantEnum.SALANDA);
 
         const selectorPrefix = '#poledni-menu #priceTable #collapse';
         const blacklistWord = 'TÝDENNÍ STÁLICE';
@@ -46,6 +46,6 @@ export class SalandaMenuService implements MenuService {
             menus.push({date: date, items: menuItems});
         });
 
-        return Promise.resolve(menus);
+        return menus;
     }
 }

@@ -12,8 +12,8 @@ export class KlikaMenuService implements MenuService {
         this.fetcher = fetcher;
     }
 
-    getMenu(): Promise<Menu[]> {
-        const {$} = useCheerio(this.fetcher, restaurantEnum.KLIKA);
+    async getMenu(): Promise<Menu[]> {
+        const {$} = await useCheerio(this.fetcher, restaurantEnum.KLIKA);
 
         const $content = $('.content').first();
         const $title = $content.find('strong').first();
@@ -37,9 +37,9 @@ export class KlikaMenuService implements MenuService {
         const menus: Menu[] = [];
 
         // Include all days of work week
-        const wekkStartDate = menuDate.startOf('week');
+        const weekStartDate = menuDate.startOf('week');
         for (let i = 0; i < 5; i++) {
-            const date = wekkStartDate.plus({days: i});
+            const date = weekStartDate.plus({days: i});
 
             menus.push({
                 date: date,
@@ -48,6 +48,6 @@ export class KlikaMenuService implements MenuService {
             });
         }
 
-        return Promise.resolve(menus);
+        return menus;
     }
 }
