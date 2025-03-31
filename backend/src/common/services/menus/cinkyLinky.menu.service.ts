@@ -9,6 +9,7 @@ import {MENU_PROMPTS} from "../../constants/gemini.constants";
 import {restaurantEnum} from "../../../../../shared/enums/restaurant.enum";
 import {DATE_FORMAT} from "../../../../../shared/constants/common.constants";
 import {menusSchema} from "../../schemas/menu.schema";
+import {RESTAURANTS} from "../../../../../shared/constants/restaurant.constants";
 
 export class CinkyLinkyMenuService implements MenuService {
     private readonly env: any;
