@@ -24,7 +24,7 @@ function parsePrice(text: string) {
 }
 
 export const MenuService = {
-    async getCinkyLinkyMenu(menus: Menu[], env: any) {
+    async getCinkyLinkyMenu(env: any): Promise<Menu[]> {
         // @ts-ignore
         const webUrl = RESTAURANTS[restaurantEnum.CINKY_LINKY].url;
 
@@ -43,10 +43,10 @@ export const MenuService = {
         const service = new GeminiService(env.GEMINI_KEY);
         const prompt = format(MENU_PROMPTS[restaurantEnum.CINKY_LINKY], workWeekStartDate.toFormat(DATE_FORMAT), workWeekEndDate.toFormat(DATE_FORMAT), DATE_FORMAT);
         const geminiResponse = await service.imageToJson<Menus>(prompt, menusSchema, {base64: imageBase64});
-        menus.push(...geminiResponse.json.menus);
+        return geminiResponse.json.menus;
     },
 
-    getKlikaMenu($: CheerioAPI, menus: Menu[]) {
+    getKlikaMenu($: CheerioAPI): Menu[] {
         const $content = $('.content').first();
         const $title = $content.find('strong').first();
 
@@ -66,6 +66,8 @@ export const MenuService = {
             return {name, price};
         });
 
+        const menus: Menu[] = [];
+
         // Include all days of work week
         const wekkStartDate = menuDate.startOf('week');
         for (let i = 0; i < 5; i++) {
@@ -77,10 +79,14 @@ export const MenuService = {
                 items: date.equals(menuDate) ? menuItems : []
             });
         }
+
+        return menus;
     },
 
-    getBarRedHookMenu($: CheerioAPI, menus: Menu[]) {
+    getBarRedHookMenu($: CheerioAPI): Menu[] {
         const contents = $('.content').toArray();
+
+        const menus: Menu[] = [];
 
         contents.forEach((content) => {
             const $content = $(content);
@@ -112,11 +118,15 @@ export const MenuService = {
             });
 
             menus.push({date, items: menuItems});
-        })
+        });
+
+        return menus;
     },
 
-    getPalatinoMenu($: CheerioAPI, menus: Menu[]) {
+    getPalatinoMenu($: CheerioAPI): Menu[] {
         const contents = [$('#pondeli').first(), $('#utery').first(), $('#streda').first(), $('#ctvrtek').first(), $('#patek').first()];
+
+        const menus: Menu[] = [];
 
         contents.forEach(($content) => {
             const $title = $content.find('.fr-tab-den').first();
@@ -135,14 +145,18 @@ export const MenuService = {
             });
 
             menus.push({date, items: menuItems});
-        })
+        });
+
+        return menus;
     },
 
-    getSalandaMenu($: CheerioAPI, menus: Menu[]) {
+    getSalandaMenu($: CheerioAPI): Menu[] {
         const selectorPrefix = '#poledni-menu #priceTable #collapse';
         const blacklistWord = 'TÝDENNÍ STÁLICE';
         const getItem = (dayNumber: number) => $(`${selectorPrefix}${dayNumber}`).first();
         const contents = [getItem(1), getItem(2), getItem(3), getItem(4), getItem(5)];
+
+        const menus: Menu[] = [];
 
         const weekStartDate = DateTime.now().startOf('week');
         contents.forEach(($content, index) => {
@@ -166,10 +180,12 @@ export const MenuService = {
             }).filter(item => item && !item.name.includes(blacklistWord)) as MenuItem[];
 
             menus.push({date: date, items: menuItems});
-        })
+        });
+
+        return menus;
     },
 
-    async getVozovnaPankracMenu($: CheerioAPI, menus: Menu[]) {
+    async getVozovnaPankracMenu($: CheerioAPI): Promise<Menu[]> {
         //const menuUrl = $('.menu-downloads a').first().attr('href');
 
         // TODO: Figure out how to get link from spa, for now, static link url
@@ -209,6 +225,8 @@ export const MenuService = {
             contentsByDay[days[dayIndex]].push(parsedContent);
         });
 
+        const menus: Menu[] = [];
+
         // Parse menu items from string contents of each day
         const weekStartDate = DateTime.now().startOf('week');
         days.forEach((day, index) => {
@@ -232,7 +250,9 @@ export const MenuService = {
                     currentItem.name += content;
                 }
             });
-        })
+        });
+
+        return menus;
     }
 
 

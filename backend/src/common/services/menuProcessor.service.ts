@@ -13,22 +13,24 @@ export const MenuProcessor = {
             throw new Error('Invalid restaurant enum value');
         }
 
-        const menus: Menu[] = [];
+        let menus: Menu[];
 
         const $ = await this.getCheerioApi(enumValue, fetcher);
 
         if (enumValue === restaurantEnum.CINKY_LINKY) {
-            await MenuService.getCinkyLinkyMenu(menus, env);
+            menus = await MenuService.getCinkyLinkyMenu(env);
         } else if (enumValue === restaurantEnum.KLIKA) {
-            MenuService.getKlikaMenu($, menus);
+            menus = MenuService.getKlikaMenu($);
         } else if (enumValue === restaurantEnum.BAR_RED_HOOK) {
-            MenuService.getBarRedHookMenu($, menus);
+            menus = MenuService.getBarRedHookMenu($);
         } else if (enumValue === restaurantEnum.PALATINO) {
-            MenuService.getPalatinoMenu($, menus);
+            menus = MenuService.getPalatinoMenu($);
         } else if (enumValue === restaurantEnum.SALANDA) {
-            MenuService.getSalandaMenu($, menus);
+            menus = MenuService.getSalandaMenu($);
         } else if (enumValue === restaurantEnum.VOZOVNA_PANKRAC) {
-            await MenuService.getVozovnaPankracMenu($, menus);
+            menus = await MenuService.getVozovnaPankracMenu($);
+        } else {
+            throw new Error('Restaurant not supported');
         }
 
         // Hotfix - set year of all menus to current year
