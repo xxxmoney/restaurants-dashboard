@@ -7,7 +7,7 @@ import {GeminiService} from "../gemini.service";
 import format from "string-format";
 import {MENU_PROMPTS} from "../../constants/gemini.constants";
 import {restaurantEnum} from "../../../../../shared/enums/restaurant.enum";
-import {DATE_FORMAT} from "../../../../../shared/constants/common.constants";
+import {DATE_FORMAT, IS_DEBUG} from "../../../../../shared/constants/common.constants";
 import {menusSchema} from "../../schemas/menu.schema";
 import {RESTAURANTS} from "../../../../../shared/constants/restaurant.constants";
 
@@ -28,7 +28,9 @@ export class CinkyLinkyMenuService implements MenuService {
         const workWeekEndDate = workWeekStartDate.plus({days: 4});
 
         const imageUrl = `${webUrl}/wp-content/uploads/${date.toFormat('yyyy')}/${date.toFormat('MM')}/poledni-menu-${workWeekStartDate.toFormat('d')}_${workWeekStartDate.toFormat('M')}-${workWeekEndDate.toFormat('d')}_${workWeekEndDate.toFormat('M')}-${date.toFormat('yyyy')}-scaled.jpg`;
-        console.log(imageUrl);
+        if (IS_DEBUG) {
+            console.info(`Cinky Linky menu image URL: ${imageUrl}`);
+        }
         const imageResponse = await fetch(imageUrl);
         const imageBuffer = await imageResponse.arrayBuffer();
         const imageBase64 = arrayBufferToBase64(imageBuffer);
