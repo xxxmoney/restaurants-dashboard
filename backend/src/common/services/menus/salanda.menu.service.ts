@@ -12,7 +12,7 @@ export class SalandaMenuService implements MenuService {
         this.fetcher = fetcher;
     }
 
-    async getMenu(): Promise<Menu[]> {
+    async getMenus(): Promise<Menu[]> {
         const {$} = await useCheerio(this.fetcher, restaurantEnum.SALANDA);
 
         const selectorPrefix = '#poledni-menu #priceTable #collapse';

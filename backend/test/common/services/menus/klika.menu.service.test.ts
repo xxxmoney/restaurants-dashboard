@@ -5,7 +5,7 @@ import {KlikaMenuService} from "../../../../src/common/services/menus/klika.menu
 describe("getMenu", () => {
     it("should get menu Klika", async () => {
         const menuService = new KlikaMenuService(undefined);
-        const result = await menuService.getMenu();
+        const result = await menuService.getMenus();
 
         expect(result).not.null;
         console.log(JSON.stringify(result, null, 2));

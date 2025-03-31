@@ -6,7 +6,7 @@ import {CinkyLinkyMenuService} from "../../../../src/common/services/menus/cinky
 describe("getMenu", () => {
     it("should get menu Cinky Linky", async () => {
         const menuService = new CinkyLinkyMenuService(env);
-        const result = await menuService.getMenu();
+        const result = await menuService.getMenus();
 
         expect(result).not.null;
         console.log(JSON.stringify(result, null, 2));

@@ -11,7 +11,7 @@ export class BarRedHookMenuService implements MenuService {
         this.fetcher = fetcher;
     }
 
-    async getMenu(): Promise<Menu[]> {
+    async getMenus(): Promise<Menu[]> {
         const {$} = await useCheerio(this.fetcher, restaurantEnum.BAR_RED_HOOK);
 
         const contents = $('.content').toArray();

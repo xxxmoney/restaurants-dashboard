@@ -12,7 +12,7 @@ export class VozovnaPankracMenuService implements MenuService {
         this.fetcher = fetcher;
     }
 
-    async getMenu(): Promise<Menu[]> {
+    async getMenus(): Promise<Menu[]> {
         const {$} = await useCheerio(this.fetcher, restaurantEnum.VOZOVNA_PANKRAC);
 
         //const menuUrl = $('.menu-downloads a').first().attr('href');

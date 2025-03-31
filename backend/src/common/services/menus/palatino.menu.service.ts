@@ -11,7 +11,7 @@ export class PalatinoMenuService implements MenuService {
         this.fetcher = fetcher;
     }
 
-    async getMenu(): Promise<Menu[]> {
+    async getMenus(): Promise<Menu[]> {
         const {$} = await useCheerio(this.fetcher, restaurantEnum.PALATINO);
 
         const contents = [$('#pondeli').first(), $('#utery').first(), $('#streda').first(), $('#ctvrtek').first(), $('#patek').first()];

@@ -18,7 +18,7 @@ export class CinkyLinkyMenuService implements MenuService {
         this.env = env;
     }
 
-    async getMenu(): Promise<Menu[]> {
+    async getMenus(): Promise<Menu[]> {
         // @ts-ignore
         const webUrl = RESTAURANTS[restaurantEnum.CINKY_LINKY].url;
 

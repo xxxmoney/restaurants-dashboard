@@ -12,7 +12,7 @@ export class KlikaMenuService implements MenuService {
         this.fetcher = fetcher;
     }
 
-    async getMenu(): Promise<Menu[]> {
+    async getMenus(): Promise<Menu[]> {
         const {$} = await useCheerio(this.fetcher, restaurantEnum.KLIKA);
 
         const $content = $('.content').first();

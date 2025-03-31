@@ -5,7 +5,7 @@ import {SalandaMenuService} from "../../../../src/common/services/menus/salanda.
 describe("getMenu", () => {
     it("should get menu Bar Red Hook", async () => {
         const menuService = new SalandaMenuService(undefined);
-        const result = await menuService.getMenu();
+        const result = await menuService.getMenus();
 
         expect(result).not.null;
         console.log(JSON.stringify(result, null, 2));

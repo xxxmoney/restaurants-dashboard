@@ -37,7 +37,7 @@ export const MenuProcessor = {
                 throw new Error('Invalid restaurant enum value');
         }
 
-        const menus = await menuService.getMenu();
+        const menus = await menuService.getMenus();
 
         // Hotfix - set year of all menus to current year
         menus.forEach(menu => {
