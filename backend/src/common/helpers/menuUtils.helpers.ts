@@ -1,8 +1,20 @@
 import {DateTime} from "luxon";
 
 export function parseDate(text: string) {
-    const date = text.match(/\d{1,2}\.\d{1,2}\.\d{4}/g)![0];
-    return DateTime.fromFormat(date, 'd.M.yyyy');
+    const regex = /(?<day>\d{1,2})(?: )?\.(?: )?(?<month>\d{1,2})(?: )?\.(?: )?(?<year>\d{4})/;
+    const dateMatch = text.match(regex);
+
+    // Check if matched
+    if (!dateMatch) {
+        throw new Error('Date not matched');
+    }
+
+    // Get groups from match
+    const day = parseInt(dateMatch.groups!.day);
+    const month = parseInt(dateMatch.groups!.month);
+    const year = parseInt(dateMatch.groups!.year);
+
+    return DateTime.fromObject({day, month, year});
 }
 
 export function parsePrice(text: string) {
