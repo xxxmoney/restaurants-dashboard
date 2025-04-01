@@ -1,4 +1,4 @@
-import {CategorizedMenu, Menu} from "../dto/menu";
+import {CategorizedMenu} from "../dto/menu";
 import {restaurantEnum} from "../../../../shared/enums/restaurant.enum";
 import {DateTime} from "luxon";
 import {MenuCategorizer} from "./menuCategorizer.service";
@@ -9,9 +9,19 @@ import {BarRedHookMenuService} from "./menus/barRedHook.menu.service";
 import {PalatinoMenuService} from "./menus/palatino.menu.service";
 import {SalandaMenuService} from "./menus/salanda.menu.service";
 import {VozovnaPankracMenuService} from "./menus/vozovnaPankrac.menu.service";
+import {useCache} from "../composables/cache.comp";
+import {MENU_CACHE_EXPIRATION, MENU_CACHE_KEY} from "../constants/cache.constants";
 
 export const MenuProcessor = {
     async getProcessedMenu(enumValue: number, env: any, fetcher?: Fetcher): Promise<CategorizedMenu[]> {
+        const cache = useCache<CategorizedMenu[]>(env, MENU_CACHE_KEY, MENU_CACHE_EXPIRATION);
+
+        // Get cached if present
+        const cachedMenus = await cache.get();
+        if (cachedMenus) {
+            return cachedMenus;
+        }
+
         let menuService: MenuService;
 
         switch (enumValue) {
@@ -48,6 +58,10 @@ export const MenuProcessor = {
 
         // Apply menu categorization
         const {categorizedMenus} = await MenuCategorizer.categorizeMenus({menus: menus}, env);
+
+        // Set to cache
+        await cache.set(categorizedMenus);
+
         return categorizedMenus;
     }
 }
