@@ -1,5 +1,7 @@
 import {Context} from "hono";
 import {IS_DEBUG} from "../../../../shared/constants/common.constants";
+import {CategorizedMenu} from "../dto/menu";
+import {MENU_CACHE_EXPIRATION, MENU_CACHE_KEY} from "../constants/cache.constants";
 
 export function useCache<T>(env: any, cacheKey: string, expirationTtl: number) {
     const kv = env.KV_CACHE;
@@ -47,4 +49,9 @@ export function useCache<T>(env: any, cacheKey: string, expirationTtl: number) {
 export function useEndpointCache<T>(context: Context, expirationTtl: number = 60) {
     const cacheKey = context.req.url;
     return useCache<T>(context.env, cacheKey, expirationTtl);
+}
+
+export function useMenuCache(env: any, restaurantEnumValue: number) {
+    const cacheKey = `${MENU_CACHE_KEY}-${restaurantEnumValue}`;
+    return useCache<CategorizedMenu[]>(env, cacheKey, MENU_CACHE_EXPIRATION);
 }

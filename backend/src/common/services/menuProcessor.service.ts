@@ -9,13 +9,11 @@ import {BarRedHookMenuService} from "./menus/barRedHook.menu.service";
 import {PalatinoMenuService} from "./menus/palatino.menu.service";
 import {SalandaMenuService} from "./menus/salanda.menu.service";
 import {VozovnaPankracMenuService} from "./menus/vozovnaPankrac.menu.service";
-import {useCache} from "../composables/cache.comp";
-import {MENU_CACHE_EXPIRATION, MENU_CACHE_KEY} from "../constants/cache.constants";
+import {useMenuCache} from "../composables/cache.comp";
 
 export const MenuProcessor = {
     async getProcessedMenu(enumValue: number, env: any, fetcher?: Fetcher): Promise<CategorizedMenu[]> {
-        const key = `${MENU_CACHE_KEY}-${enumValue}`;
-        const cache = useCache<CategorizedMenu[]>(env, key, MENU_CACHE_EXPIRATION);
+        const cache = useMenuCache(env, enumValue);
 
         // Get cached if present
         const cachedMenus = await cache.get();
