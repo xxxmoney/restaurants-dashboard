@@ -27,7 +27,7 @@ export class CinkyLinkyMenuService implements MenuService {
         const workWeekStartDate = date.startOf('week');
         const workWeekEndDate = workWeekStartDate.plus({days: 4});
 
-        const imageUrl = `${webUrl}/wp-content/uploads/${date.toFormat('yyyy')}/${date.toFormat('MM')}/poledni-menu-${workWeekStartDate.toFormat('d')}_${workWeekStartDate.toFormat('M')}-${workWeekEndDate.toFormat('d')}_${workWeekEndDate.toFormat('M')}-${date.toFormat('yyyy')}-scaled.jpg`;
+        const imageUrl = `${webUrl}/wp-content/uploads/${date.toFormat('yyyy')}/${workWeekStartDate.toFormat('MM')}/poledni-menu-${workWeekStartDate.toFormat('d')}_${workWeekStartDate.toFormat('M')}-${workWeekEndDate.toFormat('d')}_${workWeekEndDate.toFormat('M')}-${date.toFormat('yyyy')}-scaled.jpg`;
         if (IS_DEBUG) {
             console.info(`Cinky Linky menu image URL: ${imageUrl}`);
         }
