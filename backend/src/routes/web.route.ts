@@ -8,7 +8,7 @@ const websRoute = new Hono()
 
 // Get menu by id
 websRoute.get('/:id', async (c) => {
-    const cache = useEndpointCache(c, WEB_CACHE_EXPIRATION);
+    const cache = useEndpointCache<{ html: string }>(c, WEB_CACHE_EXPIRATION);
 
     const id: number = parseInt(c.req.param('id'));
     let html: string;
