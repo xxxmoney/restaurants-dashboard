@@ -21,6 +21,10 @@ id = "34e791ca02b446029a6506438a570d21"
 enabled = true
 head_sampling_rate = 1
 
+# Set cron triggers
+[triggers]
+crons = ["*/15 * * * *"]
+
 # compatibility_flags = [ "nodejs_compat" ]
 
 # [vars]
