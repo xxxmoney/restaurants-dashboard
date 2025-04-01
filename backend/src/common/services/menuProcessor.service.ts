@@ -14,7 +14,8 @@ import {MENU_CACHE_EXPIRATION, MENU_CACHE_KEY} from "../constants/cache.constant
 
 export const MenuProcessor = {
     async getProcessedMenu(enumValue: number, env: any, fetcher?: Fetcher): Promise<CategorizedMenu[]> {
-        const cache = useCache<CategorizedMenu[]>(env, MENU_CACHE_KEY, MENU_CACHE_EXPIRATION);
+        const key = `${MENU_CACHE_KEY}-${enumValue}`;
+        const cache = useCache<CategorizedMenu[]>(env, key, MENU_CACHE_EXPIRATION);
 
         // Get cached if present
         const cachedMenus = await cache.get();

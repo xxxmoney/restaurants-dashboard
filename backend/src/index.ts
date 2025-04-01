@@ -5,6 +5,7 @@ import {menuRoute} from './routes/menu.route'
 import {websRoute} from "./routes/web.route";
 import {setup} from "./setup";
 import {IS_DEBUG} from "../../shared/constants/common.constants";
+import {scheduled} from "./scheduled";
 
 const app = new Hono()
 
@@ -17,7 +18,7 @@ if (IS_DEBUG) {
 
 // Error handling
 app.onError((error, c) => {
-    console.error('An error occurred:', error)
+    console.error('An error occurred:', error);
 
     const response = {
         message: error.message,
@@ -28,8 +29,8 @@ app.onError((error, c) => {
         stack: error.stack
     };
 
-    c.status(500)
-    return c.json(response)
+    c.status(500);
+    return c.json(response);
 });
 
 // Allow any origin
@@ -41,12 +42,18 @@ app.use('*', cors({
 
 // Default get response
 app.get('/', (c) => {
-    return c.text('Hello, Hono Backend Here!')
+    return c.text('Hello, Hono Backend Here!');
 });
 
 // Routes
-app.route('/menus', menuRoute)
-app.route('/webs', websRoute)
+app.route('/menus', menuRoute);
+app.route('/webs', websRoute);
 
 
-export default app
+export default {
+    // Handle fetch with Hono
+    fetch: app.fetch,
+
+    // Handle cron schedules here
+    scheduled: scheduled
+}
