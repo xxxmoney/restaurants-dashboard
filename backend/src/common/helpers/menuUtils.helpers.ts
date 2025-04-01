@@ -1,8 +1,8 @@
 import {DateTime} from "luxon";
+import {DATE_REGEX} from "../constants/menu.constants";
 
 export function parseDate(text: string) {
-    const regex = /(?<day>\d{1,2})(?: )?\.(?: )?(?<month>\d{1,2})(?: )?\.(?: )?(?<year>\d{4})/;
-    const dateMatch = text.match(regex);
+    const dateMatch = text.match(DATE_REGEX);
 
     // Check if matched
     if (!dateMatch) {
