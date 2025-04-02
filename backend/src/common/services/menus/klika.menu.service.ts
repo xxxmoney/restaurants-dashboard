@@ -1,6 +1,6 @@
 import {MenuService} from "./menu.types";
 import {CheerioAPI} from "cheerio";
-import {Menu} from "../../dto/menu";
+import {Menu, MenuItem} from "../../dto/menu";
 import {useCheerio} from "../../composables/cheerio.comp";
 import {restaurantEnum} from "../../../../../shared/enums/restaurant.enum";
 import {parseDate, parsePrice} from "../../helpers/menuUtils.helper";
@@ -31,7 +31,7 @@ export class KlikaMenuService implements MenuService {
             // Get number from price using regex
             const price = parsePrice(priceText);
 
-            return {name, price};
+            return {name, price} as MenuItem;
         });
 
         const menus: Menu[] = [];
