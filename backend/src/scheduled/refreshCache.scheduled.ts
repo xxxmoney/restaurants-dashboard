@@ -20,10 +20,8 @@ export async function handleRefreshCache(env: any): Promise<void> {
             await MenuProcessor.getProcessedMenu(key, env);
             console.info(`Cache refreshed for restaurant: '${key}'`);
         } catch (e) {
-            const message = `Error refreshing cache for restaurant: '${key}': '${e}'`;
-
-            console.error(message);
-            errors.push(new Error(message));
+            console.error(e);
+            errors.push(e instanceof Error ? e : new Error(`${e}`));
         }
     });
 
