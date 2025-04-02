@@ -17,6 +17,11 @@ export class KlikaMenuService implements MenuService {
 
         const $content = $('.content').first();
         const $title = $content.find('strong').first();
+        const titleText = $title.text();
+
+        if (!titleText || titleText === '') {
+            throw new Error(`Title text for date empty`);
+        }
 
         const menuDate = parseDate($title.text());
 
