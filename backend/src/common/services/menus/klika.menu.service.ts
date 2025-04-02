@@ -1,5 +1,4 @@
 import {MenuService} from "./menu.types";
-import {CheerioAPI} from "cheerio";
 import {Menu} from "../../dto/menu";
 import {useCheerio} from "../../composables/cheerio.comp";
 import {restaurantEnum} from "../../../../../shared/enums/restaurant.enum";
@@ -17,6 +16,11 @@ export class KlikaMenuService implements MenuService {
 
         const $content = $('.content').first();
         const $title = $content.find('strong').first();
+        const titleText = $title.text();
+
+        if (!titleText || titleText === '') {
+            throw new Error(`Title text for date empty`);
+        }
 
         const menuDate = parseDate($title.text());
 

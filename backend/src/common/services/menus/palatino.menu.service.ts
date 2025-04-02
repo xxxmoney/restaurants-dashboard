@@ -20,8 +20,13 @@ export class PalatinoMenuService implements MenuService {
 
         contents.forEach(($content) => {
             const $title = $content.find('.fr-tab-den').first();
+            const titleText = $title.text();
 
-            const date = parseDate($title.text());
+            if (!titleText || titleText === '') {
+                throw new Error(`Title text for date empty`);
+            }
+
+            const date = parseDate(titleText);
 
             const items = $content.find('.frl-table tr').toArray();
 

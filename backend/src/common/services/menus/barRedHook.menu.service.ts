@@ -21,8 +21,13 @@ export class BarRedHookMenuService implements MenuService {
         contents.forEach((content) => {
             const $content = $(content);
             const $title = $content.find('h2').first();
+            const titleText = $title.text();
 
-            const date = parseDate($title.text());
+            if (!titleText || titleText === '') {
+                throw new Error(`Title text for date empty`);
+            }
+
+            const date = parseDate(titleText);
 
             const foodItems = $content.find('.food').toArray();
             const priceItems = $content.find('.prize').toArray();

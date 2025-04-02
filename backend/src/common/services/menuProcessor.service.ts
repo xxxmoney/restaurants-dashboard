@@ -13,54 +13,59 @@ import {useMenuCache} from "../composables/cache.comp";
 
 export const MenuProcessor = {
     async getProcessedMenu(enumValue: number, env: any, fetcher?: Fetcher): Promise<CategorizedMenu[]> {
-        const cache = useMenuCache(env, enumValue);
+        try {
+            const cache = useMenuCache(env, enumValue);
 
-        // Get cached if present
-        const cachedMenus = await cache.get();
-        if (cachedMenus) {
-            return cachedMenus;
+            // Get cached if present
+            const cachedMenus = await cache.get();
+            if (cachedMenus) {
+                return cachedMenus;
+            }
+
+            let menuService: MenuService;
+
+            switch (enumValue) {
+                case restaurantEnum.CINKY_LINKY:
+                    menuService = new CinkyLinkyMenuService(env) as MenuService;
+                    break;
+                case restaurantEnum.KLIKA:
+                    menuService = new KlikaMenuService(fetcher) as MenuService;
+                    break;
+                case restaurantEnum.BAR_RED_HOOK:
+                    menuService = new BarRedHookMenuService(fetcher) as MenuService;
+                    break;
+                case restaurantEnum.PALATINO:
+                    menuService = new PalatinoMenuService(fetcher) as MenuService;
+                    break;
+                case restaurantEnum.SALANDA:
+                    menuService = new SalandaMenuService(fetcher) as MenuService;
+                    break;
+                case restaurantEnum.VOZOVNA_PANKRAC:
+                    menuService = new VozovnaPankracMenuService(fetcher) as MenuService;
+                    break;
+                default:
+                    throw new Error('Invalid restaurant enum value');
+            }
+
+            const menus = await menuService.getMenus();
+
+            // Hotfix - set year of all menus to current year
+            menus.forEach(menu => {
+                menu.date = menu.date.set({year: DateTime.now().year});
+            });
+            // Order menus by date descending
+            menus.sort((a, b) => a.date.toMillis() - b.date.toMillis());
+
+            // Apply menu categorization
+            const {categorizedMenus} = await MenuCategorizer.categorizeMenus({menus: menus}, env);
+
+            // Set to cache
+            await cache.set(categorizedMenus);
+
+            return categorizedMenus;
         }
-
-        let menuService: MenuService;
-
-        switch (enumValue) {
-            case restaurantEnum.CINKY_LINKY:
-                menuService = new CinkyLinkyMenuService(env) as MenuService;
-                break;
-            case restaurantEnum.KLIKA:
-                menuService = new KlikaMenuService(fetcher) as MenuService;
-                break;
-            case restaurantEnum.BAR_RED_HOOK:
-                menuService = new BarRedHookMenuService(fetcher) as MenuService;
-                break;
-            case restaurantEnum.PALATINO:
-                menuService = new PalatinoMenuService(fetcher) as MenuService;
-                break;
-            case restaurantEnum.SALANDA:
-                menuService = new SalandaMenuService(fetcher) as MenuService;
-                break;
-            case restaurantEnum.VOZOVNA_PANKRAC:
-                menuService = new VozovnaPankracMenuService(fetcher) as MenuService;
-                break;
-            default:
-                throw new Error('Invalid restaurant enum value');
+        catch (e) {
+            throw new Error(`Error processing restaurant menu '${enumValue}': \n ${e}`);
         }
-
-        const menus = await menuService.getMenus();
-
-        // Hotfix - set year of all menus to current year
-        menus.forEach(menu => {
-            menu.date = menu.date.set({year: DateTime.now().year});
-        });
-        // Order menus by date descending
-        menus.sort((a, b) => a.date.toMillis() - b.date.toMillis());
-
-        // Apply menu categorization
-        const {categorizedMenus} = await MenuCategorizer.categorizeMenus({menus: menus}, env);
-
-        // Set to cache
-        await cache.set(categorizedMenus);
-
-        return categorizedMenus;
     }
 }
