@@ -2,7 +2,7 @@ import {MenuService} from "./menu.types";
 import {Menu} from "../../dto/menu";
 import {restaurantEnum} from "../../../../../shared/enums/restaurant.enum";
 import {useCheerio} from "../../composables/cheerio.comp";
-import {parseDate, parsePrice} from "../../helpers/menuUtils.helpers";
+import {parseDate, parsePrice} from "../../helpers/menuUtils.helper";
 
 export class PalatinoMenuService implements MenuService {
     private readonly fetcher?: Fetcher;

@@ -1,23 +1,23 @@
 import {DateTime} from "luxon";
 import {DATE_REGEX} from "../constants/menu.constants";
 
-export function parseDate(text: string) {
+export function parseDate(text: string): DateTime {
     const dateMatch = text.match(DATE_REGEX);
 
     // Check if matched
     if (!dateMatch) {
-        throw new Error('Date not matched');
+        throw new Error(`Date not matched from text: '${text}'`);
     }
 
     // Get groups from match
     const day = parseInt(dateMatch.groups!.day);
     const month = parseInt(dateMatch.groups!.month);
-    const year = parseInt(dateMatch.groups!.year);
+    const year = dateMatch.groups!.year ? parseInt(dateMatch.groups!.year) : DateTime.now().year;
 
-    return DateTime.fromObject({day, month, year});
+    return DateTime.fromObject({day: day, month: month, year: year});
 }
 
-export function parsePrice(text: string) {
+export function parsePrice(text: string): Number {
     const match = text.match(/\d+/g);
 
     return match ? parseInt(match[0]) : -1;

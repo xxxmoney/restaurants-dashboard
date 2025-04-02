@@ -3,7 +3,7 @@ import {CheerioAPI} from "cheerio";
 import {Menu} from "../../dto/menu";
 import {useCheerio} from "../../composables/cheerio.comp";
 import {restaurantEnum} from "../../../../../shared/enums/restaurant.enum";
-import {parseDate, parsePrice} from "../../helpers/menuUtils.helpers";
+import {parseDate, parsePrice} from "../../helpers/menuUtils.helper";
 
 export class KlikaMenuService implements MenuService {
     private readonly fetcher?: Fetcher;
