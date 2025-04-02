@@ -1,6 +1,5 @@
 import {MenuService} from "./menu.types";
-import {CheerioAPI} from "cheerio";
-import {Menu, MenuItem} from "../../dto/menu";
+import {Menu} from "../../dto/menu";
 import {useCheerio} from "../../composables/cheerio.comp";
 import {restaurantEnum} from "../../../../../shared/enums/restaurant.enum";
 import {parseDate, parsePrice} from "../../helpers/menuUtils.helper";
