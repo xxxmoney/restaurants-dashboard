@@ -3,7 +3,7 @@ import {Menu, MenuItem} from "../../dto/menu";
 import {DateTime} from "luxon";
 import {useCheerio} from "../../composables/cheerio.comp";
 import {restaurantEnum} from "../../../../../shared/enums/restaurant.enum";
-import {parsePrice} from "../../helpers/menuUtils.helpers";
+import {parsePrice} from "../../helpers/menuUtils.helper";
 
 export class SalandaMenuService implements MenuService {
     private readonly fetcher?: Fetcher;
