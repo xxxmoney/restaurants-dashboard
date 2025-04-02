@@ -12,7 +12,7 @@ export async function useCheerio(fetcher: Fetcher | undefined, enumValue: number
         await getHtmlDocFromUrl(RESTAURANTS[enumValue].url, RESTAURANTS[enumValue].urlCharset, fetcher);
 
     // @ts-ignore
-    console.log(`Fetched menu '${enumValue}' from '${RESTAURANTS[enumValue].url}': \n ${inline($.html())}`);
+    console.log(`Fetched menu '${enumValue}' from '${RESTAURANTS[enumValue].url}': '${inline($.html())}'`);
 
     return {$};
 }
