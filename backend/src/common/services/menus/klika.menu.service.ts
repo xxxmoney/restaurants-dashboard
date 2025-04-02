@@ -31,7 +31,7 @@ export class KlikaMenuService implements MenuService {
             // Get number from price using regex
             const price = parsePrice(priceText);
 
-            return {name, price} as MenuItem;
+            return {name, price};
         });
 
         const menus: Menu[] = [];

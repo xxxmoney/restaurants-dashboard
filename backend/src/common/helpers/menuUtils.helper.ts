@@ -17,7 +17,7 @@ export function parseDate(text: string): DateTime {
     return DateTime.fromObject({day: day, month: month, year: year});
 }
 
-export function parsePrice(text: string): Number {
+export function parsePrice(text: string): number {
     const match = text.match(/\d+/g);
 
     return match ? parseInt(match[0]) : -1;
