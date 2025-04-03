@@ -4,7 +4,6 @@ import {MenuCategorizer} from "./menuCategorizer.service";
 import {useMenuCache} from "../composables/cache.comp";
 import {MenuProviderService} from "./menuProvider.service";
 import {getFetcher} from "../helpers/fetcher.helper";
-import {Context} from "hono";
 
 export const MenuProcessor = {
     async getProcessedMenusWithCache(enumValue: number, env: any): Promise<CategorizedMenu[]> {
