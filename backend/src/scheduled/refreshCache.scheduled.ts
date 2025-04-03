@@ -27,9 +27,9 @@ export async function handleRefreshCache(env: any): Promise<void> {
             // If there is a change, refresh the cache
             const menusSerialized = JSON.stringify(menus);
             const cachedMenusSerialized = JSON.stringify(cachedMenus?.menus);
-            if (menusSerialized === cachedMenusSerialized) {
+            if (menusSerialized !== cachedMenusSerialized) {
                 const processedMenus = await MenuProcessor.getProcessedMenus(env, key, menus);
-                await cache.set({ processedMenus: processedMenus, menus: menus });
+                await cache.set({processedMenus: processedMenus, menus: menus});
 
                 console.info(`Cache refreshed for restaurant: '${key}'`);
             }
