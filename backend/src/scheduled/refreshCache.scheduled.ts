@@ -30,9 +30,9 @@ export async function handleRefreshCache(c: Context): Promise<void> {
             if (menusSerialized === cachedMenusSerialized) {
                 const processedMenus = await MenuProcessor.getProcessedMenus(key, c.env, menus);
                 await cache.set({ processedMenus: processedMenus, menus: menus });
-            }
 
-            console.info(`Cache refreshed for restaurant: '${key}'`);
+                console.info(`Cache refreshed for restaurant: '${key}'`);
+            }
         } catch (e) {
             console.error(e);
             errors.push(e instanceof Error ? e : new Error(`${e}`));
