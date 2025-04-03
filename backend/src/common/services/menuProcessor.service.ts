@@ -8,7 +8,7 @@ import {Context} from "hono";
 
 export const MenuProcessor = {
     async getProcessedMenusWithCache(enumValue: number, env: any): Promise<CategorizedMenu[]> {
-        const cache = useMenuCache(c.env, enumValue);
+        const cache = useMenuCache(env, enumValue);
         const cachedMenus = await cache.get();
 
         if (cachedMenus) {
