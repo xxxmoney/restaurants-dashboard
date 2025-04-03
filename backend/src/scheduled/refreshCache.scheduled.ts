@@ -6,7 +6,7 @@ import {MenuProviderService} from "../common/services/menuProvider.service";
 import {getFetcher} from "../common/helpers/fetcher.helper";
 import {Context} from "hono";
 
-export async function handleRefreshCache(c: Context): Promise<void> {
+export async function handleRefreshCache(env: any): Promise<void> {
     const errors: Error[] = [];
 
     if (IS_DEBUG) {
@@ -16,19 +16,19 @@ export async function handleRefreshCache(c: Context): Promise<void> {
     // Refresh cache for all restaurant menus
     const refreshCachePromises = Object.values(restaurantEnum).map(async key => {
         try {
-            const cache = useMenuCache(c.env, key);
+            const cache = useMenuCache(env, key);
 
             // Get cached menus
             const cachedMenus = await cache.get();
 
             // Get current menus
-            const menus = await MenuProviderService.getMenuService(key, c.env, getFetcher(c)).getMenus();
+            const menus = await MenuProviderService.getMenuService(key, env, getFetcher(env)).getMenus();
 
             // If there is a change, refresh the cache
             const menusSerialized = JSON.stringify(menus);
             const cachedMenusSerialized = JSON.stringify(cachedMenus?.menus);
             if (menusSerialized === cachedMenusSerialized) {
-                const processedMenus = await MenuProcessor.getProcessedMenus(key, c.env, menus);
+                const processedMenus = await MenuProcessor.getProcessedMenus(key, env, menus);
                 await cache.set({ processedMenus: processedMenus, menus: menus });
 
                 console.info(`Cache refreshed for restaurant: '${key}'`);

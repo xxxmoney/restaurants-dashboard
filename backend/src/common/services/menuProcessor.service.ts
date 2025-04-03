@@ -7,7 +7,7 @@ import {getFetcher} from "../helpers/fetcher.helper";
 import {Context} from "hono";
 
 export const MenuProcessor = {
-    async getProcessedMenusWithCache(enumValue: number, c: Context): Promise<CategorizedMenu[]> {
+    async getProcessedMenusWithCache(enumValue: number, env: any): Promise<CategorizedMenu[]> {
         const cache = useMenuCache(c.env, enumValue);
         const cachedMenus = await cache.get();
 
@@ -15,8 +15,8 @@ export const MenuProcessor = {
             return cachedMenus.processedMenus;
         }
 
-        const menus = await MenuProviderService.getMenuService(enumValue, c.env, getFetcher(c)).getMenus();
-        const processedMenus = await this.getProcessedMenus(enumValue, c.env, menus);
+        const menus = await MenuProviderService.getMenuService(enumValue, env, getFetcher(env)).getMenus();
+        const processedMenus = await this.getProcessedMenus(enumValue, env, menus);
         await cache.set({ processedMenus: processedMenus, menus: menus });
 
         return processedMenus;
