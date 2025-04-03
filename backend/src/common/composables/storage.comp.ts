@@ -6,12 +6,12 @@ export function useStorage(context: Context, storageKey: string) {
 
     async function get<T>(): Promise<T> {
         if (IS_DEBUG) {
-            console.info('Getting storage value for key: ', storageKey);
+            console.info(`Getting storage value for key: ${storageKey}`);
         }
 
         const value = await kv.get(storageKey);
         if (IS_DEBUG) {
-            console.info('Storage value for key: ', storageKey, ' is: ', value);
+            console.info(`Storage value for key: '${storageKey}':`, value);
         }
 
         return value;

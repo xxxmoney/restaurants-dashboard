@@ -2,6 +2,9 @@ import {restaurantEnum} from "../../../shared/enums/restaurant.enum";
 import {MenuProcessor} from "../common/services/menuProcessor.service";
 import {useMenuCache} from "../common/composables/cache.comp";
 import {IS_DEBUG} from "../../../shared/constants/common.constants";
+import {MenuProviderService} from "../common/services/menuProvider.service";
+import {getFetcher} from "../common/helpers/fetcher.helper";
+import {Context} from "hono";
 
 export async function handleRefreshCache(env: any): Promise<void> {
     const errors: Error[] = [];
@@ -13,12 +16,23 @@ export async function handleRefreshCache(env: any): Promise<void> {
     // Refresh cache for all restaurant menus
     const refreshCachePromises = Object.values(restaurantEnum).map(async key => {
         try {
-            // Clear cache
             const cache = useMenuCache(env, key);
-            await cache.clear();
 
-            await MenuProcessor.getProcessedMenu(key, env);
-            console.info(`Cache refreshed for restaurant: '${key}'`);
+            // Get cached menus
+            const cachedMenus = await cache.get();
+
+            // Get current menus
+            const menus = await MenuProviderService.getMenuService(env, key, getFetcher(env)).getMenus();
+
+            // If there is a change, refresh the cache
+            const menusSerialized = JSON.stringify(menus);
+            const cachedMenusSerialized = JSON.stringify(cachedMenus?.menus);
+            if (menusSerialized !== cachedMenusSerialized) {
+                const processedMenus = await MenuProcessor.getProcessedMenus(env, key, menus);
+                await cache.set({processedMenus: processedMenus, menus: menus});
+
+                console.info(`Cache refreshed for restaurant: '${key}'`);
+            }
         } catch (e) {
             console.error(e);
             errors.push(e instanceof Error ? e : new Error(`${e}`));

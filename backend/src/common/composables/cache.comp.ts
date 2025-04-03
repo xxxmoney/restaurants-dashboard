@@ -1,7 +1,8 @@
 import {Context} from "hono";
 import {IS_DEBUG} from "../../../../shared/constants/common.constants";
-import {CategorizedMenu} from "../dto/menu";
+import {CachedMenus, CategorizedMenu} from "../dto/menu";
 import {MENU_CACHE_EXPIRATION, MENU_CACHE_KEY} from "../constants/cache.constants";
+import {inline} from "../helpers/stringUtils.helper";
 
 export function useCache<T>(env: any, cacheKey: string, expirationTtl: number) {
     const kv = env.KV_CACHE;
@@ -15,7 +16,7 @@ export function useCache<T>(env: any, cacheKey: string, expirationTtl: number) {
         const value = jsonValue ? JSON.parse(jsonValue) as T : undefined;
 
         if (IS_DEBUG) {
-            console.info('Cache value for key: ', cacheKey, ' is: ', value);
+            console.info('Cache value for key: ', cacheKey, ' is: ', inline(jsonValue));
         }
 
         return value;
@@ -31,7 +32,7 @@ export function useCache<T>(env: any, cacheKey: string, expirationTtl: number) {
 
         const jsonValue = JSON.stringify(value);
         if (IS_DEBUG) {
-            console.info('Caching value: ', jsonValue, ' for key: ', cacheKey);
+            console.info(`Caching value for key: ${cacheKey}:`, inline(jsonValue));
         }
         await kv.put(cacheKey, jsonValue, {expirationTtl});
     }
@@ -53,5 +54,5 @@ export function useEndpointCache<T>(context: Context, expirationTtl: number = 60
 
 export function useMenuCache(env: any, restaurantEnumValue: number) {
     const cacheKey = `${MENU_CACHE_KEY}-${restaurantEnumValue}`;
-    return useCache<CategorizedMenu[]>(env, cacheKey, MENU_CACHE_EXPIRATION);
+    return useCache<CachedMenus>(env, cacheKey, MENU_CACHE_EXPIRATION);
 }
