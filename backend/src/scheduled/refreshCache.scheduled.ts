@@ -18,7 +18,7 @@ export async function handleRefreshCache(c: Context): Promise<void> {
         try {
             const cache = useMenuCache(c.env, key);
 
-            // Get cached processed menus
+            // Get cached menus
             const cachedMenus = await cache.get();
 
             // Get current menus
