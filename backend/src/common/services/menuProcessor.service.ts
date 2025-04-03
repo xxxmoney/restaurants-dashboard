@@ -6,7 +6,7 @@ import {MenuProviderService} from "./menuProvider.service";
 import {getFetcher} from "../helpers/fetcher.helper";
 
 export const MenuProcessor = {
-    async getProcessedMenusWithCache(enumValue: number, env: any): Promise<CategorizedMenu[]> {
+    async getProcessedMenusWithCache(env: any, enumValue: number): Promise<CategorizedMenu[]> {
         const cache = useMenuCache(env, enumValue);
         const cachedMenus = await cache.get();
 
@@ -15,13 +15,13 @@ export const MenuProcessor = {
         }
 
         const menus = await MenuProviderService.getMenuService(enumValue, env, getFetcher(env)).getMenus();
-        const processedMenus = await this.getProcessedMenus(enumValue, env, menus);
+        const processedMenus = await this.getProcessedMenus(env, enumValue, menus);
         await cache.set({ processedMenus: processedMenus, menus: menus });
 
         return processedMenus;
     },
 
-    async getProcessedMenus(enumValue: number, env: any, menus: Menu[]): Promise<CategorizedMenu[]> {
+    async getProcessedMenus(env: any, enumValue: number, menus: Menu[]): Promise<CategorizedMenu[]> {
         try {
             // Hotfix - set year of all menus to current year
             menus.forEach(menu => {

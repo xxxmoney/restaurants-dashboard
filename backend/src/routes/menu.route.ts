@@ -7,7 +7,7 @@ const menuRoute = new Hono()
 menuRoute.get('/:id', async (c) => {
     const id: number = parseInt(c.req.param('id'));
 
-    return c.json(await MenuProcessor.getProcessedMenusWithCache(id, c.env));
+    return c.json(await MenuProcessor.getProcessedMenusWithCache(c.env, id));
 });
 
 export {menuRoute}
