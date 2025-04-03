@@ -4,6 +4,7 @@ import format from "string-format";
 import * as yup from 'yup';
 import {AnyObject, ArraySchema, ObjectSchema} from "yup";
 import {IS_DEBUG} from "../../../../shared/constants/common.constants";
+import {inline} from "../helpers/stringUtils.helper";
 
 interface Image {
     base64: string;
@@ -69,7 +70,7 @@ export class GeminiService {
         const content = await this.model.generateContent(request);
         if (IS_DEBUG) {
             console.info('Gemini response:', content);
-            console.info('Gemini response text:', content.response.text());
+            console.info('Gemini response text:', inline(content.response.text()));
         }
 
         return content;
