@@ -8,7 +8,7 @@ import {SalandaMenuService} from "./menus/salanda.menu.service";
 import {VozovnaPankracMenuService} from "./menus/vozovnaPankrac.menu.service";
 
 export const MenuProviderService = {
-    getMenuService(enumValue: number, env: any, fetcher?: Fetcher): MenuService {
+    getMenuService(env: any, enumValue: number, fetcher?: Fetcher): MenuService {
         switch (enumValue) {
             case restaurantEnum.CINKY_LINKY:
                 return new CinkyLinkyMenuService(env) as MenuService;

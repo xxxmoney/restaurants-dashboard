@@ -10,7 +10,7 @@ describe("getMenu", () => {
     it("should get menu cinky linky (long running)", async () => {
         const restaurantId = restaurantEnum.CINKY_LINKY;
 
-        const result = await MenuProcessor.getProcessedMenusWithCache(restaurantId, {env} as Context);
+        const result = await MenuProcessor.getProcessedMenusWithCache(env, restaurantId);
 
         expect(result).not.null;
         console.log(JSON.stringify(result, null, 2));
@@ -19,7 +19,7 @@ describe("getMenu", () => {
     it("should get menu klika", async () => {
         const restaurantId = restaurantEnum.KLIKA;
 
-        const result = await MenuProcessor.getProcessedMenusWithCache(restaurantId, {env} as Context);
+        const result = await MenuProcessor.getProcessedMenusWithCache(env, restaurantId);
 
         expect(result).not.null;
         console.log(JSON.stringify(result, null, 2));
@@ -28,7 +28,7 @@ describe("getMenu", () => {
     it("should get menu red hook", async () => {
         const restaurantId = restaurantEnum.BAR_RED_HOOK;
 
-        const result = await MenuProcessor.getProcessedMenusWithCache(restaurantId, {env} as Context);
+        const result = await MenuProcessor.getProcessedMenusWithCache(env, restaurantId);
 
         expect(result).not.null;
         console.log(JSON.stringify(result, null, 2));
@@ -37,7 +37,7 @@ describe("getMenu", () => {
     it("should get menu palatino", async () => {
         const restaurantId = restaurantEnum.PALATINO;
 
-        const result = await MenuProcessor.getProcessedMenusWithCache(restaurantId, {env} as Context);
+        const result = await MenuProcessor.getProcessedMenusWithCache(env, restaurantId);
 
         expect(result).not.null;
         console.log(JSON.stringify(result, null, 2));
@@ -46,7 +46,7 @@ describe("getMenu", () => {
     it("should get menu salanda", async () => {
         const restaurantId = restaurantEnum.SALANDA;
 
-        const result = await MenuProcessor.getProcessedMenusWithCache(restaurantId, {env} as Context);
+        const result = await MenuProcessor.getProcessedMenusWithCache(env, restaurantId);
 
         expect(result).not.null;
         console.log(JSON.stringify(result, null, 2));
@@ -55,7 +55,7 @@ describe("getMenu", () => {
     it("should get menu vozovna pankrac", async () => {
         const restaurantId = restaurantEnum.VOZOVNA_PANKRAC;
 
-        const result = await MenuProcessor.getProcessedMenusWithCache(restaurantId, {env} as Context);
+        const result = await MenuProcessor.getProcessedMenusWithCache(env, restaurantId);
 
         expect(result).not.null;
         console.log(JSON.stringify(result, null, 2));

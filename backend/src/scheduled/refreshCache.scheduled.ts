@@ -22,7 +22,7 @@ export async function handleRefreshCache(env: any): Promise<void> {
             const cachedMenus = await cache.get();
 
             // Get current menus
-            const menus = await MenuProviderService.getMenuService(key, env, getFetcher(env)).getMenus();
+            const menus = await MenuProviderService.getMenuService(env, key, getFetcher(env)).getMenus();
 
             // If there is a change, refresh the cache
             const menusSerialized = JSON.stringify(menus);

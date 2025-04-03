@@ -14,7 +14,7 @@ export const MenuProcessor = {
             return cachedMenus.processedMenus;
         }
 
-        const menus = await MenuProviderService.getMenuService(enumValue, env, getFetcher(env)).getMenus();
+        const menus = await MenuProviderService.getMenuService(env, enumValue, getFetcher(env)).getMenus();
         const processedMenus = await this.getProcessedMenus(env, enumValue, menus);
         await cache.set({ processedMenus: processedMenus, menus: menus });
 
