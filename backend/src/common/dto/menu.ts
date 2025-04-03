@@ -27,3 +27,8 @@ export interface CategorizedMenu {
 export interface CategorizedMenus {
     categorizedMenus: CategorizedMenu[];
 }
+
+export interface CachedMenus {
+    processedMenus: CategorizedMenu[];
+    menus: Menu[];
+}

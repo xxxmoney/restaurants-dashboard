@@ -16,11 +16,22 @@ export async function handleRefreshCache(c: Context): Promise<void> {
     // Refresh cache for all restaurant menus
     const refreshCachePromises = Object.values(restaurantEnum).map(async key => {
         try {
-            // Clear cache
-            const menuService = MenuProviderService.getMenuService(key, c.env, getFetcher(c));
-            const menus = await menuService.getMenus();
+            const cache = useMenuCache(c.env, key);
 
-            await MenuProcessor.getProcessedMenu(key, c.env, menus);
+            // Get cached processed menus
+            const cachedMenus = await cache.get();
+
+            // Get current menus
+            const menus = await MenuProviderService.getMenuService(key, c.env, getFetcher(c)).getMenus();
+
+            // If there is a change, refresh the cache
+            const menusSerialized = JSON.stringify(menus);
+            const cachedMenusSerialized = JSON.stringify(cachedMenus?.menus);
+            if (menusSerialized === cachedMenusSerialized) {
+                const processedMenus = await MenuProcessor.getProcessedMenus(key, c.env, menus);
+                await cache.set({ processedMenus: processedMenus, menus: menus });
+            }
+
             console.info(`Cache refreshed for restaurant: '${key}'`);
         } catch (e) {
             console.error(e);

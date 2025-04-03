@@ -2,25 +2,28 @@ import {CategorizedMenu, Menu} from "../dto/menu";
 import {DateTime} from "luxon";
 import {MenuCategorizer} from "./menuCategorizer.service";
 import {useMenuCache} from "../composables/cache.comp";
+import {MenuProviderService} from "./menuProvider.service";
+import {getFetcher} from "../helpers/fetcher.helper";
+import {Context} from "hono";
 
 export const MenuProcessor = {
-    async getProcessedMenu(enumValue: number, env: any, menus: Menu[]): Promise<CategorizedMenu[]> {
+    async getProcessedMenusWithCache(enumValue: number, c: Context): Promise<CategorizedMenu[]> {
+        const cache = useMenuCache(c.env, enumValue);
+        const cachedMenus = await cache.get();
+
+        if (cachedMenus) {
+            return cachedMenus.processedMenus;
+        }
+
+        const menus = await MenuProviderService.getMenuService(enumValue, c.env, getFetcher(c)).getMenus();
+        const processedMenus = await this.getProcessedMenus(enumValue, c.env, menus);
+        await cache.set({ processedMenus: processedMenus, menus: menus });
+
+        return processedMenus;
+    },
+
+    async getProcessedMenus(enumValue: number, env: any, menus: Menu[]): Promise<CategorizedMenu[]> {
         try {
-            const cache = useMenuCache(env, enumValue);
-
-            // Get cached
-            const cachedMenus = await cache.get();
-
-            // Compare menus and decide if there was a change
-            let cacheDiffers = false;
-            if (cachedMenus && cachedMenus.length > 0) {
-                const menusSerialized = JSON.stringify(menus);
-                const cachedMenusSerialized = JSON.stringify(cachedMenus);
-
-                // Compare serialized menus
-                cacheDiffers = menusSerialized !== cachedMenusSerialized;
-            }
-
             // Hotfix - set year of all menus to current year
             menus.forEach(menu => {
                 menu.date = menu.date.set({year: DateTime.now().year});
@@ -30,11 +33,6 @@ export const MenuProcessor = {
 
             // Apply menu categorization
             const {categorizedMenus} = await MenuCategorizer.categorizeMenus({menus: menus}, env);
-
-            // If cache differs, set menus to cache
-            if (cacheDiffers) {
-                await cache.set(categorizedMenus);
-            }
 
             return categorizedMenus;
         }
