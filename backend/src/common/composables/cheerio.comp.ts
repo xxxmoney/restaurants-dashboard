@@ -14,7 +14,7 @@ export async function useCheerio(fetcher: Fetcher | undefined, enumValue: number
 
     if (IS_DEBUG) {
         // @ts-ignore
-        console.info(`Fetched menu '${enumValue}' from '${RESTAURANTS[enumValue].url}': '${inline($.html())}'`);
+        console.info(`Fetched restaurant: '${enumValue}' from '${RESTAURANTS[enumValue].url}': '${inline($.html())}'`);
     }
 
     return {$};
