@@ -2,6 +2,7 @@ import {CheerioAPI} from "cheerio";
 import {RESTAURANTS} from "../../../../shared/constants/restaurant.constants";
 import {getHtmlDocFromUrl} from "../helpers/domParser.helper";
 import {inline} from "../helpers/stringUtils.helper";
+import {IS_DEBUG} from "../../../../shared/constants/common.constants";
 
 export async function useCheerio(fetcher: Fetcher | undefined, enumValue: number): Promise<{ $: CheerioAPI }> {
     // @ts-ignore
@@ -11,8 +12,10 @@ export async function useCheerio(fetcher: Fetcher | undefined, enumValue: number
         // @ts-ignore
         await getHtmlDocFromUrl(RESTAURANTS[enumValue].url, RESTAURANTS[enumValue].urlCharset, fetcher);
 
-    // @ts-ignore
-    console.log(`Fetched menu '${enumValue}' from '${RESTAURANTS[enumValue].url}': '${inline($.html())}'`);
+    if (IS_DEBUG) {
+        // @ts-ignore
+        console.info(`Fetched menu '${enumValue}' from '${RESTAURANTS[enumValue].url}': '${inline($.html())}'`);
+    }
 
     return {$};
 }
