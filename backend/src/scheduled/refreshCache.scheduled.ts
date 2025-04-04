@@ -34,7 +34,7 @@ export async function handleRefreshCache(env: any): Promise<void> {
                 console.info(`Cache refreshed for restaurant: '${key}'`);
             }
         } catch (e) {
-            console.error(e);
+            console.error(`Failed to refresh cache for restaurant: '${key}':`, e);
             errors.push(e instanceof Error ? e : new Error(`${e}`));
         }
     });
