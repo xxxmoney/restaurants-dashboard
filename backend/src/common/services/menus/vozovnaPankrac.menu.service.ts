@@ -18,7 +18,7 @@ export class VozovnaPankracMenuService implements MenuService {
         //const menuUrl = $('.menu-downloads a').first().attr('href');
 
         // TODO: Figure out how to get link from spa, for now, static link url
-        const menuUrl = 'https://cdn.website.dish.co/media/61/c4/8960138/Aktualni-nabidka.pdf';
+        const menuUrl = 'https://cdn.website.dish.co/media/23/fd/8977774/Aktualni-nabidka.pdf';
 
         // Fetch the pdf from link
         const pdfResponse = await fetch(menuUrl);
