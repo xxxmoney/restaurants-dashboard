@@ -3,7 +3,7 @@ import {LONG_RUNNING_TEST_TIMEOUT} from "../../../constants";
 import {PalatinoMenuService} from "../../../../src/common/services/menus/palatino.menu.service";
 
 describe("getMenu", () => {
-    it("should get menu Bar Red Hook", async () => {
+    it("should get menu Palatino", async () => {
         const menuService = new PalatinoMenuService(undefined);
         const result = await menuService.getMenus();
 
