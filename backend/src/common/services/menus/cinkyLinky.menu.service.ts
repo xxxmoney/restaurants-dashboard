@@ -27,7 +27,15 @@ export class CinkyLinkyMenuService implements MenuService {
         const workWeekStartDate = date.startOf('week');
         const workWeekEndDate = workWeekStartDate.plus({days: 4});
 
-        const imageUrl = `${webUrl}/wp-content/uploads/${date.toFormat('yyyy')}/${workWeekStartDate.toFormat('MM')}/poledni-menu-${workWeekStartDate.toFormat('d')}_${workWeekStartDate.toFormat('M')}-${workWeekEndDate.toFormat('d')}_${workWeekEndDate.toFormat('M')}-${date.toFormat('yyyy')}-scaled.jpg`;
+        const workWeekStartDateMonth = workWeekStartDate.toFormat('M');
+        const workWeekEndDateMonth = workWeekEndDate.toFormat('M');
+
+        // Suffix the start date with the month if the month is different for start and end date of week
+        const workWeekStartDateSuffix = workWeekStartDateMonth !== workWeekEndDateMonth ? ('_' + workWeekStartDate.toFormat('M')) : '';
+        const workWeekEndDateSuffix = '_' + workWeekEndDateMonth;
+        const workWeekStartDateFormatted = workWeekStartDate.toFormat('d') + workWeekStartDateSuffix;
+        const workWeekEndDateFormatted = workWeekEndDate.toFormat('d') + workWeekEndDateSuffix;
+        const imageUrl = `${webUrl}/wp-content/uploads/${date.toFormat('yyyy')}/${workWeekStartDate.toFormat('MM')}/poledni-menu-${workWeekStartDateFormatted}-${workWeekEndDateFormatted}-${date.toFormat('yyyy')}-scaled.jpg`;
         if (IS_DEBUG) {
             console.info(`Cinky Linky menu image URL: ${imageUrl}`);
         }
