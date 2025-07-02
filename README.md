@@ -25,6 +25,6 @@ Frontend: `npm run dev:frontend`
 
 Backend: `npm run dev:backend`
 
-Proxy: `npm run dev:proxy`
+Proxy: TODO: specify command and add to package.json
 
 
