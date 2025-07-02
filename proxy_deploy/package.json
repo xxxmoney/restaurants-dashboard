@@ -1,0 +1,16 @@
+{
+  "name": "proxy_deploy",
+  "version": "1.0.0",
+  "main": "deploy.js",
+  "scripts": {
+    "deploy": "node deploy.js"
+  },
+  "type": "module",
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "basic-ftp": "^5.0.5",
+    "dotenv": "^17.0.1"
+  }
+}
