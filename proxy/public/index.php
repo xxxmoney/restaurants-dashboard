@@ -1,13 +1,12 @@
 <?php
-use Psr\Http\Message\ResponseInterface as Response;
-use Psr\Http\Message\ServerRequestInterface as Request;
-use Slim\Factory\AppFactory;
+use \Psr\Http\Message\ServerRequestInterface as Request;
+use \Psr\Http\Message\ResponseInterface as Response;
 
 // Include the Composer autoloader
 require __DIR__ . '/../vendor/autoload.php';
 
 // Create a new Slim App instance
-$app = AppFactory::create();
+$app = new \Slim\App;
 
 // Default root get route
 $app->get('/', function (Request $request, Response $response) {
@@ -16,7 +15,6 @@ $app->get('/', function (Request $request, Response $response) {
 });
 
 $app->get('/users/{id}', function (Request $request, Response $response, array $args) {
-    // A dummy array of users. In a real app, this would come from a database.
     $users = [
         1 => ['name' => 'Alice', 'email' => 'alice@example.com'],
         2 => ['name' => 'Bob', 'email' => 'bob@example.com'],
@@ -26,16 +24,12 @@ $app->get('/users/{id}', function (Request $request, Response $response, array $
     $user = $users[$userId] ?? null;
 
     if ($user) {
-        $payload = json_encode($user);
-        $response->getBody()->write($payload);
+        // Use the withJson helper to return data and set the correct header
+        return $response->withJson($user);
     } else {
-        // Return a 404 Not Found status code.
-        $response = $response->withStatus(404);
-        $response->getBody()->write(json_encode(['error' => 'User not found']));
+        // Return the error with a 404 status code.
+        return $response->withJson(['error' => 'User not found'], 404);
     }
-
-    // Return the response with the correct JSON content type header.
-    return $response->withHeader('Content-Type', 'application/json');
 });
 
 // Run the Slim application
