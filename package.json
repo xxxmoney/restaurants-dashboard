@@ -9,7 +9,7 @@
     "dev": "npm-run-all --parallel dev:*",
     "deploy:frontend": "cd app/tauri-app && npm run deploy",
     "deploy:backend": "cd backend && npm run deploy",
-    "deploy:proxy": "cd proxy && node deploy.js",
+    "deploy:proxy": "cd proxy_deploy && node deploy.js",
     "deploy": "npm-run-all --parallel deploy:*"
   },
   "repository": {

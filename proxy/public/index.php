@@ -9,8 +9,12 @@ require __DIR__ . '/../vendor/autoload.php';
 // Create a new Slim App instance.
 $app = AppFactory::create();
 
-// Define the GET route.
-// This route responds to GET requests at /users/{id}
+// Default root get route
+$app->get('/', function (Request $request, Response $response) {
+    $response->getBody()->write('Welcome to the Slim Framework API!');
+    return $response;
+});
+
 $app->get('/users/{id}', function (Request $request, Response $response, array $args) {
     // A dummy array of users. In a real app, this would come from a database.
     $users = [

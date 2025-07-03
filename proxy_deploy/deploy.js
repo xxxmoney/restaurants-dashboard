@@ -1,11 +1,14 @@
 import ftp from "basic-ftp";
 import path from "path";
+import {config} from "dotenv";
 
-require("dotenv").config(); // Load variables from .env file
+config(); // Load variables from .env file
 
 // Define the local directory to upload and the remote base directory.
-const localDir = path.join(__dirname, "local-folder-to-upload");
+const localDir = path.join(__dirname, "../proxy");
 const remoteDir = process.env.REMOTE_DIR;
+
+console.log(`Initializing preparations to upload from local directory: '${localDir}' to remote directory: '${remoteDir}'`);
 
 async function uploadDirectory() {
     const client = new ftp.Client();
