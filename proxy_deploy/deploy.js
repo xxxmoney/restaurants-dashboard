@@ -17,7 +17,7 @@ console.log(`Initializing preparations to upload from local directory: '${localD
 async function uploadDirectory() {
     const client = new ftp.Client();
     // Set to true for detailed logging in the console
-    client.ftp.verbose = true;
+    client.ftp.verbose = false;
 
     try {
         // Connect to the FTP server using credentials from the .env file
@@ -34,7 +34,18 @@ async function uploadDirectory() {
         await client.ensureDir(remoteDir);
         console.log(`Remote directory '${remoteDir}' is ready`);
 
-        // Upload the entire directory.
+        // Clear the remote directory before uploading
+        await client.cd(remoteDir);
+        console.log(`Changed to remote directory: '${remoteDir}'`);
+        console.log(`Clearing contents of remote directory: '${remoteDir}'...`);
+        await client.clearWorkingDir();
+        console.log(`Cleared contents of remote directory: '${remoteDir}'`);
+
+        // Change back to the root directory to start the upload
+        await client.cd("/");
+        console.log("Changed back to root directory");
+
+        // Upload the entire directory
         console.log(`Uploading contents from '${localDir}' to '${remoteDir}'...`);
         await client.uploadFromDir(localDir, remoteDir);
         console.log("Upload complete!");
