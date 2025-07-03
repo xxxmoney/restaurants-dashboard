@@ -3,15 +3,15 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Factory\AppFactory;
 
-// Include the Composer autoloader.
+// Include the Composer autoloader
 require __DIR__ . '/../vendor/autoload.php';
 
-// Create a new Slim App instance.
+// Create a new Slim App instance
 $app = AppFactory::create();
 
 // Default root get route
 $app->get('/', function (Request $request, Response $response) {
-    $response->getBody()->write('Welcome to the Slim Framework API!');
+    $response->getBody()->write('Hello from Simple Proxy!');
     return $response;
 });
 
@@ -38,5 +38,5 @@ $app->get('/users/{id}', function (Request $request, Response $response, array $
     return $response->withHeader('Content-Type', 'application/json');
 });
 
-// Run the Slim application.
+// Run the Slim application
 $app->run();

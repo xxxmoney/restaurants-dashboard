@@ -1,6 +1,10 @@
 import ftp from "basic-ftp";
 import path from "path";
 import {config} from "dotenv";
+import {fileURLToPath} from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 config(); // Load variables from .env file
 
