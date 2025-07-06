@@ -32,8 +32,6 @@ class Browser
      */
     public function initialize(): void
     {
-        $isWindows = strtoupper(substr(PHP_OS, 0, 3)) === 'WIN';
-
         if ($this->process !== null && is_resource($this->process)) {
             $status = proc_get_status($this->process);
             if ($status['running']) {
@@ -106,7 +104,7 @@ class Browser
 
     private function findChromeDriverPidOnWindows(): ?int
     {
-        $command = "wmic process where \"name='chromedriver.exe' and commandline like '%%--port={$this->port}%%'\" get processid /value";
+        $command = "wmic process where \"name='chromedriver.exe'\" get processid /value";
         exec($command, $output);
 
         foreach ($output as $line) {
