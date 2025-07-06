@@ -48,6 +48,8 @@ final class BrowserTest extends TestCase
             $browser->close();
         }
 
+        echo $result;
+
         // Assert
         $this->assertNotNull($result);
     }
