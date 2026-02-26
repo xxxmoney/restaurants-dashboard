@@ -26,6 +26,10 @@ export const MENUS = [
         id: restaurantEnum.VOZOVNA_PANKRAC,
         name: RESTAURANTS[restaurantEnum.VOZOVNA_PANKRAC].name,
     },
+    {
+        id: restaurantEnum.NOVODVORKA,
+        name: RESTAURANTS[restaurantEnum.NOVODVORKA].name,
+    }
 ];
 
 export const MENUS_PER_ROW = 4;

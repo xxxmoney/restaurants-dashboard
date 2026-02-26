@@ -39,6 +39,7 @@ Each parts have its own README - check them out for more details.
 ## Add new restaurant
  - Add to /shared/enums/restaurant.enum.js
  - Add to /shared/constants/restaurant.constants.js
+ - Add to /app/tauri-app/src/common/constants/menu.constants.js
  - Add new menu service to /backend/src/common/services/menus/[NAME].menu.service.ts
  - Add menu service usage to /backend/src/common/services/menuProvider.service.ts
  - Add test to /backend/test/common/services/menus/[NAME].menu.service.spec.ts
