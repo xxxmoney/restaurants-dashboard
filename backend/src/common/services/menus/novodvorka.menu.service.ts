@@ -12,7 +12,6 @@ export class NovodvorkaMenuService implements MenuService {
     private static readonly DISH_NAME_ON_ROW_INDEX: number = 3;
     private static readonly DISH_PRICE_ON_ROW_INDEX: number = 4;
     private static readonly DISH_PRICE_REGEX: RegExp = /\d+/;
-    private static readonly LAST_ROW_TEXT: string = 'Ceny pokrmů jsou uvedeny včetně příloh';
 
     private readonly fetcher?: Fetcher;
 
