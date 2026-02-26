@@ -64,7 +64,7 @@ export class NovodvorkaMenuService implements MenuService {
             }
 
             // First row of day, initialize new current menu (minus one due to indexed)
-            if (currentRowInDayIndex % NovodvorkaMenuService.ROWS_IN_DAY === 0) {
+            if ((currentRowInDayIndex % (NovodvorkaMenuService.ROWS_IN_DAY - 1)) === 0) {
                 this.logDebug(`Is first row of day: ${inline($row.html()?.trim())}`);
 
                 if (currentMenu) {
