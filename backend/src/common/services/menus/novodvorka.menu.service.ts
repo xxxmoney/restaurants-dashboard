@@ -60,13 +60,8 @@ export class NovodvorkaMenuService implements MenuService {
 
             this.logDebug(`Processing row: ${inline($row.text().trim())}`);
 
-            if ($row.text().trim() === NovodvorkaMenuService.LAST_ROW_TEXT) {
-                this.logDebug('Is last row, ending');
-                break; // End of menu, can break the loop
-            }
-
             // First row of day, initialize new current menu (minus one due to indexed)
-            if ((currentRowInDayIndex % (NovodvorkaMenuService.ROWS_IN_DAY - 0)) === 0) {
+            if ((currentRowInDayIndex % NovodvorkaMenuService.ROWS_IN_DAY) === 0) {
                 this.logDebug(`Is first row of day: ${inline($row.html()?.trim())}`);
 
                 if (currentMenu) {
@@ -81,6 +76,11 @@ export class NovodvorkaMenuService implements MenuService {
                 currentDayIndex++;
 
                 this.logDebug('Skipping rest, is first row of day');
+            }
+
+            if ($row.text().trim() === NovodvorkaMenuService.LAST_ROW_TEXT) {
+                this.logDebug('Is last row, ending');
+                break; // End of menu, can break the loop
             }
 
             this.logDebug('Getting dish name and price text');
