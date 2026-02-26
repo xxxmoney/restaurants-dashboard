@@ -45,7 +45,7 @@ for (const value of Object.values(restaurantEnum)) {
             break;
         case restaurantEnum.NOVODVORKA:
             RESTAURANTS[value] = {
-                name: 'Restaurace Novodvorka',
+                name: 'Novodvorka',
                 url: 'https://novodvorka.cz/jidelna-denni-menu/'
             };
             break;
