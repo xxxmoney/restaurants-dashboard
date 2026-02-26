@@ -61,4 +61,13 @@ describe("getMenu", () => {
         console.log(JSON.stringify(result, null, 2));
     }, {timeout: LONG_RUNNING_TEST_TIMEOUT});
 
+    it("should get menu Novodvorka", async () => {
+        const restaurantId = restaurantEnum.NOVODVORKA;
+
+        const result = await MenuProcessor.getProcessedMenusWithCache(env, restaurantId);
+
+        expect(result).not.null;
+        console.log(JSON.stringify(result, null, 2));
+    }, {timeout: LONG_RUNNING_TEST_TIMEOUT});
+
 });
