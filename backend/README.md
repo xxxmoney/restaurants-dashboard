@@ -1,5 +1,11 @@
 # Backend - Hono Worker
 
+## About
+ - Hono Cloudflare Worker backend for providing menus for restaurants
+ - Parses html content of restaurant websites, processes using Cheerio, processes the result with LLM for categorisation
+ - Uses caching using Cloudflare Workers KV
+ - Endpoints defined in src/routes/* (used in src/index.ts - `Routes`)
+
 ## Prerequisites
  - Install dependencies: `npm install`
  - For local debugging, uncomment a section in wrangler.toml
