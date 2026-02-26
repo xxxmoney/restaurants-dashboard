@@ -13,6 +13,21 @@ Consists of 3 main parts:
 
 Each parts have its own README - check them out for more details.
 
+## General Info
+ - /backend - Hono Cloudflare project
+ - /app/tauri-app - Tauri project with Vue.js frontend
+ - /proxy - Legacy Cloudflare project (for proxying requests for restaurant menus - bypassing reasons)
+
+## Prerequisites
+ - Install Node.js
+ - Install dependencies for /app/tauri-app
+ - Install dependencies for /backend
+ - Install dependencies for /backend
+ - Create a .dev.vars file in /backend with following
+   - `GEMINI_KEY = <your google gemini key>`
+ - Setup for local debug in explained in /shared/README.md
+ - Run all projects with `npm run dev`
+
 ## Quick Start - Run all projects
 
 Install packages: `npm install`
