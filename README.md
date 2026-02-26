@@ -13,7 +13,7 @@ Consists of 3 main parts:
 
 Each parts have its own README - check them out for more details.
 
-## General Info
+## About
  - /backend - Hono Cloudflare project
  - /app/tauri-app - Tauri project with Vue.js frontend
  - /proxy - Legacy Cloudflare project (for proxying requests for restaurant menus - bypassing reasons)
