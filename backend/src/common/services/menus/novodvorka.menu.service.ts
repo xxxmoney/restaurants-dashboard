@@ -58,29 +58,21 @@ export class NovodvorkaMenuService implements MenuService {
         for (const row of rows) {
             const $row = $(row);
 
-            this.logDebug(`Processing row: ${inline($row.text().trim())}`);
-
             // First row of day, initialize new current menu (minus one due to indexed)
             if ((currentRowInDayIndex % NovodvorkaMenuService.ROWS_IN_DAY) === 0) {
-                this.logDebug(`Is first row of day: ${inline($row.html()?.trim())}`);
-
                 if (currentMenu) {
-                    this.logDebug('Pushing last current menu');
+                    this.logDebug(`Pushing last current menu: ${JSON.stringify(currentMenu)}`);
                     menus.push(currentMenu);
                 }
+
+                this.logDebug(`Processing row: ${inline($row.text().trim())}`);
+                this.logDebug('Is first row of day');
 
                 this.logDebug('Initializing new menu');
                 const date = startOfWeek.plus({days: currentDayIndex}).startOf('day');
                 currentMenu = {date, items: []};
 
                 currentDayIndex++;
-
-                this.logDebug('Skipping rest, is first row of day');
-            }
-
-            if ($row.text().trim() === NovodvorkaMenuService.LAST_ROW_TEXT) {
-                this.logDebug('Is last row, ending');
-                break; // End of menu, can break the loop
             }
 
             this.logDebug('Getting dish name and price text');
@@ -98,7 +90,7 @@ export class NovodvorkaMenuService implements MenuService {
                 currentMenu.items.push({ name: this.parseDishName(dishName), price: this.parseDishPrice(priceText)});
                 this.logDebug(`New item: ${JSON.stringify(currentMenu.items[currentMenu.items.length - 1])}`);
             } else {
-                this.logDebug('No dish name and price text, skipping');
+                this.logDebug('No dish name or price text, skipping');
             }
 
             currentRowInDayIndex++;
