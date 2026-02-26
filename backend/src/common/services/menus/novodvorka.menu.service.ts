@@ -7,7 +7,7 @@ import {IS_DEBUG} from "../../../../../shared/constants/common.constants";
 import {inline} from "../../helpers/stringUtils.helper";
 
 export class NovodvorkaMenuService implements MenuService {
-    private static readonly ROWS_IN_DAY: number = 8;
+    private static readonly ROWS_IN_DAY: number = 9;
     private static readonly SKIP_ROWS_START: number = 3;
     private static readonly DISH_NAME_ON_ROW_INDEX: number = 3;
     private static readonly DISH_PRICE_ON_ROW_INDEX: number = 4;
@@ -23,6 +23,8 @@ export class NovodvorkaMenuService implements MenuService {
     async getMenus(): Promise<Menu[]> {
         const {$} = await useCheerio(this.fetcher, restaurantEnum.NOVODVORKA);
         const startOfWeek = DateTime.now().startOf('week');
+
+        this.logDebug(`Start of week: ${startOfWeek}`);
 
         //
         // This restaurant has menus in table - order seems to be same
@@ -64,7 +66,7 @@ export class NovodvorkaMenuService implements MenuService {
             }
 
             // First row of day, initialize new current menu (minus one due to indexed)
-            if ((currentRowInDayIndex % (NovodvorkaMenuService.ROWS_IN_DAY - 1)) === 0) {
+            if ((currentRowInDayIndex % (NovodvorkaMenuService.ROWS_IN_DAY - 0)) === 0) {
                 this.logDebug(`Is first row of day: ${inline($row.html()?.trim())}`);
 
                 if (currentMenu) {
