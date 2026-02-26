@@ -3,11 +3,12 @@ import {Menu} from "../../dto/menu";
 import {useCheerio} from "../../composables/cheerio.comp";
 import {restaurantEnum} from "../../../../../shared/enums/restaurant.enum";
 import {DateTime} from "luxon";
-import {parsePrice} from "../../helpers/menuUtils.helper";
-import {menuRoute} from "../../../routes/menu.route";
+import {IS_DEBUG} from "../../../../../shared/constants/common.constants";
+import {inline} from "../../helpers/stringUtils.helper";
 
 export class NovodvorkaMenuService implements MenuService {
     private static readonly ROWS_IN_DAY: number = 8;
+    private static readonly SKIP_ROWS_START: number = 3;
     private static readonly DISH_NAME_ON_ROW_INDEX: number = 3;
     private static readonly DISH_PRICE_ON_ROW_INDEX: number = 4;
     private static readonly DISH_PRICE_REGEX: RegExp = /\d+/;
@@ -20,13 +21,10 @@ export class NovodvorkaMenuService implements MenuService {
     }
 
     async getMenus(): Promise<Menu[]> {
-
-
-        const {$} = await useCheerio(this.fetcher, restaurantEnum.SALANDA);
+        const {$} = await useCheerio(this.fetcher, restaurantEnum.NOVODVORKA);
         const startOfWeek = DateTime.now().startOf('week');
 
-        const container = $(".elementor-text-editor")[2];
-
+        //
         // This restaurant has menus in table - order seems to be same
         //
         // Skip first three rows, then each day contains 8 rows
@@ -41,10 +39,15 @@ export class NovodvorkaMenuService implements MenuService {
         // Regarding columns, dishes are specified on column 4, its price on column 5
         //
 
-        const table = $(container).find("table");
-        const rows = table.find("tr").toArray();
+        const table = $('table');
+        this.logDebug(`Got table: ${inline(table.html())}`);
+        const rows = table.find('tr').toArray();
 
-        rows.splice(0, 3); // Skip first three rows
+        this.logDebug(`Got total rows count: ${rows.length}`);
+
+        rows.splice(0, NovodvorkaMenuService.SKIP_ROWS_START); // Skip start empty rows
+
+        this.logDebug(`Reduced rows count: ${rows.length}`);
 
         const menus: Menu[] = [];
         let currentMenu: Menu | null = null;
@@ -53,44 +56,72 @@ export class NovodvorkaMenuService implements MenuService {
         for (const row of rows) {
             const $row = $(row);
 
+            this.logDebug(`Processing row: ${inline($row.text().trim())}`);
+
             if ($row.text().trim() === NovodvorkaMenuService.LAST_ROW_TEXT) {
+                this.logDebug('Is last row, ending');
                 break; // End of menu, can break the loop
             }
 
             // First row of day, initialize new current menu (minus one due to indexed)
             if (currentRowInDayIndex % (NovodvorkaMenuService.ROWS_IN_DAY - 1) === 0) {
+                this.logDebug('Is first row of day');
+
                 if (currentMenu) {
+                    this.logDebug('Pushing last current menu');
                     menus.push(currentMenu);
                 }
 
+                this.logDebug('Initializing new menu');
                 const date = startOfWeek.plus({days: currentDayIndex}).startOf('day');
                 currentMenu = {date, items: []};
 
                 currentDayIndex++;
 
-                continue; // SKip the empty row
+                this.logDebug('Skipping rest, is first row of day');
             }
 
+            this.logDebug('Getting dish name and price text');
+
             // Get dish from current row
-            const dishName = $row.find("td").eq(NovodvorkaMenuService.DISH_NAME_ON_ROW_INDEX).text().trim();
-            const priceText = $row.find("td").eq(NovodvorkaMenuService.DISH_PRICE_ON_ROW_INDEX).text().trim();
+            const dishName = $row.find('td').eq(NovodvorkaMenuService.DISH_NAME_ON_ROW_INDEX).text().trim();
+            const priceText = $row.find('td').eq(NovodvorkaMenuService.DISH_PRICE_ON_ROW_INDEX).text().trim();
 
             if (!currentMenu) {
                 throw new Error("Current menu should be initialized");
             }
-            currentMenu.items.push({ name: dishName, price: parsePrice(priceText)});
+
+            if (dishName && priceText) {
+                this.logDebug('Pushing new item');
+                currentMenu.items.push({ name: this.parseDishName(dishName), price: this.parseDishPrice(priceText)});
+                this.logDebug(`New item: ${JSON.stringify(currentMenu.items[currentMenu.items.length - 1])}`);
+            } else {
+                this.logDebug('No dish name and price text, skipping');
+            }
 
             currentRowInDayIndex++;
         }
 
-        // TODO: use menu contents when getting from html is ready
+        this.logDebug(`Got all menus ${menus.length}`);
+
         return menus;
     }
 
-    private parsePrice(priceText: string): number {
+    private parseDishName(name: string) {
+        // TODO: maybe trim leading numbers, like '1,3,7,9'
+        return name.trim();
+    }
+
+    private parseDishPrice(priceText: string): number {
         const matches = [ ...NovodvorkaMenuService.DISH_PRICE_REGEX[Symbol.matchAll](priceText).map(item => item[0]) ];
         const lastMatch = matches[matches.length - 1];
 
         return parseInt(lastMatch);
+    }
+
+    private logDebug(message: string) {
+        if (IS_DEBUG) {
+            console.info('NovodvorkaMenuService', message);
+        }
     }
 }
