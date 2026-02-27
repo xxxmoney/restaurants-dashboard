@@ -15,7 +15,7 @@ const WEBS = [
         zoom: 1,
     },
     {
-        id: restaurantEnum.BAR_RED_HOOK,
+        id: restaurantEnum.IL_GIARDINO,
         name: RESTAURANTS[restaurantEnum.IL_GIARDINO].name,
         url: RESTAURANTS[restaurantEnum.IL_GIARDINO].url,
         zoom: 1,
