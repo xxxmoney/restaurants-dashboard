@@ -12,7 +12,7 @@ export class NovodvorkaMenuService implements MenuService {
     private static readonly SKIP_ROWS_START: number = 3;
     private static readonly DISH_NAME_ON_ROW_INDEX: number = 3;
     private static readonly DISH_PRICE_ON_ROW_INDEX: number = 4;
-    private static readonly DISH_PRICE_REGEX: RegExp = /\d+/;
+    private static readonly DISH_PRICE_REGEX: RegExp = /\d+/g;
 
     private readonly fetcher?: Fetcher;
 

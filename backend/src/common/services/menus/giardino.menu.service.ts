@@ -59,7 +59,7 @@ export class GiardinoMenuService implements MenuService {
 
     private logDebug(message: string) {
         if (IS_DEBUG) {
-            console.info('MiniGolfMenuService', message);
+            console.info('GiardinoMenuService', message);
         }
     }
 }

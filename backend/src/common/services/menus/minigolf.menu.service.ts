@@ -32,7 +32,7 @@ export class MinigolfMenuService implements MenuService {
         const currentDate = this.parseDate(currentDateText);
         this.logDebug(`Current date: ${currentDate}`);
         const menu: Menu = {
-            date: DateTime.now(),
+            date: currentDate,
             items: []
         };
 
@@ -69,6 +69,10 @@ export class MinigolfMenuService implements MenuService {
         const matches = getAllMatches(MinigolfMenuService.DATE_REGEX, dateText);
 
         this.logDebug(`Got matches for date: ${JSON.stringify(matches)}`);
+
+        if (matches.length < 2) {
+            throw new Error(`Could not parse date from text: ${dateText}`);
+        }
 
         const day = parseInt(matches[0]);
         const month = parseInt(matches[1]);

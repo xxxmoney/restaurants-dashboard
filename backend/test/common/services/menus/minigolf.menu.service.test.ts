@@ -3,7 +3,7 @@ import {LONG_RUNNING_TEST_TIMEOUT} from "../../../constants";
 import {MinigolfMenuService} from "../../../../src/common/services/menus/minigolf.menu.service";
 
 describe("getMenu", () => {
-    it("should get menu MiniGolf", async () => {
+    it("should get menu Mini Golf", async () => {
         const menuService = new MinigolfMenuService(undefined);
         const result = await menuService.getMenus();
 

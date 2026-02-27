@@ -68,7 +68,7 @@ describe("getMenu", () => {
         console.log(JSON.stringify(result, null, 2));
     }, {timeout: LONG_RUNNING_TEST_TIMEOUT});
 
-    it("should get menu MiniGolf", async () => {
+    it("should get menu Mini Golf", async () => {
         const restaurantId = restaurantEnum.MINI_GOLF;
 
         const result = await MenuProcessor.getProcessedMenusWithCache(env, restaurantId);
@@ -77,7 +77,7 @@ describe("getMenu", () => {
         console.log(JSON.stringify(result, null, 2));
     }, {timeout: LONG_RUNNING_TEST_TIMEOUT});
 
-    it("should get menu IlGiardino", async () => {
+    it("should get menu Il Giardino", async () => {
         const restaurantId = restaurantEnum.IL_GIARDINO;
 
         const result = await MenuProcessor.getProcessedMenusWithCache(env, restaurantId);
