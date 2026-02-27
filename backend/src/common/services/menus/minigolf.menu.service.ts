@@ -15,7 +15,7 @@ export class MinigolfMenuService implements MenuService {
     }
 
     async getMenus(): Promise<Menu[]> {
-        const {$} = await useCheerio(this.fetcher, restaurantEnum.NOVODVORKA);
+        const {$} = await useCheerio(this.fetcher, restaurantEnum.MINI_GOLF);
 
         const menu: Menu = {
             date: DateTime.now(),
@@ -34,12 +34,16 @@ export class MinigolfMenuService implements MenuService {
             const name = $item.find('.menu-item-name').text().trim();
             const priceText = $item.find('.menu-item-price').text().trim();
 
-            menu.items.push({
-                name: name,
-                price: this.parseDishPrice(priceText)
-            });
+            if (name && priceText) {
+                menu.items.push({
+                    name: name,
+                    price: this.parseDishPrice(priceText)
+                });
 
-            this.logDebug(`New item added: ${JSON.stringify(menu.items[menu.items.length - 1])}`)
+                this.logDebug(`New item added: ${JSON.stringify(menu.items[menu.items.length - 1])}`)
+            } else {
+                this.logDebug('Skipping item due to missing name or price');
+            }
         }
 
         return [menu];
