@@ -3,39 +3,21 @@ import {RESTAURANTS} from "root/shared/constants/restaurant.constants.js";
 
 const WEBS = [
     {
-        id: restaurantEnum.CINKY_LINKY,
-        name: RESTAURANTS[restaurantEnum.CINKY_LINKY].name,
-        url: RESTAURANTS[restaurantEnum.CINKY_LINKY].url,
-        zoom: 0.5,
-    },
-    {
-        id: restaurantEnum.KLIKA,
-        name: RESTAURANTS[restaurantEnum.KLIKA].name,
-        url: RESTAURANTS[restaurantEnum.KLIKA].url,
+        id: restaurantEnum.NOVODVORKA,
+        name: RESTAURANTS[restaurantEnum.NOVODVORKA].name,
+        url: RESTAURANTS[restaurantEnum.NOVODVORKA].url,
         zoom: 1,
     },
     {
-        id: restaurantEnum.BAR_RED_HOOK,
-        name: RESTAURANTS[restaurantEnum.BAR_RED_HOOK].name,
-        url: RESTAURANTS[restaurantEnum.BAR_RED_HOOK].url,
+        id: restaurantEnum.MINI_GOLF,
+        name: RESTAURANTS[restaurantEnum.MINI_GOLF].name,
+        url: RESTAURANTS[restaurantEnum.MINI_GOLF].url,
         zoom: 1,
     },
     {
-        id: restaurantEnum.PALATINO,
-        name: RESTAURANTS[restaurantEnum.PALATINO].name,
-        url: RESTAURANTS[restaurantEnum.PALATINO].url,
-        zoom: 0.75,
-    },
-    {
-        id: restaurantEnum.SALANDA,
-        name: RESTAURANTS[restaurantEnum.SALANDA].name,
-        url: RESTAURANTS[restaurantEnum.SALANDA].url,
-        zoom: 0.75,
-    },
-    {
-        id: restaurantEnum.VOZOVNA_PANKRAC,
-        name: RESTAURANTS[restaurantEnum.VOZOVNA_PANKRAC].name,
-        url: RESTAURANTS[restaurantEnum.VOZOVNA_PANKRAC].url,
+        id: restaurantEnum.IL_GIARDINO,
+        name: RESTAURANTS[restaurantEnum.IL_GIARDINO].name,
+        url: RESTAURANTS[restaurantEnum.IL_GIARDINO].url,
         zoom: 1,
     },
 ];

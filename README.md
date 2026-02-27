@@ -6,25 +6,41 @@ Simple restaurant menus overview app.
 Built with Tauri, so there is support for browser, desktop and mobile.
 
 Consists of 3 main parts:
-
 - Frontend: Vue.js
 - Backend: Hono Cloudflare
 - Proxy - Legacy Cloudflare
 
 Each parts have its own README - check them out for more details.
 
+## About
+ - /backend - Hono Cloudflare project
+ - /app/tauri-app - Tauri project with Vue.js frontend
+ - /proxy - Legacy Cloudflare project (for proxying requests for restaurant menus - bypassing reasons)
+H
+## Prerequisites
+ - Install Node.js
+ - Install dependencies for FE /app/tauri-app
+ - Install dependencies for BE /backend
+ - Install dependencies for PROXY /proxy
+ - Create a .dev.vars file in /backend with following
+   - `GEMINI_KEY = <your google gemini key>`
+ - Setup for local debug in explained in /shared/README.md
+ - Run all projects with `npm run dev`
+
 ## Quick Start - Run all projects
-
-Install packages: `npm install`
-
-Run all projects: `npm run dev`
+ - Install packages: `npm install`
+ - Run all projects: `npm run dev`
 
 ## Quick Start - Run Each Project
+ - Frontend: `npm run dev:frontend`
+ - Backend: `npm run dev:backend`
+ - Proxy: `npm run dev:proxy`
 
-Frontend: `npm run dev:frontend`
-
-Backend: `npm run dev:backend`
-
-Proxy: `npm run dev:proxy`
-
+## Add new restaurant
+ - Add to /shared/enums/restaurant.enum.js
+ - Add to /shared/constants/restaurant.constants.js
+ - Add to /app/tauri-app/src/common/constants/menu.constants.js
+ - Add new menu service to /backend/src/common/services/menus/[NAME].menu.service.ts
+ - Add menu service usage to /backend/src/common/services/menuProvider.service.ts
+ - Add test to /backend/test/common/services/menus/[NAME].menu.service.test.ts
 

@@ -3,8 +3,6 @@ import {env} from "cloudflare:test";
 import {restaurantEnum} from "../../../../shared/enums/restaurant.enum";
 import {MenuProcessor} from "../../../src/common/services/menuProcessor.service";
 import {LONG_RUNNING_TEST_TIMEOUT} from "../../constants";
-import {Context} from "hono";
-
 
 describe("getMenu", () => {
     it("should get menu cinky linky (long running)", async () => {
@@ -61,4 +59,30 @@ describe("getMenu", () => {
         console.log(JSON.stringify(result, null, 2));
     }, {timeout: LONG_RUNNING_TEST_TIMEOUT});
 
+    it("should get menu Novodvorka", async () => {
+        const restaurantId = restaurantEnum.NOVODVORKA;
+
+        const result = await MenuProcessor.getProcessedMenusWithCache(env, restaurantId);
+
+        expect(result).not.null;
+        console.log(JSON.stringify(result, null, 2));
+    }, {timeout: LONG_RUNNING_TEST_TIMEOUT});
+
+    it("should get menu Mini Golf", async () => {
+        const restaurantId = restaurantEnum.MINI_GOLF;
+
+        const result = await MenuProcessor.getProcessedMenusWithCache(env, restaurantId);
+
+        expect(result).not.null;
+        console.log(JSON.stringify(result, null, 2));
+    }, {timeout: LONG_RUNNING_TEST_TIMEOUT});
+
+    it("should get menu Il Giardino", async () => {
+        const restaurantId = restaurantEnum.IL_GIARDINO;
+
+        const result = await MenuProcessor.getProcessedMenusWithCache(env, restaurantId);
+
+        expect(result).not.null;
+        console.log(JSON.stringify(result, null, 2));
+    }, {timeout: LONG_RUNNING_TEST_TIMEOUT});
 });

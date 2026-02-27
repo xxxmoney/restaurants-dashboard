@@ -5,4 +5,7 @@ export const restaurantEnum = Object.freeze({
     PALATINO: 4,
     SALANDA: 5,
     VOZOVNA_PANKRAC: 6,
+    NOVODVORKA: 7,
+    MINI_GOLF: 8,
+    IL_GIARDINO: 9,
 });
