@@ -5,6 +5,7 @@ import {restaurantEnum} from "../../../../../shared/enums/restaurant.enum";
 import {DateTime} from "luxon";
 import {IS_DEBUG} from "../../../../../shared/constants/common.constants";
 import {inline} from "../../helpers/stringUtils.helper";
+import {getALlMatches} from "../../helpers/regex.helper";
 
 export class NovodvorkaMenuService implements MenuService {
     private static readonly ROWS_IN_DAY: number = 9;
@@ -21,8 +22,8 @@ export class NovodvorkaMenuService implements MenuService {
 
     async getMenus(): Promise<Menu[]> {
         const {$} = await useCheerio(this.fetcher, restaurantEnum.NOVODVORKA);
-        const startOfWeek = DateTime.now().startOf('week');
 
+        const startOfWeek = DateTime.now().startOf('week');
         this.logDebug(`Start of week: ${startOfWeek}`);
 
         //
@@ -106,7 +107,7 @@ export class NovodvorkaMenuService implements MenuService {
     }
 
     private parseDishPrice(priceText: string): number {
-        const matches = [ ...NovodvorkaMenuService.DISH_PRICE_REGEX[Symbol.matchAll](priceText).map(item => item[0]) ];
+        const matches = getALlMatches(NovodvorkaMenuService.DISH_PRICE_REGEX, priceText);
         const lastMatch = matches[matches.length - 1];
 
         return parseInt(lastMatch);
