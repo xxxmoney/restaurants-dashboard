@@ -10,6 +10,10 @@ export const MENUS = [
         id: restaurantEnum.MINI_GOLF,
         name: RESTAURANTS[restaurantEnum.MINI_GOLF].name,
     },
+    {
+        id: restaurantEnum.IL_GIARDINO,
+        name: RESTAURANTS[restaurantEnum.IL_GIARDINO].name,
+    }
 ];
 
 export const MENUS_PER_ROW = 4;
