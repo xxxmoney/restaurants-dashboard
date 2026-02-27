@@ -6,10 +6,10 @@ import {restaurantEnum} from "../../../../../shared/enums/restaurant.enum";
 import {CURRENCY_CZK} from "../../constants/menu.constants";
 import {IS_DEBUG} from "../../../../../shared/constants/common.constants";
 import {inline} from "../../helpers/stringUtils.helper";
-import {getALlMatches} from "../../helpers/regex.helper";
+import {getAllMatches} from "../../helpers/regex.helper";
 
 export class MinigolfMenuService implements MenuService {
-    private static readonly DATE_REGEX: RegExp = /\d+/;
+    private static readonly DATE_REGEX: RegExp = /\d+/g;
 
     private readonly fetcher?: Fetcher;
 
@@ -66,7 +66,9 @@ export class MinigolfMenuService implements MenuService {
 
     private parseDate(dateText: string): DateTime {
         // Date is in format "Pátek 27.2" - we can only extract the day and month from it with regex
-        const matches = getALlMatches(MinigolfMenuService.DATE_REGEX, dateText);
+        const matches = getAllMatches(MinigolfMenuService.DATE_REGEX, dateText);
+
+        this.logDebug(`Got matches for date: ${JSON.stringify(matches)}`);
 
         const day = parseInt(matches[0]);
         const month = parseInt(matches[1]);

@@ -5,7 +5,7 @@ import {restaurantEnum} from "../../../../../shared/enums/restaurant.enum";
 import {DateTime} from "luxon";
 import {IS_DEBUG} from "../../../../../shared/constants/common.constants";
 import {inline} from "../../helpers/stringUtils.helper";
-import {getALlMatches} from "../../helpers/regex.helper";
+import {getAllMatches} from "../../helpers/regex.helper";
 
 export class NovodvorkaMenuService implements MenuService {
     private static readonly ROWS_IN_DAY: number = 9;
@@ -107,7 +107,7 @@ export class NovodvorkaMenuService implements MenuService {
     }
 
     private parseDishPrice(priceText: string): number {
-        const matches = getALlMatches(NovodvorkaMenuService.DISH_PRICE_REGEX, priceText);
+        const matches = getAllMatches(NovodvorkaMenuService.DISH_PRICE_REGEX, priceText);
         const lastMatch = matches[matches.length - 1];
 
         return parseInt(lastMatch);
