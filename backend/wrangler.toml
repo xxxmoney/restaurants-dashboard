@@ -25,10 +25,6 @@ head_sampling_rate = 1
 [triggers]
 crons = ["*/15 * * * *"]
 
-# Use higher CPU limit (long running requests)
-[limits]
-cpu_ms = 120_000 # For now, let's use 2 minutes
-
 # compatibility_flags = [ "nodejs_compat" ]
 
 # [vars]
