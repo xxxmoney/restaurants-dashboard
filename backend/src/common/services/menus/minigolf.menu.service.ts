@@ -65,18 +65,25 @@ export class MinigolfMenuService implements MenuService {
     }
 
     private parseDate(dateText: string): DateTime {
-        // Date is in format "Pátek 27.2" - we can only extract the day and month from it with regex
+        const now = DateTime.now();
+
+        // Date is in format "Pátek 27.2" or "Středa 4.března" - we can only extract the day and month from it with regex (sometimes only day)
         const matches = getAllMatches(MinigolfMenuService.DATE_REGEX, dateText);
 
         this.logDebug(`Got matches for date: ${JSON.stringify(matches)}`);
 
-        if (matches.length < 2) {
-            throw new Error(`Could not parse date from text: ${dateText}`);
+        const hasDay = matches.length >= 1;
+        if (!hasDay) {
+            this.logDebug(`Date does not contain day, will use current day: ${dateText}`);
+        }
+        const hasMonth = matches.length >= 2;
+        if (!hasMonth) {
+            this.logDebug(`Date does not contain month, will use current month: ${dateText}`);
         }
 
-        const day = parseInt(matches[0]);
-        const month = parseInt(matches[1]);
-        const year = DateTime.now().year;
+        const day = hasDay ? parseInt(matches[0]) : now.day;
+        const month = hasMonth ? parseInt(matches[1]) : now.month;
+        const year = now.year;
 
         return DateTime.fromObject({day, month, year});
     }
