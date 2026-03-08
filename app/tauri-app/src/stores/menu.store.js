@@ -4,12 +4,12 @@ import {MenuApi} from "@/common/apiServices/menu.api.js";
 import {DateTime} from "luxon";
 import {parseDate} from "@/common/helpers/date.helper.js";
 import {DATE_FORMAT} from "root/shared/constants/common.constants.js";
-import {restaurantEnum} from "root/shared/enums/restaurant.enum.js";
 import {useLocalStorage} from "@vueuse/core";
 import {SHOWN_MENUS_KEY} from "@/common/constants/storage.constants.js";
+import {MENUS} from "@/common/constants/menu.constants.js";
 
 export const useMenuStore = defineStore('menus', () => {
-    const restaurantIds = Object.values(restaurantEnum);
+    const restaurantIds = MENUS.map(menu => menu.id); // Allowed restaurants are defined in MENUS
 
     // Object with keys as restaurant id and value of menu array
     const menusByRestaurant = ref(Object.fromEntries(restaurantIds.map(id => [id, null])));
