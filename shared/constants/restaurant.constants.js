@@ -58,7 +58,7 @@ for (const value of Object.values(restaurantEnum)) {
         case restaurantEnum.IL_GIARDINO:
             RESTAURANTS[value] = {
                 name: 'Il Giardino',
-                url: 'https://www.ristoranteilgiardino.cz/menu/'
+                url: 'https://www.ilgiardino.cz/#poledni-menu'
             };
             break;
         default:
