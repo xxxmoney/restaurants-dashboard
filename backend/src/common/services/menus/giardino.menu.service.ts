@@ -64,16 +64,17 @@ export class GiardinoMenuService implements MenuService {
                 const description = $text.find('.elementor-price-list-description').text().trim(); // We use description as name (name is just a fancy name, rather use the description)
                 const priceText = $text.find('.elementor-price-list-price').text().trim();
 
-                if (description && priceText) {
-                    const item = {
-                        name: description,
-                        price: this.parseDishPrice(priceText)
-                    };
-                    this.logDebug(`New item added: ${JSON.stringify(item)}`);
-                    menu.items.push(item);
-                } else {
-                    this.logDebug('Skipping item due to missing description or price');
+                if (!description || !priceText) {
+                    this.logDebug('Skipping text, because description or price text is empty');
+                    continue;
                 }
+
+                const item = {
+                    name: description,
+                    price: this.parseDishPrice(priceText)
+                };
+                this.logDebug(`New item added: ${JSON.stringify(item)}`);
+                menu.items.push(item);
             }
 
             menus.push(menu);
