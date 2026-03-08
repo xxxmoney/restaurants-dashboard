@@ -46,7 +46,7 @@ for (const value of Object.values(restaurantEnum)) {
         case restaurantEnum.NOVODVORKA:
             RESTAURANTS[value] = {
                 name: 'Novodvorka',
-                url: 'https://novodvorka.cz/jidelna-denni-menu/'
+                url: 'https://novodvorka.cz/denni-jidelni-listek/'
             };
             break;
         case restaurantEnum.MINI_GOLF:
