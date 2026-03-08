@@ -25,7 +25,10 @@ export class GiardinoMenuService implements MenuService {
         // This restaurant has menus in divs with classes, which very much so simplifies getting the information
         //
         // Container is ".category-denni-menu"
-        // Each menu is "section" element - first section element contains info about start and end date of the week - in format "Týden od 2.3-6.3.2026"
+        // Each menu is "section" element
+        // - first section element contains info about start and end date of the week - in format "Týden od 2.3-6.3.2026"
+        // - second element is a contaner for all menus - skip that
+        // - rest of the sections are menus for each day - start with monday, end with friday
         // Each dish is in ".elementor-price-list-text" - name is ",elementor-price-list-header", description is ".elementor-price-list-description" and price is ".elementor-price-list-price"
         //
 
@@ -35,7 +38,9 @@ export class GiardinoMenuService implements MenuService {
         this.logDebug(`Got sections count: ${sections.length}`);
 
         const $weekSection = $(sections.shift()); // First section contains information about the week
-        this.logDebug(`First section is week description (shift from section array): ${inline($weekSection.html())}`);
+        this.logDebug(`First section is week description - shift from section array: ${inline($weekSection.html())}`);
+        sections.shift(); // Second section is container for all menus - skip that
+        this.logDebug('Second section is container for all menus - shift from section array');
         const startDate = this.parseStartDate($weekSection.text());
         this.logDebug(`Got start date: ${startDate}`);
 
