@@ -69,6 +69,8 @@ export class GiardinoMenuService implements MenuService {
                 }
             }
 
+            menus.push(menu);
+
             dayIndex++;
         }
 
