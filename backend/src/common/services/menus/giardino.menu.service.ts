@@ -45,6 +45,7 @@ export class GiardinoMenuService implements MenuService {
         this.logDebug(`Got start date: ${startDate}`);
 
         let dayIndex = 0; // Current day - start with 0 - monday
+        // Process container of each menu
         for (const section of sections) {
             const $section = $(section);
             this.logDebug(`Processing section: ${inline($section.html())}`);
@@ -56,10 +57,11 @@ export class GiardinoMenuService implements MenuService {
 
             const texts = $section.find('.elementor-price-list-text').toArray();
             this.logDebug(`Got texts count: ${texts.length}`);
+            // Process container of each dish
             for (const text of texts) {
                 const $text = $(text);
                 this.logDebug(`Processing text: ${inline($text.html())}`);
-                const description = $text.find('.elementor-price-list-description').text().trim();
+                const description = $text.find('.elementor-price-list-description').text().trim(); // We use description as name (name is just a fancy name, rather use the description)
                 const priceText = $text.find('.elementor-price-list-price').text().trim();
 
                 if (description && priceText) {
@@ -75,7 +77,6 @@ export class GiardinoMenuService implements MenuService {
             }
 
             menus.push(menu);
-
             dayIndex++;
         }
 
