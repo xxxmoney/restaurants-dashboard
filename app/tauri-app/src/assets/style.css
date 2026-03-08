@@ -81,18 +81,22 @@
     }
 }
 
-
 * {
     box-sizing: border-box;
+
+    margin: 0;
+    padding: 0;
+    border: 0;
 }
 
 html, body, #app {
-    margin: 0;
-    padding: 0;
-    min-width: 100vw;
-    min-height: 100vh;
     width: 100%;
     height: 100%;
+
+    overflow-x: hidden;
+}
+
+html {
     font-family: 'Roboto', sans-serif;
     font-size: 14px;
     line-height: 1.5;
@@ -100,6 +104,11 @@ html, body, #app {
     /* Set the colors */
     background-color: var(--p-primary-contrast-color);
     color: var(--p-text-color);
+}
+
+#app {
+    min-width: 100vw;
+    min-height: 100vh;
 }
 
 .background-primary-contrast-brighter {

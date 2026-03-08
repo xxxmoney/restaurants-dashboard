@@ -5,7 +5,6 @@ import {storeToRefs} from "pinia";
 import {MENUS} from "@/common/constants/menu.constants.js";
 import Menus from "@/components/views/menus/Menus.vue";
 import Button from "primevue/button";
-import {MENUS_PER_ROW} from "@/common/constants/menu.constants.js";
 
 const store = useMenuStore();
 const {selectedIds} = storeToRefs(store);
@@ -22,11 +21,17 @@ const {selectedIds} = storeToRefs(store);
       </div>
     </div>
 
-    <div class="grid gap-xl grid-cols-1 md:gap-md" :class="`md:grid-cols-${MENUS_PER_ROW}`">
+    <div class="grid flexible-grid gap-xl md:gap-md">
       <template v-for="id in selectedIds">
         <Menus :restaurantId="id"/>
       </template>
     </div>
   </div>
 </template>
+
+<style>
+.flexible-grid {
+  grid-template-columns: repeat(auto-fit, min(100%, 400px))
+}
+</style>
 
