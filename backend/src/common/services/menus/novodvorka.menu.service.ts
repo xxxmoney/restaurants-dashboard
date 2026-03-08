@@ -5,7 +5,6 @@ import {restaurantEnum} from "../../../../../shared/enums/restaurant.enum";
 import {DateTime} from "luxon";
 import {IS_DEBUG} from "../../../../../shared/constants/common.constants";
 import {inline} from "../../helpers/stringUtils.helper";
-import {getAllMatches} from "../../helpers/regex.helper";
 
 export class NovodvorkaMenuService implements MenuService {
     private static readonly DISH_TD_INDEX_NAME = 1;
