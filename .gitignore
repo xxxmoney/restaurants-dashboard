@@ -1,2 +1,9 @@
 
-.idea
+.idea/
+node_modules/
+.env
+.DS_Store
+bin/
+bundle*
+tmp/
+vendor/
