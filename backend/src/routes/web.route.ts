@@ -18,7 +18,7 @@ websRoute.get('/:id', async (c) => {
         html = cachedValue.html;
     } else {
         // @ts-ignore
-        html = await WebService.getWebHtml(id, getFetcher(c));
+        html = await WebService.getWebHtml(id, getFetcher(c.env));
         await cache.set({html});
     }
 
