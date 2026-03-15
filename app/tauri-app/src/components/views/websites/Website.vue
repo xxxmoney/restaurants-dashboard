@@ -60,7 +60,7 @@ onMounted(async () => {
       <div v-if="!web.content" class="w-full h-full flex flex-row justify-center items-center font-bold">
         <Loading/>
       </div>
-      <iframe v-else ref="frames" :srcdoc="web.content" :class="{'hidden': !isVisible}"
+      <iframe v-else ref="frames" :src="web.url" :class="{'hidden': !isVisible}"
               @load="onWebLoaded(web, containerRef)"
               class="w-full h-full border-none"
               :style="{ zoom: web.zoom }"
