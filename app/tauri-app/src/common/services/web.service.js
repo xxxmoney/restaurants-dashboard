@@ -80,8 +80,8 @@ export const WebService = {
                 }
             default:
                 // Not required, default is empty function
-                return () => {
-                };
+                return () => new Promise((resolve, _) => resolve(() => {
+                }));
         }
 
     }
