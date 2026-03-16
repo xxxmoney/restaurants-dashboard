@@ -43,4 +43,4 @@ H
  - Add new menu service to /backend/src/common/services/menus/[NAME].menu.service.ts
  - Add menu service usage to /backend/src/common/services/menuProvider.service.ts
  - Add test to /backend/test/common/services/menus/[NAME].menu.service.test.ts
-
+ - Add test case to /backend/test/common/services/menuProcessor.service.test.ts

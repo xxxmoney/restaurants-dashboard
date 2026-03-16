@@ -13,6 +13,10 @@ export const MENUS = [
     {
         id: restaurantEnum.IL_GIARDINO,
         name: RESTAURANTS[restaurantEnum.IL_GIARDINO].name,
+    },
+    {
+        id: restaurantEnum.KAMYK,
+        name: RESTAURANTS[restaurantEnum.KAMYK].name,
     }
 ];
 
