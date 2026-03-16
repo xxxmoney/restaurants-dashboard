@@ -78,6 +78,18 @@ export const WebService = {
 
                     return {};
                 }
+            case restaurantEnum.KAMYK:
+                return async (iframe) => {
+                    // Timeout
+                    await new Promise(resolve => setTimeout(resolve, 500));
+
+                    const menuLink = iframe.querySelector('a.elementor-button-link');
+                    if (menuLink) {
+                        menuLink.click();
+                    }
+
+                    return {};
+                }
             default:
                 // Not required, default is empty function
                 return () => new Promise((resolve, _) =>

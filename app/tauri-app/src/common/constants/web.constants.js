@@ -20,6 +20,12 @@ const WEBS = [
         url: RESTAURANTS[restaurantEnum.IL_GIARDINO].url,
         zoom: 1,
     },
+    {
+        id: restaurantEnum.KAMYK,
+        name: RESTAURANTS[restaurantEnum.KAMYK].name,
+        url: RESTAURANTS[restaurantEnum.KAMYK].url,
+        zoom: 1,
+    }
 ];
 
 export {
