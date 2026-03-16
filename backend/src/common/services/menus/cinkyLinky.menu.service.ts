@@ -43,7 +43,7 @@ export class CinkyLinkyMenuService implements MenuService {
         const imageBuffer = await imageResponse.arrayBuffer();
         const imageBase64 = arrayBufferToBase64(imageBuffer);
 
-        // Get menus with gemini service
+        // Parse menus with gemini service
         const service = new GeminiService(this.env.GEMINI_KEY);
         const prompt = format(MENU_PROMPTS[restaurantEnum.CINKY_LINKY], workWeekStartDate.toFormat(DATE_FORMAT), workWeekEndDate.toFormat(DATE_FORMAT), DATE_FORMAT);
         const geminiResponse = await service.imageToJson<Menus>(prompt, menusSchema, {base64: imageBase64});

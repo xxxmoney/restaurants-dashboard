@@ -9,6 +9,7 @@ import {VozovnaPankracMenuService} from "./menus/vozovnaPankrac.menu.service";
 import {NovodvorkaMenuService} from "./menus/novodvorka.menu.service";
 import {MinigolfMenuService} from "./menus/minigolf.menu.service";
 import {GiardinoMenuService} from "./menus/giardino.menu.service";
+import {KamykMenuService} from "./menus/kamyk.menu.service";
 
 export const MenuProviderService = {
     getMenuService(env: any, enumValue: number, fetcher?: Fetcher): MenuService {
@@ -31,6 +32,8 @@ export const MenuProviderService = {
                 return new MinigolfMenuService(fetcher) as MenuService;
             case restaurantEnum.IL_GIARDINO:
                 return new GiardinoMenuService(fetcher) as MenuService;
+            case restaurantEnum.KAMYK:
+                return new KamykMenuService(env, fetcher) as MenuService;
             default:
                 throw new Error('Invalid restaurant enum value');
         }

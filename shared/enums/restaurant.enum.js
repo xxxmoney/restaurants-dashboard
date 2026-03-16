@@ -8,4 +8,5 @@ export const restaurantEnum = Object.freeze({
     NOVODVORKA: 7,
     MINI_GOLF: 8,
     IL_GIARDINO: 9,
+    KAMYK: 10,
 });
