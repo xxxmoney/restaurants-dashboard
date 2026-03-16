@@ -1,4 +1,3 @@
-import {CheerioAPI} from "cheerio";
 import {MenuService} from "./menu.types"
 import {Menu, Menus} from "../../dto/menu";
 import {DateTime} from "luxon";
