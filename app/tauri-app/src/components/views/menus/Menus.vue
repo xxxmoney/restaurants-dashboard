@@ -39,7 +39,9 @@ async function loadMenus() {
   // Open current day menu if present
   if (currentMenu.value) {
     expandedRows.value = {};
-    expandedRows.value[currentMenu.value.date] = true;
+    if (currentMenu.value.date) {
+      expandedRows.value[currentMenu.value.date] = true;
+    }
   }
 }
 
@@ -70,7 +72,7 @@ onMounted(async () => {
       <Empty/>
     </div>
     <!-- Menus loading-->
-    <div v-else-if="menus === null" class="w-full h-full flex flex-col justify-center items-center">
+    <div v-else-if="menus === null" class="w-full h-full flex flex-col justify-start items-center">
       <Loading/>
     </div>
     <!-- Menus loaded and present-->
