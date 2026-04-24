@@ -95,6 +95,8 @@ onMounted(async () => {
               <Divider class="mt-0"/>
 
               <DataTable :value="categorizedItem.items" sortField="price" :sortOrder="1">
+                <!-- TODO: add button to favorite here, should use the store method -->
+                <Column header="#"></Column>
                 <Column field="name" header="Name"/>
                 <Column field="price" header="Price" headerClass="w-1/3" sortable>
                   <template #body="{data}">

@@ -5,7 +5,7 @@ import {DateTime} from "luxon";
 import {parseDate} from "@/common/helpers/date.helper.js";
 import {DATE_FORMAT} from "root/shared/constants/common.constants.js";
 import {useLocalStorage} from "@vueuse/core";
-import {SHOWN_MENUS_KEY} from "@/common/constants/storage.constants.js";
+import {FAVORITE_MENU_ITEMS_KEY, SHOWN_MENUS_KEY} from "@/common/constants/storage.constants.js";
 import {MENUS} from "@/common/constants/menu.constants.js";
 
 export const useMenuStore = defineStore('menus', () => {
@@ -15,6 +15,7 @@ export const useMenuStore = defineStore('menus', () => {
     const menusByRestaurant = ref(Object.fromEntries(restaurantIds.map(id => [id, null])));
     // Which restaurants to show
     const selectedIds = useLocalStorage(SHOWN_MENUS_KEY, restaurantIds);
+    const favoriteMenuItems = useLocalStorage(FAVORITE_MENU_ITEMS_KEY, []);
 
     function getMenus(restaurantId) {
         return menusByRestaurant.value[restaurantId];
@@ -41,12 +42,23 @@ export const useMenuStore = defineStore('menus', () => {
         return menusByRestaurant.value[restaurantId]?.find(menu => parseDate(menu.date).toFormat(DATE_FORMAT) === today);
     }
 
+    function toggleFavoriteMenuItem(menuItem) {
+        const index = favoriteMenuItems.value.findIndex(item => item === menuItem);
+        if (index === -1) {
+            favoriteMenuItems.value.push(menuItem); // Not yet favorite, add
+        } else {
+            favoriteMenuItems.value.splice(index, 1); // Already favorite, remove
+        }
+    }
+
     return {
         selectedIds,
+        menusByRestaurant,
 
         getMenus,
         loadMenus,
         loadAllMenus,
-        getCurrentDayMenu
+        getCurrentDayMenu,
+        toggleFavoriteMenuItem
     }
 })
