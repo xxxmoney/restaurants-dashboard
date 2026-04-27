@@ -42,13 +42,17 @@ export const useMenuStore = defineStore('menus', () => {
         return menusByRestaurant.value[restaurantId]?.find(menu => parseDate(menu.date).toFormat(DATE_FORMAT) === today);
     }
 
-    function toggleFavoriteMenuItem(menuItem) {
-        const index = favoriteMenuItems.value.findIndex(item => item === menuItem);
+    function toggleFavoriteMenuItem(menuItemText) {
+        const index = favoriteMenuItems.value.findIndex(item => item === menuItemText);
         if (index === -1) {
-            favoriteMenuItems.value.push(menuItem); // Not yet favorite, add
+            favoriteMenuItems.value.push(menuItemText); // Not yet favorite, add
         } else {
             favoriteMenuItems.value.splice(index, 1); // Already favorite, remove
         }
+    }
+
+    function hasFavoriteMenuItem(menuItemText) {
+        return favoriteMenuItems.value.includes(menuItemText);
     }
 
     return {
@@ -59,6 +63,7 @@ export const useMenuStore = defineStore('menus', () => {
         loadMenus,
         loadAllMenus,
         getCurrentDayMenu,
-        toggleFavoriteMenuItem
+        toggleFavoriteMenuItem,
+      hasFavoriteMenuItem
     }
 })
