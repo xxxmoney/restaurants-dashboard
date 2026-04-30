@@ -1,7 +1,7 @@
 <script setup>
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
-import Button from "primevue/button";
+import Button from 'primevue/button';
 import {Divider} from "primevue";
 import Empty from "@/components/common/Empty.vue";
 import Loading from "@/components/common/Loading.vue";
@@ -12,7 +12,7 @@ import {formatCurrency} from "@/common/helpers/currency.helper.js";
 import {RESTAURANTS} from "root/shared/constants/restaurant.constants.js";
 import {useCustomToast} from "@/composables/customToast.comp.js";
 import Dead from "@/components/common/Dead.vue";
-import {CURRENCY, CURRENCY_SYMBOL} from "@/common/constants/common.constants.js";
+import {CURRENCY_SYMBOL} from "@/common/constants/common.constants.js";
 
 const {restaurantId} = defineProps({
   restaurantId: {
@@ -45,8 +45,20 @@ async function loadMenus() {
   }
 }
 
-function getRowClass(data) {
+function getMenusRowClass(data) {
   return [{'!bg-green-400 !bg-opacity-40': data.date === currentMenu.value?.date}];
+}
+
+function getMenuRowClass(data) {
+  return [{'!bg-green-400 !bg-opacity-40': hasFavorite(data)}];
+}
+
+function toggleFavorite(item) {
+  store.toggleFavoriteMenuItem(item.id);
+}
+
+function hasFavorite(item) {
+  return store.hasFavoriteMenuItem(item.id);
 }
 
 onMounted(async () => {
@@ -77,7 +89,7 @@ onMounted(async () => {
     </div>
     <!-- Menus loaded and present-->
     <div v-else class="flex flex-col justify-center gap">
-      <DataTable v-model:expandedRows="expandedRows" :value="menus" dataKey="date" :rowClass="getRowClass">
+      <DataTable v-model:expandedRows="expandedRows" :value="menus" dataKey="date" :rowClass="getMenusRowClass">
         <Column expander style="width: 2rem"/>
 
         <Column field="date" header="Date" sortable>
@@ -94,7 +106,12 @@ onMounted(async () => {
               <span class="p-lg text-lg font-bold">{{ categorizedItem.category }}</span>
               <Divider class="mt-0"/>
 
-              <DataTable :value="categorizedItem.items" sortField="price" :sortOrder="1">
+              <DataTable :value="categorizedItem.items" sortField="price" :sortOrder="1" :rowClass="getMenuRowClass">
+                <Column header="#">
+                  <template #body="{data}">
+                    <Button rounded icon="pi pi-heart" aria-label="Favorite" :severity="hasFavorite(data) ? 'primary' : 'secondary'" @click="toggleFavorite(data)"/>
+                  </template>
+                </Column>
                 <Column field="name" header="Name"/>
                 <Column field="price" header="Price" headerClass="w-1/3" sortable>
                   <template #body="{data}">
