@@ -45,7 +45,7 @@ export class KamykMenuService implements MenuService {
 
         // Parse menus with gemini service
         const service = new GeminiService(this.env.GEMINI_KEY);
-        const prompt = format(MENU_PROMPTS[restaurantEnum.KAMYK], DATE_FORMAT);
+        const prompt = format(MENU_PROMPTS[restaurantEnum.KAMYK], DATE_FORMAT, startOfWeek.toFormat(DATE_FORMAT));
         const geminiResponse = await service.imageToJson<Menus>(prompt, menusSchema, {base64: imageBase64});
         return geminiResponse.json.menus;
     }
