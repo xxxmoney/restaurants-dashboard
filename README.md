@@ -16,7 +16,7 @@ Each parts have its own README - check them out for more details.
  - /backend - Hono Cloudflare project
  - /app/tauri-app - Tauri project with Vue.js frontend
  - /proxy - Legacy Cloudflare project (for proxying requests for restaurant menus - bypassing reasons)
-H
+
 ## Prerequisites
  - Install Node.js
  - Install dependencies for FE /app/tauri-app
