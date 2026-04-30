@@ -9,6 +9,7 @@ import format from "string-format";
 import {MENU_PROMPTS} from "../../constants/gemini.constants";
 import {Menus} from "../../dto/menu";
 import {menusSchema} from "../../schemas/menu.schema";
+import {DateTime} from "luxon";
 
 export class KamykMenuService implements MenuService {
     private readonly env: any;
@@ -21,6 +22,10 @@ export class KamykMenuService implements MenuService {
 
     async getMenus() {
         const {$} = await useCheerio(this.fetcher, restaurantEnum.KAMYK);
+
+        const now = DateTime.now();
+        const startOfWeek = now.startOf('week');
+        this.logDebug(`Current date: ${now.toFormat(DATE_FORMAT)}, start of the week: ${startOfWeek.toFormat(DATE_FORMAT)}`);
 
         const $link = $('a.elementor-button-link').first();
         this.logDebug(`Got menus link: ${inline($link.html())}`);
@@ -40,7 +45,7 @@ export class KamykMenuService implements MenuService {
 
         // Parse menus with gemini service
         const service = new GeminiService(this.env.GEMINI_KEY);
-        const prompt = format(MENU_PROMPTS[restaurantEnum.CINKY_LINKY], DATE_FORMAT);
+        const prompt = format(MENU_PROMPTS[restaurantEnum.KAMYK], DATE_FORMAT);
         const geminiResponse = await service.imageToJson<Menus>(prompt, menusSchema, {base64: imageBase64});
         return geminiResponse.json.menus;
     }
