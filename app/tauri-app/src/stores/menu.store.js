@@ -15,7 +15,7 @@ export const useMenuStore = defineStore('menus', () => {
     const menusByRestaurant = ref(Object.fromEntries(restaurantIds.map(id => [id, null])));
     // Which restaurants to show
     const selectedIds = useLocalStorage(SHOWN_MENUS_KEY, restaurantIds);
-    const favoriteMenuItems = useLocalStorage(FAVORITE_MENU_ITEMS_KEY, []);
+    const favoriteMenuItemIds = useLocalStorage(FAVORITE_MENU_ITEMS_KEY, []);
 
     function getMenus(restaurantId) {
         return menusByRestaurant.value[restaurantId];
@@ -25,6 +25,14 @@ export const useMenuStore = defineStore('menus', () => {
         menusByRestaurant.value[restaurantId] = null;
         try {
             const response = await MenuApi.getMenus(restaurantId);
+
+            // Generate id for each menu item
+            for (const menu of response.data) {
+              for (const item of menu.categorizedItems.flatMap(category => category.items)) {
+                  item.id = `${restaurantId}_${menu.date}_${item.name}`;
+              }
+            }
+
             menusByRestaurant.value[restaurantId] = response.data
         } catch (e) {
             menusByRestaurant.value[restaurantId] = undefined;
@@ -42,17 +50,17 @@ export const useMenuStore = defineStore('menus', () => {
         return menusByRestaurant.value[restaurantId]?.find(menu => parseDate(menu.date).toFormat(DATE_FORMAT) === today);
     }
 
-    function toggleFavoriteMenuItem(menuItemText) {
-        const index = favoriteMenuItems.value.findIndex(item => item === menuItemText);
+    function toggleFavoriteMenuItem(menuItemId) {
+        const index = favoriteMenuItemIds.value.findIndex(item => item === menuItemId);
         if (index === -1) {
-            favoriteMenuItems.value.push(menuItemText); // Not yet favorite, add
+            favoriteMenuItemIds.value.push(menuItemId); // Not yet favorite, add
         } else {
-            favoriteMenuItems.value.splice(index, 1); // Already favorite, remove
+            favoriteMenuItemIds.value.splice(index, 1); // Already favorite, remove
         }
     }
 
-    function hasFavoriteMenuItem(menuItemText) {
-        return favoriteMenuItems.value.includes(menuItemText);
+    function hasFavoriteMenuItem(menuItemId) {
+        return favoriteMenuItemIds.value.includes(menuItemId);
     }
 
     return {
@@ -64,6 +72,6 @@ export const useMenuStore = defineStore('menus', () => {
         loadAllMenus,
         getCurrentDayMenu,
         toggleFavoriteMenuItem,
-      hasFavoriteMenuItem
+        hasFavoriteMenuItem
     }
 })
