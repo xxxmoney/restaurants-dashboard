@@ -2,7 +2,7 @@ import {restaurantEnum} from "../../../../shared/enums/restaurant.enum";
 
 export const LANGUAGE = 'CZECH';
 
-export const MODEL_NAME = 'gemma-3-27b-it';
+export const MODEL_NAME = 'gemini-3.1-flash-lite-preview';
 
 export const DEFAULT_MIME_TYPE = 'image/jpeg';
 
