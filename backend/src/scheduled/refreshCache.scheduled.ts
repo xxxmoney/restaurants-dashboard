@@ -1,10 +1,9 @@
-import {restaurantEnum} from "../../../shared/enums/restaurant.enum";
+import {allowedRestaurants} from "../../../shared/enums/restaurant.enum";
 import {MenuProcessor} from "../common/services/menuProcessor.service";
 import {useMenuCache} from "../common/composables/cache.comp";
 import {IS_DEBUG} from "../../../shared/constants/common.constants";
 import {MenuProviderService} from "../common/services/menuProvider.service";
 import {getFetcher} from "../common/helpers/fetcher.helper";
-import {Context} from "hono";
 
 export async function handleRefreshCache(env: any): Promise<void> {
     const errors: Error[] = [];
@@ -14,7 +13,7 @@ export async function handleRefreshCache(env: any): Promise<void> {
     }
 
     // Refresh cache for all restaurant menus
-    const refreshCachePromises = Object.values(restaurantEnum).map(async key => {
+    const refreshCachePromises = allowedRestaurants.map(async key => {
         try {
             const cache = useMenuCache(env, key);
 

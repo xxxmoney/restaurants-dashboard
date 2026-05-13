@@ -23,7 +23,7 @@ head_sampling_rate = 1
 
 # Set cron triggers
 [triggers]
-crons = ["*/15 * * * *"]
+crons = ["*/30 * * * *"]
 
 # compatibility_flags = [ "nodejs_compat" ]
 

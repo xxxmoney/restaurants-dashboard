@@ -10,3 +10,10 @@ export const restaurantEnum = Object.freeze({
     IL_GIARDINO: 9,
     KAMYK: 10,
 });
+
+export const allowedRestaurants = [
+  restaurantEnum.NOVODVORKA,
+  restaurantEnum.MINI_GOLF,
+  restaurantEnum.IL_GIARDINO,
+  restaurantEnum.KAMYK
+]
