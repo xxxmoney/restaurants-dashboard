@@ -3,6 +3,7 @@ import {logger} from 'hono/logger'
 import {cors} from 'hono/cors'
 import {menuRoute} from './routes/menu.route'
 import {websRoute} from "./routes/web.route";
+import {authRoute} from "./routes/auth.route";
 import {setup} from "./setup";
 import {IS_DEBUG} from "../../shared/constants/common.constants";
 import {scheduled} from "./scheduled";
@@ -48,6 +49,7 @@ app.get('/', (c) => {
 // Routes
 app.route('/menus', menuRoute);
 app.route('/webs', websRoute);
+app.route('/auth', authRoute);
 
 
 export default {

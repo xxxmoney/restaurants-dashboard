@@ -24,6 +24,7 @@ Each parts have its own README - check them out for more details.
  - Install dependencies for PROXY /proxy
  - Create a .dev.vars file in /backend with following
    - `GEMINI_KEY = <your google gemini key>`
+   - `BETTER_AUTH_API_KEY = <your better auth key>`
  - Setup for local debug in explained in /shared/README.md
  - Run all projects with `npm run dev`
 
