@@ -11,6 +11,7 @@
     "cheerio": "^1.0.0",
     "dotenv": "^16.4.7",
     "hono": "^4.6.12",
+    "kysely": "0.28.0",
     "luxon": "^3.5.0",
     "pdfjs-serverless": "^0.7.0",
     "string-format": "^2.0.0",
