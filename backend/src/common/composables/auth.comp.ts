@@ -1,6 +1,6 @@
 
 import { betterAuth } from "better-auth";
-import { dash } from "@better-auth/infra";
+// import { dash } from "@better-auth/infra";
 import {BACKEND_URL} from "../../../../shared/constants/common.constants";
 
 export const useAuth = (env: any) => {
@@ -9,9 +9,11 @@ export const useAuth = (env: any) => {
 
     secret: env.BETTER_AUTH_API_KEY!,
 
-    // TODO: setup auth
+    // TODO: setup dash
     plugins: [
-      dash()
+      // dash({
+      //   apiKey: env.BETTER_AUTH_API_KEY!,
+      // })
     ],
     socialProviders: {
       google: {

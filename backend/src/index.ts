@@ -51,7 +51,6 @@ app.route('/menus', menuRoute);
 app.route('/webs', websRoute);
 app.route('/auth', authRoute);
 
-
 export default {
     // Handle fetch with Hono
     fetch: app.fetch,
