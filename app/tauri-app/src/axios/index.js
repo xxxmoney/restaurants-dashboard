@@ -1,5 +1,5 @@
-import {BACKEND_URL} from "@/common/constants/common.constants.js";
 import axios from "axios";
+import {BACKEND_URL} from "root/shared/constants/common.constants.js";
 
 const api = axios.create({
     baseURL: BACKEND_URL
