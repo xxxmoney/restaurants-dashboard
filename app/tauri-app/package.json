@@ -17,6 +17,7 @@
     "@tauri-apps/plugin-shell": "^2",
     "@vueuse/core": "^12.0.0",
     "axios": "^1.7.9",
+    "better-auth": "^1.6.14",
     "luxon": "^3.5.0",
     "pinia": "^2.2.8",
     "primeicons": "^7.0.0",
