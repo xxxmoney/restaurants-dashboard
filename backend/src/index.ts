@@ -39,7 +39,8 @@ app.use('*', cors({
     origin: '*',
     allowMethods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowHeaders: ['Content-Type', 'Authorization'],
-}))
+    credentials: true
+}));
 
 // Default get response
 app.get('/', (c) => {
@@ -47,9 +48,9 @@ app.get('/', (c) => {
 });
 
 // Routes
-app.route('api/menus', menuRoute);
-app.route('api/webs', websRoute);
-app.route('api/auth', authRoute);
+app.route('/api/menus', menuRoute);
+app.route('/api/webs', websRoute);
+app.route('/api/auth', authRoute);
 
 export default {
     // Handle fetch with Hono
