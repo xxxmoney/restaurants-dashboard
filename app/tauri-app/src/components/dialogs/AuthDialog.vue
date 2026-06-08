@@ -1,7 +1,7 @@
 <script setup>
 import Dialog from 'primevue/dialog';
 import Button from 'primevue/button';
-import {BACKEND_URL} from "root/shared/constants/common.constants.js";
+import {BACKEND_URL, FRONTEND_URL} from "root/shared/constants/common.constants.js";
 import {useDialogsStore} from "@/stores/dialog.store.js";
 import {auth} from "@/auth/index.js";
 
@@ -10,7 +10,7 @@ import {auth} from "@/auth/index.js";
   async function loginGoogle() {
     const data = await auth.signIn.social({
       provider: 'google',
-      callbackUrl: BACKEND_URL,
+      callbackUrl: FRONTEND_URL,
     })
     console.log(data);
   }
