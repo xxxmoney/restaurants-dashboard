@@ -1,5 +1,11 @@
 <script setup>
+  import {useDialogsStore} from "@/stores/dialog.store.js";
 
+  const dialogsStore = useDialogsStore();
+
+  function showAuthDialog() {
+    dialogsStore.auth = true
+  }
 </script>
 
 <template>
@@ -15,6 +21,9 @@
       </li>
       <li>
         <RouterLink to="/menus">Menus</RouterLink>
+      </li>
+      <li>
+        <Button @click="showAuthDialog">Login</Button>
       </li>
     </ul>
   </nav>
