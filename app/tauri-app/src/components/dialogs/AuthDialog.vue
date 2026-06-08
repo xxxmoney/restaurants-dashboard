@@ -8,11 +8,10 @@ import {auth} from "@/auth/index.js";
   const dialogsStore = useDialogsStore();
 
   async function loginGoogle() {
-    const data = await auth.signIn.social({
+    await auth.signIn.social({
       provider: 'google',
       callbackURL: FRONTEND_URL,
-    })
-    console.log(data);
+    });
   }
 </script>
 
