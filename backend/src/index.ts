@@ -47,9 +47,9 @@ app.get('/', (c) => {
 });
 
 // Routes
-app.route('/menus', menuRoute);
-app.route('/webs', websRoute);
-app.route('/auth', authRoute);
+app.route('api/menus', menuRoute);
+app.route('api/webs', websRoute);
+app.route('api/auth', authRoute);
 
 export default {
     // Handle fetch with Hono
