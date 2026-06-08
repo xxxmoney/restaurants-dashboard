@@ -10,7 +10,7 @@ import {auth} from "@/auth/index.js";
   async function loginGoogle() {
     const data = await auth.signIn.social({
       provider: 'google',
-      callbackUrl: FRONTEND_URL,
+      callbackURL: FRONTEND_URL,
     })
     console.log(data);
   }
