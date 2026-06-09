@@ -1,9 +1,9 @@
 <script setup>
-import Dialog from 'primevue/dialog';
-import Button from 'primevue/button';
-import {BACKEND_URL, FRONTEND_URL} from "root/shared/constants/common.constants.js";
-import {useDialogsStore} from "@/stores/dialog.store.js";
-import {auth} from "@/auth/index.js";
+  import Dialog from 'primevue/dialog';
+  import Button from 'primevue/button';
+  import {BACKEND_URL, FRONTEND_URL} from "root/shared/constants/common.constants.js";
+  import {useDialogsStore} from "@/stores/dialog.store.js";
+  import {auth} from "@/auth/index.js";
 
   const dialogsStore = useDialogsStore();
 
