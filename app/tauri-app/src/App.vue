@@ -2,7 +2,14 @@
 import NavBar from '@/components/layout/NavBar.vue'
 import {Toast} from "primevue";
 import AuthDialog from "@/components/dialogs/AuthDialog.vue";
+import {onMounted} from "vue";
+import {useAuthStore} from "@/stores/auth.store.js";
 
+// Initialize
+onMounted(async () => {
+  const authStore = useAuthStore();
+  await authStore.verifyUser();
+})
 </script>
 
 <template>

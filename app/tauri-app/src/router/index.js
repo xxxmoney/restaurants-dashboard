@@ -8,11 +8,13 @@ const routes = [
     { path: '/', name: 'home', component: HomeView },
     { path: '/websites', name: 'websites', component: WebsitesView },
     { path: '/menus', name: 'menus', component: MenusView },
-]
+];
 
 const router = createRouter({
     history: createMemoryHistory(),
     routes,
-})
+});
+
+// TODO: maybe use authentication verification here with beforeEach?
 
 export { router }
