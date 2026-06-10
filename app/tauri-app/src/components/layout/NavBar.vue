@@ -1,5 +1,23 @@
 <script setup>
+  import {useAuthStore} from "@/stores/auth.store.js";
+  import {useDialogsStore} from "@/stores/dialog.store.js";
+  import {useCustomToast} from "@/composables/customToast.comp.js";
 
+  const authStore = useAuthStore();
+  const dialogsStore = useDialogsStore();
+  const {showErrorToast} = useCustomToast();
+
+  function showAuthDialog() {
+    dialogsStore.auth = true
+  }
+  async function signOut() {
+    try {
+      await authStore.signOut();
+    } catch (error) {
+      console.error(error);
+      showErrorToast('Failed to sign out');
+    }
+  }
 </script>
 
 <template>
@@ -15,6 +33,10 @@
       </li>
       <li>
         <RouterLink to="/menus">Menus</RouterLink>
+      </li>
+      <li>
+        <Button v-if="!authStore.isAuthenticated" @click="showAuthDialog">Sign In</Button>
+        <Button v-else @click="signOut">Sign Out</Button>
       </li>
     </ul>
   </nav>

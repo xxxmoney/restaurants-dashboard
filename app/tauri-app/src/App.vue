@@ -1,7 +1,7 @@
 <script setup>
 import NavBar from '@/components/layout/NavBar.vue'
 import {Toast} from "primevue";
-
+import AuthDialog from "@/components/dialogs/AuthDialog.vue";
 </script>
 
 <template>
@@ -14,6 +14,8 @@ import {Toast} from "primevue";
       <RouterView/>
     </div>
   </main>
+
+  <AuthDialog />
 </template>
 
 <style>

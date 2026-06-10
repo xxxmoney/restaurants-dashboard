@@ -3,6 +3,7 @@ import {logger} from 'hono/logger'
 import {cors} from 'hono/cors'
 import {menuRoute} from './routes/menu.route'
 import {websRoute} from "./routes/web.route";
+import {authRoute} from "./routes/auth.route";
 import {setup} from "./setup";
 import {IS_DEBUG} from "../../shared/constants/common.constants";
 import {scheduled} from "./scheduled";
@@ -38,7 +39,8 @@ app.use('*', cors({
     origin: '*',
     allowMethods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowHeaders: ['Content-Type', 'Authorization'],
-}))
+    credentials: true
+}));
 
 // Default get response
 app.get('/', (c) => {
@@ -46,9 +48,9 @@ app.get('/', (c) => {
 });
 
 // Routes
-app.route('/menus', menuRoute);
-app.route('/webs', websRoute);
-
+app.route('/api/menus', menuRoute);
+app.route('/api/webs', websRoute);
+app.route('/api/auth', authRoute);
 
 export default {
     // Handle fetch with Hono

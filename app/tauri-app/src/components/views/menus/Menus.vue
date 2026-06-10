@@ -32,7 +32,8 @@ const expandedRows = ref({});
 async function loadMenus() {
   try {
     await store.loadMenus(restaurantId);
-  } catch (e) {
+  } catch (error) {
+    console.error(error);
     showErrorToast(`Failed to load menus for '${RESTAURANTS[restaurantId].name}'`);
   }
 

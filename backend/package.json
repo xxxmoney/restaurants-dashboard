@@ -6,7 +6,9 @@
     "test": "vitest"
   },
   "dependencies": {
+    "@better-auth/infra": "^0.2.8",
     "@google/generative-ai": "^0.21.0",
+    "better-auth": "1.6.11",
     "cheerio": "^1.0.0",
     "dotenv": "^16.4.7",
     "hono": "^4.6.12",
@@ -24,5 +26,10 @@
     "expect-matchers": "^1.2.0",
     "vitest": "2.1.8",
     "wrangler": "^3.99.0"
+  },
+  "overrides": {
+    "vite": "^5.0.0",
+    "@better-auth/sso": "1.6.11",
+    "@better-auth/utils": "0.4.1"
   }
 }
