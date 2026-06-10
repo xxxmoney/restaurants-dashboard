@@ -7,6 +7,7 @@ export const useAuthStore = defineStore('auth', () => {
   const userData = ref(null);
 
   const isAuthenticated = computed(() => !!userData.value);
+  const isInitialized = ref(false);
 
   async function signInGoogle() {
     await auth.signIn.social({
@@ -30,11 +31,17 @@ export const useAuthStore = defineStore('auth', () => {
     userData.value = data;
   }
 
+  async function initialize() {
+    isInitialized.value = true;
+    await verifyUser();
+  }
+
   return {
     userData, // TODO: this works - use this for user profile, etc
     isAuthenticated,
+    isInitialized,
 
     signInGoogle,
-    verifyUser
+    initialize,
   }
 })
