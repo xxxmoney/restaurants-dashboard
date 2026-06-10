@@ -19,7 +19,11 @@ router.beforeEach(async (to, from, next) => {
   const dialogsStore = useDialogsStore();
 
   if (!authStore.isInitialized) {
-    await authStore.initialize();
+    try {
+      await authStore.initialize();
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   if (to.meta.requiresAuth && !authStore.isAuthenticated) {

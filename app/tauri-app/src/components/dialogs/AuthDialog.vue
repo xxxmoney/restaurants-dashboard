@@ -3,12 +3,19 @@
   import Button from 'primevue/button';
   import {useDialogsStore} from "@/stores/dialog.store.js";
   import {useAuthStore} from "@/stores/auth.store.js";
+  import {useCustomToast} from "@/composables/customToast.comp.js";
 
   const dialogsStore = useDialogsStore();
   const authStore = useAuthStore();
+  const {showErrorToast} = useCustomToast();
 
   async function loginGoogle() {
-    await authStore.signInGoogle();
+    try {
+      await authStore.signInGoogle();
+    } catch (error) {
+      console.error(error);
+      showErrorToast('Failed to sign in with Google');
+    }
   }
 </script>
 

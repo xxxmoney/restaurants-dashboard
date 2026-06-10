@@ -1,15 +1,22 @@
 <script setup>
   import {useAuthStore} from "@/stores/auth.store.js";
   import {useDialogsStore} from "@/stores/dialog.store.js";
+  import {useCustomToast} from "@/composables/customToast.comp.js";
 
   const authStore = useAuthStore();
   const dialogsStore = useDialogsStore();
+  const {showErrorToast} = useCustomToast();
 
   function showAuthDialog() {
     dialogsStore.auth = true
   }
   async function signOut() {
-    await authStore.signOut();
+    try {
+      await authStore.signOut();
+    } catch (error) {
+      console.error(error);
+      showErrorToast('Failed to sign out');
+    }
   }
 </script>
 
