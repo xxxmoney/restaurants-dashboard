@@ -4,10 +4,10 @@ import {auth} from "@/auth/index.js";
 import {FRONTEND_URL} from "root/shared/constants/common.constants.js";
 
 export const useAuthStore = defineStore('auth', () => {
+  const isInitialized = ref(false);
   const userData = ref(null);
 
   const isAuthenticated = computed(() => !!userData.value);
-  const isInitialized = ref(false);
 
   async function signInGoogle() {
     await auth.signIn.social({
