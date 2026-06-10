@@ -19,14 +19,18 @@ export const useAuth = (env: any) => {
       })
     ],
 
+    // TODO: figure this out - prolly needs to have sql tables in db1 cloudflare set up
+    database: {
+      provider: 'sqlite',
+      db: env.DB
+    },
+
     socialProviders: {
       google: {
         clientId: env.GOOGLE_CLIENT_ID!,
         clientSecret: env.GOOGLE_CLIENT_SECRET!,
       }
     }
-
-    // TODO: setup database
   });
 
   return {auth};
