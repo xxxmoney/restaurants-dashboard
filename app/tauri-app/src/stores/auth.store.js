@@ -16,6 +16,11 @@ export const useAuthStore = defineStore('auth', () => {
     });
   }
 
+  async function signOut() {
+    await auth.signOut();
+    userData.value = null;
+  }
+
   async function verifyUser() {
     const { data, error } = await auth.getSession();
 
@@ -41,7 +46,8 @@ export const useAuthStore = defineStore('auth', () => {
     isAuthenticated,
     isInitialized,
 
-    signInGoogle,
     initialize,
+    signInGoogle,
+    signOut
   }
 })

@@ -8,6 +8,9 @@
   function showAuthDialog() {
     dialogsStore.auth = true
   }
+  async function signOut() {
+    await authStore.signOut();
+  }
 </script>
 
 <template>
@@ -25,7 +28,8 @@
         <RouterLink to="/menus">Menus</RouterLink>
       </li>
       <li>
-        <Button v-if="!authStore.isAuthenticated" @click="showAuthDialog">Login</Button>
+        <Button v-if="!authStore.isAuthenticated" @click="showAuthDialog">Sign In</Button>
+        <Button v-else @click="signOut">Sign Out</Button>
       </li>
     </ul>
   </nav>
