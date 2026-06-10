@@ -1,6 +1,8 @@
 <script setup>
+  import {useAuthStore} from "@/stores/auth.store.js";
   import {useDialogsStore} from "@/stores/dialog.store.js";
 
+  const authStore = useAuthStore();
   const dialogsStore = useDialogsStore();
 
   function showAuthDialog() {
@@ -23,7 +25,7 @@
         <RouterLink to="/menus">Menus</RouterLink>
       </li>
       <li>
-        <Button @click="showAuthDialog">Login</Button>
+        <Button v-if="!authStore.isAuthenticated" @click="showAuthDialog">Login</Button>
       </li>
     </ul>
   </nav>

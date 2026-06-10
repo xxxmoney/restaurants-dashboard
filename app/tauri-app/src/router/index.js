@@ -3,6 +3,7 @@ import HomeView from '@/views/HomeView.vue'
 import WebsitesView from "@/views/WebsitesView.vue";
 import MenusView from "@/views/MenusView.vue";
 import {useAuthStore} from "@/stores/auth.store.js";
+import {useDialogsStore} from "@/stores/dialog.store.js";
 
 const router = createRouter({
     history: createWebHistory('/restaurants-dashboard/'),
@@ -15,12 +16,14 @@ const router = createRouter({
 
 router.beforeEach(async (to, from, next) => {
   const authStore = useAuthStore();
+  const dialogsStore = useDialogsStore();
 
   if (!authStore.isInitialized) {
     await authStore.initialize();
   }
 
   if (to.meta.requiresAuth && !authStore.isAuthenticated) {
+    dialogsStore.auth.value = true;
     next('/');
   } else {
     next();
