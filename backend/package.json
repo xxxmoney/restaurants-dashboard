@@ -10,8 +10,7 @@
     "db:generate": "drizzle-kit generate",
     "db:migrate:dev": "wrangler d1 migrations apply restaurants-dashboard-db --local",
     "db:migrate:prod": "wrangler d1 migrations apply restaurants-dashboard-db --remote",
-    "db:studio:dev": "drizzle-kit studio",
-    "db:studio:prod": "NODE_ENV=production drizzle-kit studio"
+    "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
     "@better-auth/infra": "^0.2.8",

@@ -31,5 +31,5 @@
 - To migrate
   - `db:migrate:dev` / `db:migrate:prod`
 - Preview of the database
-  - Db studio `db:studio:dev` / `db:studio:prod`
+  - Db studio `db:studio`
 

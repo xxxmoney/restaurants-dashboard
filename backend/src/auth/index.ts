@@ -47,6 +47,14 @@ function createAuth(env?: any) {
             clientSecret: env?.GOOGLE_CLIENT_SECRET!,
           }
         },
+
+        advanced: {
+          cookiePrefix: "restaurants-dashboard",
+          defaultCookieAttributes: {
+            sameSite: "none",
+            secure: true
+          }
+        }
       }
     ),
 
