@@ -12,20 +12,6 @@ function createAuth(env?: any) {
 
   return betterAuth({
     baseURL: BACKEND_URL_BASE,
-
-    trustedOrigins: [
-      FRONTEND_URL_BASE
-    ],
-
-    secret: env?.BETTER_AUTH_API_KEY!,
-
-    socialProviders: {
-      google: {
-        clientId: env?.GOOGLE_CLIENT_ID!,
-        clientSecret: env?.GOOGLE_CLIENT_SECRET!,
-      }
-    },
-
     ...withCloudflare(
       {
         autoDetectIpAddress: false,
@@ -44,9 +30,31 @@ function createAuth(env?: any) {
         emailAndPassword: {
           enabled: true,
         },
+
         plugins: [dash({
           apiKey: env?.BETTER_AUTH_API_KEY!,
         })],
+
+        trustedOrigins: [
+          FRONTEND_URL_BASE
+        ],
+
+        secret: env?.BETTER_AUTH_API_KEY!,
+
+        socialProviders: {
+          google: {
+            clientId: env?.GOOGLE_CLIENT_ID!,
+            clientSecret: env?.GOOGLE_CLIENT_SECRET!,
+          }
+        },
+
+        advanced: {
+          cookiePrefix: "restaurants-dashboard",
+          defaultCookieAttributes: {
+            sameSite: "none",
+            secure: true
+          }
+        }
       }
     ),
 
