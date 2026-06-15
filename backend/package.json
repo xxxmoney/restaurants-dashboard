@@ -3,12 +3,21 @@
   "scripts": {
     "dev": "wrangler dev  --test-scheduled",
     "deploy": "wrangler deploy --minify",
-    "test": "vitest"
+    "test": "vitest",
+    "auth:generate": "npx --yes @better-auth/cli@latest generate --config src/auth/index.ts --output src/db/auth.schema.ts -y",
+    "auth:format": "npx --yes prettier --write src/db/auth.schema.ts",
+    "auth:update": "npm run auth:generate && npm run auth:format",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate:dev": "wrangler d1 migrations apply restaurants-dashboard-db --local",
+    "db:migrate:prod": "wrangler d1 migrations apply restaurants-dashboard-db --remote",
+    "db:studio:dev": "drizzle-kit studio",
+    "db:studio:prod": "NODE_ENV=production drizzle-kit studio"
   },
   "dependencies": {
     "@better-auth/infra": "^0.2.8",
     "@google/generative-ai": "^0.21.0",
     "better-auth": "1.6.11",
+    "better-auth-cloudflare": "^0.3.0",
     "cheerio": "^1.0.0",
     "dotenv": "^16.4.7",
     "hono": "^4.6.12",
@@ -23,6 +32,8 @@
     "@types/jsdom": "^21.1.7",
     "@types/luxon": "^3.4.2",
     "@types/string-format": "^2.0.3",
+    "better-sqlite3": "^12.10.1",
+    "drizzle-kit": "^0.31.10",
     "expect-matchers": "^1.2.0",
     "vitest": "2.1.8",
     "wrangler": "^3.99.0"
