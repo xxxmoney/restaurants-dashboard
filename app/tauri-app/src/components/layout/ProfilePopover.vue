@@ -22,9 +22,15 @@
   function showAuthDialog() {
     dialogsStore.auth = true
   }
+
+  function goToProfile() {
+    // TODO: route to profile page, make new profile page
+  }
+
   async function signOut() {
     try {
       await authStore.signOut();
+      // TODO: maybe toast info message?
     } catch (error) {
       console.error(error);
       showErrorToast('Failed to sign out');
@@ -38,9 +44,12 @@
   </Button>
 
   <Popover ref="popover">
-    <div class="flex flex-col justify-between">
+    <div class="flex flex-col justify-between gap-md md:flex-row">
       <Button v-if="!authStore.isAuthenticated" @click="showAuthDialog">Sign In</Button>
-      <Button v-else @click="signOut">Sign Out</Button>
+      <template v-else>
+        <Button @click="goToProfile">Profile</Button>
+        <Button @click="signOut">Sign Out</Button>
+      </template>
     </div>
   </Popover>
 </template>
