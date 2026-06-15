@@ -1,21 +1,35 @@
 import type { D1Database, IncomingRequestCfProperties } from "@cloudflare/workers-types";
 import { betterAuth } from "better-auth";
 import { withCloudflare } from "better-auth-cloudflare";
-import { anonymous } from "better-auth/plugins";
 import { drizzleAdapter } from "@better-auth/drizzle-adapter";
 import { drizzle } from "drizzle-orm/d1";
 import { schema } from "../db";
+import {BACKEND_URL_BASE, FRONTEND_URL_BASE} from "../../../shared/constants/common.constants";
+import {dash} from "@better-auth/infra";
 
-function createAuth(env?: any, cf?: IncomingRequestCfProperties, baseURL?: string) {
+function createAuth(env?: any) {
   const db = env ? drizzle(env.DB, { schema, logger: true }) : ({} as any);
 
   return betterAuth({
-    baseURL,
+    baseURL: BACKEND_URL_BASE,
+
+    trustedOrigins: [
+      FRONTEND_URL_BASE
+    ],
+
+    secret: env.BETTER_AUTH_API_KEY!,
+
+    socialProviders: {
+      google: {
+        clientId: env.GOOGLE_CLIENT_ID!,
+        clientSecret: env.GOOGLE_CLIENT_SECRET!,
+      }
+    },
+
     ...withCloudflare(
       {
-        autoDetectIpAddress: true,
-        geolocationTracking: true,
-        cf: cf || {},
+        autoDetectIpAddress: false,
+        geolocationTracking: false,
         d1: env
           ? {
             db,
@@ -25,31 +39,17 @@ function createAuth(env?: any, cf?: IncomingRequestCfProperties, baseURL?: strin
             },
           }
           : undefined,
-        kv: env?.KV_STORAGE,
       },
       {
         emailAndPassword: {
           enabled: true,
         },
-        plugins: [anonymous()],
-        rateLimit: {
-          enabled: true,
-          window: 60, // Minimum KV TTL is 60s
-          max: 100, // reqs/window
-          customRules: {
-            "/sign-in/email": {
-              window: 60,
-              max: 100,
-            },
-            "/sign-in/social": {
-              window: 60,
-              max: 100,
-            },
-          },
-        },
+        plugins: [dash({
+          apiKey: env.BETTER_AUTH_API_KEY!,
+        })],
       }
     ),
-    // Only add database adapter for CLI schema generation
+
     ...(env
       ? {}
       : {
