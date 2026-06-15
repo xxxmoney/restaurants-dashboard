@@ -1,7 +1,10 @@
 import { defineConfig } from "drizzle-kit";
 import fs from "node:fs";
 import path from "node:path";
+import { config } from "dotenv";
 import {IS_DEBUG} from "../shared/constants/common.constants";
+
+config({ path: '.drizzle.env' });
 
 function getLocalD1DB() {
   try {

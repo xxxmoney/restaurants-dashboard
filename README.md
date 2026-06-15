@@ -23,8 +23,14 @@ Each parts have its own README - check them out for more details.
  - Install dependencies for BE /backend
  - Install dependencies for PROXY /proxy
  - Create a .dev.vars file in /backend with following
-   - `GEMINI_KEY = <your google gemini key>`
-   - `BETTER_AUTH_API_KEY = <your better auth key>`
+   `GEMINI_KEY=<KEY>
+    BETTER_AUTH_API_KEY=<KEY>
+    GOOGLE_CLIENT_ID=<ID>
+    GOOGLE_CLIENT_SECRET=<SECRET>`
+ - Create a `.env` file in /back with following
+   `CLOUDFLARE_D1_ACCOUNT_ID=<ID>
+    CLOUDFLARE_DATABASE_ID=<ID>
+    CLOUDFLARE_D1_API_TOKEN=<TOKEN>`
  - Setup for local debug in explained in /shared/README.md
  - Run all projects with `npm run dev`
 
