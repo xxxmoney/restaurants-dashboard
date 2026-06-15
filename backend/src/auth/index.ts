@@ -17,12 +17,12 @@ function createAuth(env?: any) {
       FRONTEND_URL_BASE
     ],
 
-    secret: env.BETTER_AUTH_API_KEY!,
+    secret: env?.BETTER_AUTH_API_KEY!,
 
     socialProviders: {
       google: {
-        clientId: env.GOOGLE_CLIENT_ID!,
-        clientSecret: env.GOOGLE_CLIENT_SECRET!,
+        clientId: env?.GOOGLE_CLIENT_ID!,
+        clientSecret: env?.GOOGLE_CLIENT_SECRET!,
       }
     },
 
@@ -45,7 +45,7 @@ function createAuth(env?: any) {
           enabled: true,
         },
         plugins: [dash({
-          apiKey: env.BETTER_AUTH_API_KEY!,
+          apiKey: env?.BETTER_AUTH_API_KEY!,
         })],
       }
     ),

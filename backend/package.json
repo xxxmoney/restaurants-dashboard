@@ -8,8 +8,8 @@
     "auth:format": "npx --yes prettier --write src/db/auth.schema.ts",
     "auth:update": "npm run auth:generate && npm run auth:format",
     "db:generate": "drizzle-kit generate",
-    "db:migrate:dev": "wrangler d1 migrations apply DATABASE --local",
-    "db:migrate:prod": "wrangler d1 migrations apply DATABASE --remote",
+    "db:migrate:dev": "wrangler d1 migrations apply restaurants-dashboard-db --local",
+    "db:migrate:prod": "wrangler d1 migrations apply restaurants-dashboard-db --remote",
     "db:studio:dev": "drizzle-kit studio",
     "db:studio:prod": "NODE_ENV=production drizzle-kit studio"
   },
@@ -32,6 +32,8 @@
     "@types/jsdom": "^21.1.7",
     "@types/luxon": "^3.4.2",
     "@types/string-format": "^2.0.3",
+    "better-sqlite3": "^12.10.1",
+    "drizzle-kit": "^0.31.10",
     "expect-matchers": "^1.2.0",
     "vitest": "2.1.8",
     "wrangler": "^3.99.0"
