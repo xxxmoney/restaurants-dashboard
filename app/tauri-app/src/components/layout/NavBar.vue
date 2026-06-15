@@ -1,30 +1,12 @@
 <script setup>
-  import {useAuthStore} from "@/stores/auth.store.js";
-  import {useDialogsStore} from "@/stores/dialog.store.js";
-  import {useCustomToast} from "@/composables/customToast.comp.js";
-
-  const authStore = useAuthStore();
-  const dialogsStore = useDialogsStore();
-  const {showErrorToast} = useCustomToast();
-
-  function showAuthDialog() {
-    dialogsStore.auth = true
-  }
-  async function signOut() {
-    try {
-      await authStore.signOut();
-    } catch (error) {
-      console.error(error);
-      showErrorToast('Failed to sign out');
-    }
-  }
+import ProfilePopover from "@/components/layout/ProfilePopover.vue";
 </script>
 
 <template>
   <nav class="flex flex-col md:flex-row gap-4xl py-2xl">
     <RouterLink to="/" class="text-3xl max-md:text-center">Restaurants</RouterLink>
 
-    <ul class="flex flex-row items-center gap-md max-md:mx-auto">
+    <ul class="flex-1 flex flex-row items-center gap-md max-md:mx-auto">
       <li>
         <RouterLink to="/">Home</RouterLink>
       </li>
@@ -34,9 +16,9 @@
       <li>
         <RouterLink to="/menus">Menus</RouterLink>
       </li>
-      <li>
-        <Button v-if="!authStore.isAuthenticated" @click="showAuthDialog">Sign In</Button>
-        <Button v-else @click="signOut">Sign Out</Button>
+      <li class="flex-1"></li>
+      <li class="order-first md:order-none">
+        <ProfilePopover />
       </li>
     </ul>
   </nav>
