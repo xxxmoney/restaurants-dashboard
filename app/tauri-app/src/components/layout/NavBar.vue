@@ -1,5 +1,5 @@
 <script setup>
-import ProfilePopover from "@/components/layout/ProfilePopover.vue";
+  import ProfilePopover from "@/components/layout/ProfilePopover.vue";
 </script>
 
 <template>

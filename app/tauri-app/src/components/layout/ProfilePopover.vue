@@ -46,7 +46,8 @@
 </script>
 
 <template>
-  <Button variant="outlined" @click="togglePopover" :loading="isLoading">
+  <Button v-if="!authStore.isAuthenticated" @click="showAuthDialog" class="rounded-xl">Sign In</Button>
+  <Button v-else variant="outlined" @click="togglePopover" :loading="isLoading">
     <img :src="authStore.user?.image ?? DEFAULT_USER_PROFILE_IMAGE" alt="User profile" class="w-8 h-8 rounded-full object-cover" />
   </Button>
 
@@ -55,11 +56,8 @@
       <Loading />
     </div>
     <div v-else class="flex flex-col justify-between gap-md md:flex-row">
-      <Button v-if="!authStore.isAuthenticated" @click="showAuthDialog">Sign In</Button>
-      <template v-else>
-        <Button @click="goToProfile">Profile</Button>
-        <Button @click="signOut">Sign Out</Button>
-      </template>
+      <Button @click="goToProfile">Profile</Button>
+      <Button @click="signOut">Sign Out</Button>
     </div>
   </Popover>
 </template>
