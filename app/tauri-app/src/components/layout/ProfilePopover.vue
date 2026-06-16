@@ -32,9 +32,6 @@
   function showAuthDialog() {
     dialogsStore.auth = true;
   }
-  function hideAuthDialog() {
-    dialogsStore.auth = false;
-  }
 
   async function goToProfile() {
     await router.push({ name: 'profile' });
