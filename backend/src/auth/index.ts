@@ -43,6 +43,7 @@ function createAuth(env?: any) {
 
         socialProviders: {
           google: {
+            prompt: "select_account", // Ask for account each time
             clientId: env?.GOOGLE_CLIENT_ID!,
             clientSecret: env?.GOOGLE_CLIENT_SECRET!,
           }
