@@ -23,8 +23,17 @@
     }
   }
 
+  function hidePopover() {
+    if (popover.value) {
+      popover.value.hide();
+    }
+  }
+
   function showAuthDialog() {
-    dialogsStore.auth = true
+    dialogsStore.auth = true;
+  }
+  function hideAuthDialog() {
+    dialogsStore.auth = false;
   }
 
   async function goToProfile() {
@@ -41,12 +50,13 @@
       showErrorToast('Failed to sign out');
     } finally {
       isLoading.value = false;
+      hidePopover();
     }
   }
 </script>
 
 <template>
-  <Button v-if="!authStore.isAuthenticated" @click="showAuthDialog" class="rounded-xl">Sign In</Button>
+  <Button v-if="!authStore.isAuthenticated" @click="showAuthDialog" icon="pi-sign-in" label="Sign In" />
   <Button v-else variant="outlined" @click="togglePopover" :loading="isLoading">
     <img :src="authStore.user?.image ?? DEFAULT_USER_PROFILE_IMAGE" alt="User profile" class="w-8 h-8 rounded-full object-cover" />
   </Button>
@@ -56,8 +66,8 @@
       <Loading />
     </div>
     <div v-else class="flex flex-col justify-between gap-md md:flex-row">
-      <Button @click="goToProfile">Profile</Button>
-      <Button @click="signOut">Sign Out</Button>
+      <Button @click="goToProfile" icon="pi-user" label="Profile" />
+      <Button @click="signOut" icon="pi-sign-out" label="Sign Out" />
     </div>
   </Popover>
 </template>
