@@ -6,12 +6,13 @@
   import {useCustomToast} from "@/composables/customToast.comp.js";
   import {DEFAULT_USER_PROFILE_IMAGE} from "@/common/constants/common.constants.js";
   import {ref} from "vue";
-  import {useRouter} from "vue-router";
+  import {useRoute, useRouter} from "vue-router";
   import Loading from "@/components/common/Loading.vue";
 
   const popover = ref();
   const isLoading = ref(false);
 
+  const route = useRoute();
   const router = useRouter();
   const authStore = useAuthStore();
   const dialogsStore = useDialogsStore();
@@ -48,6 +49,7 @@
     } finally {
       isLoading.value = false;
       hidePopover();
+      await router.replace(route.fullPath); // TODO: figure out how to trigger route auth guard
     }
   }
 </script>
