@@ -1,0 +1,1 @@
+ALTER TABLE `favorites` ADD `restaurant_id` text NOT NULL;
