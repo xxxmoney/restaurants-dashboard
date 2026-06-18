@@ -49,7 +49,7 @@
     } finally {
       isLoading.value = false;
       hidePopover();
-      await router.replace(route.fullPath); // TODO: figure out how to trigger route auth guard
+      await router.push('/');
     }
   }
 </script>
