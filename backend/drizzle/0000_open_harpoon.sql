@@ -59,4 +59,13 @@ CREATE TABLE `verifications` (
 	`updated_at` integer DEFAULT (cast(unixepoch('subsecond') * 1000 as integer)) NOT NULL
 );
 --> statement-breakpoint
-CREATE INDEX `verifications_identifier_idx` ON `verifications` (`identifier`);
+CREATE INDEX `verifications_identifier_idx` ON `verifications` (`identifier`);--> statement-breakpoint
+CREATE TABLE `favorites` (
+	`id` text PRIMARY KEY NOT NULL,
+	`date` integer NOT NULL,
+	`text` text NOT NULL,
+	`user_id` text NOT NULL,
+	FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE cascade
+);
+--> statement-breakpoint
+CREATE INDEX `favorites_userId_idx` ON `favorites` (`user_id`);
