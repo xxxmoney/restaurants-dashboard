@@ -6,7 +6,7 @@ export * from "./auth.schema";
 export * from "./schema";
 
 export const useDb = (env: any) => {
-  const db = env ? drizzle(env.DB, { schema, logger: true }) : ({} as any);
+  const db = drizzle(env.DB, { schema, logger: true });
 
   return { db };
 }

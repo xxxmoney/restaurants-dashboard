@@ -7,7 +7,7 @@ import {BACKEND_URL_BASE, FRONTEND_URL_BASE} from "../../../shared/constants/com
 import {dash} from "@better-auth/infra";
 
 function createAuth(env?: any) {
-  const { db } = useDb(env);
+  const { db } = env ? useDb(env) : {db: {} as any};
 
   return betterAuth({
     baseURL: BACKEND_URL_BASE,
