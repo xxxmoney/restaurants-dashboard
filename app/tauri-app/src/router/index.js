@@ -1,9 +1,10 @@
 import {createRouter, createWebHistory} from 'vue-router'
+import {useAuthStore} from "@/stores/auth.store.js";
+import {useDialogsStore} from "@/stores/dialog.store.js";
 import HomeView from '@/views/HomeView.vue'
 import WebsitesView from "@/views/WebsitesView.vue";
 import MenusView from "@/views/MenusView.vue";
-import {useAuthStore} from "@/stores/auth.store.js";
-import {useDialogsStore} from "@/stores/dialog.store.js";
+import ProfileView from "@/views/ProfileView.vue";
 
 const router = createRouter({
     history: createWebHistory('/restaurants-dashboard/'),
@@ -11,6 +12,7 @@ const router = createRouter({
       { path: '/', name: 'home', component: HomeView },
       { path: '/websites', name: 'websites', component: WebsitesView },
       { path: '/menus', name: 'menus', component: MenusView },
+      { path: '/profile', name: 'profile', component: ProfileView, meta: { requiresAuth: true } },
     ]
 });
 
@@ -27,7 +29,7 @@ router.beforeEach(async (to, from, next) => {
   }
 
   if (to.meta.requiresAuth && !authStore.isAuthenticated) {
-    dialogsStore.auth.value = true;
+    dialogsStore.auth = true;
     next('/');
   } else {
     next();

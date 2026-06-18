@@ -8,6 +8,8 @@ export const useAuthStore = defineStore('auth', () => {
   const userData = ref(null);
 
   const isAuthenticated = computed(() => !!userData.value);
+  const user = computed(() => userData.value?.user);
+  const session = computed(() => userData.value?.session);
 
   async function signInGoogle() {
     await auth.signIn.social({
@@ -37,12 +39,14 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   async function initialize() {
+    // TODO: maybe hnadle session.expiresAt?
     isInitialized.value = true;
     await verifyUser();
   }
 
   return {
-    userData, // TODO: this works - use this for user profile, etc
+    user,
+    session,
     isAuthenticated,
     isInitialized,
 
