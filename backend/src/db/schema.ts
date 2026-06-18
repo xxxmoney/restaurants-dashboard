@@ -3,7 +3,7 @@ import * as favoritesSchema from "./favorites.schema";
 
 export const schema = {
   ...authSchema,
-  favoritesSchema
+  ...favoritesSchema
   // ... other application schemas
 } as const;
 
