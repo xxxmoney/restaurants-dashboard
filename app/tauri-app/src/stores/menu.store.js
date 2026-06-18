@@ -15,6 +15,7 @@ export const useMenuStore = defineStore('menus', () => {
     const menusByRestaurant = ref(Object.fromEntries(restaurantIds.map(id => [id, null])));
     // Which restaurants to show
     const selectedIds = useLocalStorage(SHOWN_MENUS_KEY, restaurantIds);
+    // TODO: use API db
     const favoriteMenuItemIds = useLocalStorage(FAVORITE_MENU_ITEMS_KEY, []);
 
     function getMenus(restaurantId) {

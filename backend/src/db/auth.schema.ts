@@ -1,5 +1,6 @@
 import { relations, sql } from "drizzle-orm";
 import { sqliteTable, text, integer, index } from "drizzle-orm/sqlite-core";
+import { favorites } from "./favorites.schema";
 
 export const users = sqliteTable("users", {
   id: text("id").primaryKey(),
@@ -99,6 +100,7 @@ export const verifications = sqliteTable(
 export const usersRelations = relations(users, ({ many }) => ({
   sessions: many(sessions),
   accounts: many(accounts),
+  favorites: many(favorites),
 }));
 
 export const sessionsRelations = relations(sessions, ({ one }) => ({

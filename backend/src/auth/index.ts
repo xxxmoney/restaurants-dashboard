@@ -1,14 +1,13 @@
-import type { D1Database, IncomingRequestCfProperties } from "@cloudflare/workers-types";
+import type { D1Database } from "@cloudflare/workers-types";
 import { betterAuth } from "better-auth";
 import { withCloudflare } from "better-auth-cloudflare";
 import { drizzleAdapter } from "@better-auth/drizzle-adapter";
-import { drizzle } from "drizzle-orm/d1";
-import { schema } from "../db";
+import {useDb} from "../db";
 import {BACKEND_URL_BASE, FRONTEND_URL_BASE} from "../../../shared/constants/common.constants";
 import {dash} from "@better-auth/infra";
 
 function createAuth(env?: any) {
-  const db = env ? drizzle(env.DB, { schema, logger: true }) : ({} as any);
+  const { db } = useDb(env);
 
   return betterAuth({
     baseURL: BACKEND_URL_BASE,
