@@ -5,7 +5,7 @@ import {DateTime} from "luxon";
 import {parseDate} from "@/common/helpers/date.helper.js";
 import {DATE_FORMAT} from "root/shared/constants/common.constants.js";
 import {useLocalStorage} from "@vueuse/core";
-import {FAVORITE_MENU_ITEMS_KEY, SHOWN_MENUS_KEY} from "@/common/constants/storage.constants.js";
+import {SHOWN_MENUS_KEY} from "@/common/constants/storage.constants.js";
 import {MENUS} from "@/common/constants/menu.constants.js";
 
 export const useMenuStore = defineStore('menus', () => {
@@ -15,8 +15,7 @@ export const useMenuStore = defineStore('menus', () => {
     const menusByRestaurant = ref(Object.fromEntries(restaurantIds.map(id => [id, null])));
     // Which restaurants to show
     const selectedIds = useLocalStorage(SHOWN_MENUS_KEY, restaurantIds);
-    // TODO: use API db
-    const favoriteMenuItemIds = useLocalStorage(FAVORITE_MENU_ITEMS_KEY, []);
+    const favoriteMenuItems = ref([]);
 
     function getMenus(restaurantId) {
         return menusByRestaurant.value[restaurantId];
@@ -37,8 +36,8 @@ export const useMenuStore = defineStore('menus', () => {
 
             menusByRestaurant.value[restaurantId] = response.data
 
-            const favorites = await favoritesPromise;
-            console.log(favorites);
+            const { data: favorites } = await favoritesPromise;
+            favoriteMenuItems.value = favorites;
         } catch (e) {
             menusByRestaurant.value[restaurantId] = undefined;
             throw e;
@@ -56,16 +55,16 @@ export const useMenuStore = defineStore('menus', () => {
     }
 
     function toggleFavoriteMenuItem(menuItemId) {
-        const index = favoriteMenuItemIds.value.findIndex(item => item === menuItemId);
+        const index = favoriteMenuItems.value.findIndex(item => item === menuItemId);
         if (index === -1) {
-            favoriteMenuItemIds.value.push(menuItemId); // Not yet favorite, add
+            favoriteMenuItems.value.push(menuItemId); // Not yet favorite, add
         } else {
-            favoriteMenuItemIds.value.splice(index, 1); // Already favorite, remove
+            favoriteMenuItems.value.splice(index, 1); // Already favorite, remove
         }
     }
 
     function hasFavoriteMenuItem(menuItemId) {
-        return favoriteMenuItemIds.value.includes(menuItemId);
+        return favoriteMenuItems.value.includes(menuItemId);
     }
 
     return {

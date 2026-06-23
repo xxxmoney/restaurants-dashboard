@@ -55,11 +55,14 @@ function getMenuRowClass(data) {
 }
 
 function toggleFavorite(item) {
-  store.toggleFavoriteMenuItem(item.id);
+  // TODO: adjust to use favorite id
+  //store.toggleFavoriteMenuItem(item.id);
 }
 
 function hasFavorite(item) {
-  return store.hasFavoriteMenuItem(item.id);
+  // TODO: adjust to use favorite id
+  //return store.hasFavoriteMenuItem(item.id);
+  return false;
 }
 
 onMounted(async () => {
