@@ -25,6 +25,7 @@ export const useMenuStore = defineStore('menus', () => {
     async function loadMenus(restaurantId) {
         menusByRestaurant.value[restaurantId] = null;
         try {
+            const favoritesPromise = MenuApi.getFavoriteMenuItems(restaurantId, '2026-06-22', '2026-06-26'); // TODO: use correct dateFrom and dateTo
             const response = await MenuApi.getMenus(restaurantId);
 
             // Generate id for each menu item
@@ -35,6 +36,9 @@ export const useMenuStore = defineStore('menus', () => {
             }
 
             menusByRestaurant.value[restaurantId] = response.data
+
+            const favorites = await favoritesPromise;
+            console.log(favorites);
         } catch (e) {
             menusByRestaurant.value[restaurantId] = undefined;
             throw e;
@@ -42,7 +46,7 @@ export const useMenuStore = defineStore('menus', () => {
     }
 
     async function loadAllMenus() {
-        const promises = restaurantIds.map(id => loadMenus(id));
+        const promises = selectedIds.value.map(id => loadMenus(id));
         await Promise.all(promises);
     }
 
