@@ -11,5 +11,8 @@ export const MenuApi = {
           dateTo: dateToFormatted
         }
       });
+    },
+    addFavoriteMenuItem(restaurantId, dateFromFormatted, text) {
+
     }
 }

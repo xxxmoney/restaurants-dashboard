@@ -1,7 +1,7 @@
 import {createAuth} from "../auth";
 import {Context} from "hono";
 
-export const authGuard = async (c: Context, next: any) => {
+export const authMiddleware = async (c: Context, next: any) => {
   const auth = createAuth(c.env); // TODO: test this and use this
 
   const session = await auth.api.getSession({

@@ -4,8 +4,10 @@ import {useMenuCache} from "../common/composables/cache.comp";
 import {useDb} from "../db";
 import {DateTime} from "luxon";
 import {DATE_FORMAT} from "../../../shared/constants/common.constants";
-import {createAuth} from "../auth";
-import {authGuard} from "../middleware/auth.middleware";
+import {authMiddleware} from "../middleware/auth.middleware";
+import {FavoriteMenuItem, FavoriteMenuItemCreate} from "../common/dto/favorite";
+import {useYupValidatorMiddleware} from "../middleware/validator.middleware";
+import {favoriteMenuItemCreateSchema} from "../common/schemas/favorite.schema";
 
 const menuRoute = new Hono()
 
@@ -22,9 +24,9 @@ menuRoute.delete('/:id/cache', async (c) => {
     await clear();
 
     return c.text('OK');
-})
+});
 
-menuRoute.get(':id/favorites', authGuard, async (c) => {
+menuRoute.get(':id/favorites', authMiddleware, async (c) => {
   const dateFromRaw = c.req.query('dateFrom');
   const dateToRaw = c.req.query('dateTo');
 
@@ -50,6 +52,14 @@ menuRoute.get(':id/favorites', authGuard, async (c) => {
   });
 
   return c.json(favorites);
-})
+});
+
+menuRoute.post(':id/favorites', authMiddleware, useYupValidatorMiddleware('json', favoriteMenuItemCreateSchema), async (c) => {
+  const value = c.req.valid('json') as FavoriteMenuItemCreate;
+  const user = (c.var as any).user;
+
+  // TODO: finish and test this
+
+});
 
 export {menuRoute}
