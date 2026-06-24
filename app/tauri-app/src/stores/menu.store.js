@@ -24,7 +24,6 @@ export const useMenuStore = defineStore('menus', () => {
     async function loadMenus(restaurantId) {
         menusByRestaurant.value[restaurantId] = null;
         try {
-            const favoritesPromise = MenuApi.getFavoriteMenuItems(restaurantId, '2026-06-22', '2026-06-26'); // TODO: use correct dateFrom and dateTo
             const response = await MenuApi.getMenus(restaurantId);
 
             // Generate id for each menu item
@@ -34,9 +33,12 @@ export const useMenuStore = defineStore('menus', () => {
               }
             }
 
-            menusByRestaurant.value[restaurantId] = response.data
+            menusByRestaurant.value[restaurantId] = response.data;
 
-            const { data: favorites } = await favoritesPromise;
+            const timestamps = response.data.map(item => DateTime.fromFormat(item.date, DATE_FORMAT).toMillis());
+            const minDate = DateTime.fromMillis(Math.min(...timestamps));
+            const maxDate = DateTime.fromMillis(Math.max(...timestamps));
+            const { data: favorites } = await MenuApi.getFavoriteMenuItems(restaurantId, minDate.toFormat(DATE_FORMAT), maxDate.toFormat(DATE_FORMAT));
             favoriteMenuItems.value = favorites;
         } catch (e) {
             menusByRestaurant.value[restaurantId] = undefined;

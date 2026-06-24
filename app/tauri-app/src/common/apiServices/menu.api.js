@@ -4,11 +4,11 @@ export const MenuApi = {
     getMenus(restaurantId) {
         return api.get(`/menus/${restaurantId}`);
     },
-    getFavoriteMenuItems(restaurantId, dateFrom, dateTo) {
+    getFavoriteMenuItems(restaurantId, dateFromFormatted, dateToFormatted) {
       return api.get(`/menus/${restaurantId}/favorites`, {
         params: {
-          dateFrom,
-          dateTo
+          dateFrom: dateFromFormatted,
+          dateTo: dateToFormatted
         }
       });
     }
