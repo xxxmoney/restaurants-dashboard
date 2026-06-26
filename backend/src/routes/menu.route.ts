@@ -5,9 +5,11 @@ import {useDb} from "../db";
 import {DateTime} from "luxon";
 import {DATE_FORMAT} from "../../../shared/constants/common.constants";
 import {authMiddleware} from "../middleware/auth.middleware";
-import {FavoriteMenuItem, FavoriteMenuItemCreate} from "../common/dto/favorite";
+import {FavoriteMenuItemUpdate} from "../common/dto/favorite";
 import {useYupValidatorMiddleware} from "../middleware/validator.middleware";
-import {favoriteMenuItemCreateSchema} from "../common/schemas/favorite.schema";
+import {favoriteMenuItemUpdateSchema} from "../common/schemas/favorite.schema";
+import {favorites} from "../db/favorites.schema";
+import { eq, and, or, lte, gte } from 'drizzle-orm';
 
 const menuRoute = new Hono()
 
@@ -36,29 +38,54 @@ menuRoute.get(':id/favorites', authMiddleware, async (c) => {
 
   const dateFrom: DateTime = DateTime.fromFormat(dateFromRaw, DATE_FORMAT);
   const dateTo: DateTime = DateTime.fromFormat(dateToRaw, DATE_FORMAT);
-  const user = (c.var as any).user;
 
+  const user = (c.var as any).user;
   const { db } = useDb(c.env);
 
-  const favorites = await db.query.favorites.findMany({
-    where: (f, { gte, lte, or, and, eq }) =>
+  const items = await db.select()
+    .from(favorites)
+    .where(
       and(
-        eq(f.userId, user.id),
+        eq(favorites.userId, user.id),
         or(
-          gte(f.date, dateFrom.toJSDate()),
-          lte(f.date, dateTo.toJSDate())
+          gte(favorites.date, dateFrom.toJSDate()),
+          lte(favorites.date, dateTo.toJSDate())
         )
-      )
-  });
+    ));
 
-  return c.json(favorites);
+  return c.json(items);
 });
 
-menuRoute.post(':id/favorites', authMiddleware, useYupValidatorMiddleware('json', favoriteMenuItemCreateSchema), async (c) => {
-  const value = c.req.valid('json') as FavoriteMenuItemCreate;
-  const user = (c.var as any).user;
+menuRoute.post(':id/favorites', authMiddleware, useYupValidatorMiddleware('json', favoriteMenuItemUpdateSchema), async (c) => {
+  const id: number = parseInt(c.req.param('id'));
+  const favoriteCreate = c.req.valid('json') as FavoriteMenuItemUpdate;
 
-  // TODO: finish and test this
+  const user = (c.var as any).user;
+  const { db } = useDb(c.env);
+
+  const [favoriteNew] = await db.insert(favorites).values({
+    date: favoriteCreate.date.toJSDate(),
+    text: favoriteCreate.text,
+    restaurantId: id.toString(),
+    userId: user.id
+  }).returning();
+
+  return c.json(favoriteNew);
+});
+
+menuRoute.delete(':id/favorites', authMiddleware, useYupValidatorMiddleware('json', favoriteMenuItemUpdateSchema), async (c) => {
+  const id: number = parseInt(c.req.param('id')!);
+  const favoriteDelete = c.req.valid('json') as FavoriteMenuItemUpdate;
+
+  const user = (c.var as any).user;
+  const { db } = useDb(c.env);
+
+  await db.delete(favorites).where(and(
+    eq(favorites.userId, user.id),
+    eq(favorites.restaurantId, id.toString()),
+    eq(favorites.date, favoriteDelete.date.toJSDate()),
+    eq(favorites.text, favoriteDelete.text)
+  ));
 
 });
 

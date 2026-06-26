@@ -10,6 +10,10 @@ export interface FavoriteMenuItem {
 
 export interface FavoriteMenuItemCreate {
   date: DateTime;
-  restaurantId: string;
+  text: string;
+}
+
+export interface FavoriteMenuItemUpdate {
+  date: DateTime;
   text: string;
 }

@@ -9,9 +9,8 @@ export const favoriteMenuItemSchema = yup.object({
   userId: yup.string().required()
 });
 
-export const favoriteMenuItemCreateSchema = yup.object({
+export const favoriteMenuItemUpdateSchema = yup.object({
   date: luxonDateTimeSchema.required(),
-  restaurantId: yup.string().required(),
   text: yup.string().required()
 });
 
