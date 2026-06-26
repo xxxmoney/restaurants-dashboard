@@ -5,9 +5,9 @@ import {useDb} from "../db";
 import {DateTime} from "luxon";
 import {DATE_FORMAT} from "../../../shared/constants/common.constants";
 import {authMiddleware} from "../middleware/auth.middleware";
-import {FavoriteMenuItemUpdate} from "../common/dto/favorite";
+import {FavoriteMenuItem, FavoriteMenuItemUpdate} from "../common/dto/favorite";
 import {useYupValidatorMiddleware} from "../middleware/validator.middleware";
-import {favoriteMenuItemUpdateSchema} from "../common/schemas/favorite.schema";
+import {favoriteMenuItemSchema, favoriteMenuItemUpdateSchema} from "../common/schemas/favorite.schema";
 import {favorites} from "../db/favorites.schema";
 import { eq, and, or, lte, gte } from 'drizzle-orm';
 
@@ -42,7 +42,7 @@ menuRoute.get(':id/favorites', authMiddleware, async (c) => {
   const user = (c.var as any).user;
   const { db } = useDb(c.env);
 
-  const items = await db.select()
+  const dbItems = await db.select()
     .from(favorites)
     .where(
       and(
@@ -52,6 +52,13 @@ menuRoute.get(':id/favorites', authMiddleware, async (c) => {
           lte(favorites.date, dateTo.toJSDate())
         )
     ));
+  const items = dbItems.map(item => ({
+    id: item.id,
+    date: DateTime.fromJSDate(item.date),
+    restaurantId: item.restaurantId,
+    text: item.text,
+    userId: item.userId
+  })) as FavoriteMenuItem[]
 
   return c.json(items);
 });

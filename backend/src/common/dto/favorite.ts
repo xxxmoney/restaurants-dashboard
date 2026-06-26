@@ -8,11 +8,6 @@ export interface FavoriteMenuItem {
   userId: string;
 }
 
-export interface FavoriteMenuItemCreate {
-  date: DateTime;
-  text: string;
-}
-
 export interface FavoriteMenuItemUpdate {
   date: DateTime;
   text: string;
