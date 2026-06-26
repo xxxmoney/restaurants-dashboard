@@ -1,6 +1,6 @@
 import {DateTime} from "luxon";
 
-export interface FavoriteMenuItem {
+export interface FavoriteDto {
   id: string;
   date: DateTime;
   restaurantId: string;
@@ -8,7 +8,7 @@ export interface FavoriteMenuItem {
   userId: string;
 }
 
-export interface FavoriteMenuItemUpdate {
+export interface FavoriteUpdateDto {
   date: DateTime;
   text: string;
 }

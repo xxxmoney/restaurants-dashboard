@@ -5,11 +5,12 @@ import {useDb} from "../db";
 import {DateTime} from "luxon";
 import {DATE_FORMAT} from "../../../shared/constants/common.constants";
 import {authMiddleware} from "../middleware/auth.middleware";
-import {FavoriteMenuItem, FavoriteMenuItemUpdate} from "../common/dto/favorite";
+import {FavoriteDto, FavoriteUpdateDto} from "../common/dto/favorite";
 import {useYupValidatorMiddleware} from "../middleware/validator.middleware";
 import {favoriteMenuItemSchema, favoriteMenuItemUpdateSchema} from "../common/schemas/favorite.schema";
 import {favorites} from "../db/favorites.schema";
 import { eq, and, or, lte, gte } from 'drizzle-orm';
+import {mapToFavoriteDto} from "../common/mappers/favorite.mapper";
 
 const menuRoute = new Hono()
 
@@ -47,25 +48,20 @@ menuRoute.get(':id/favorites', authMiddleware, async (c) => {
     .where(
       and(
         eq(favorites.userId, user.id),
-        or(
-          gte(favorites.date, dateFrom.toJSDate()),
-          lte(favorites.date, dateTo.toJSDate())
-        )
-    ));
-  const items = dbItems.map(item => ({
-    id: item.id,
-    date: DateTime.fromJSDate(item.date),
-    restaurantId: item.restaurantId,
-    text: item.text,
-    userId: item.userId
-  })) as FavoriteMenuItem[]
+        gte(favorites.date, dateFrom.toJSDate()),
+        lte(favorites.date, dateTo.toJSDate())
+      )
+    );
+
+  const items = dbItems
+    .map(item => mapToFavoriteDto(item));
 
   return c.json(items);
 });
 
 menuRoute.post(':id/favorites', authMiddleware, useYupValidatorMiddleware('json', favoriteMenuItemUpdateSchema), async (c) => {
   const id: number = parseInt(c.req.param('id'));
-  const favoriteCreate = c.req.valid('json') as FavoriteMenuItemUpdate;
+  const favoriteCreate = c.req.valid('json') as FavoriteUpdateDto;
 
   const user = (c.var as any).user;
   const { db } = useDb(c.env);
@@ -77,23 +73,27 @@ menuRoute.post(':id/favorites', authMiddleware, useYupValidatorMiddleware('json'
     userId: user.id
   }).returning();
 
-  return c.json(favoriteNew);
+  return c.json(mapToFavoriteDto(favoriteNew));
 });
 
 menuRoute.delete(':id/favorites', authMiddleware, useYupValidatorMiddleware('json', favoriteMenuItemUpdateSchema), async (c) => {
   const id: number = parseInt(c.req.param('id')!);
-  const favoriteDelete = c.req.valid('json') as FavoriteMenuItemUpdate;
+  const favoriteDelete = c.req.valid('json') as FavoriteUpdateDto;
 
   const user = (c.var as any).user;
   const { db } = useDb(c.env);
 
-  await db.delete(favorites).where(and(
-    eq(favorites.userId, user.id),
-    eq(favorites.restaurantId, id.toString()),
-    eq(favorites.date, favoriteDelete.date.toJSDate()),
-    eq(favorites.text, favoriteDelete.text)
-  ));
+  const [favoriteDeleted] = await db.delete(favorites)
+    .where(
+      and(
+        eq(favorites.userId, user.id),
+        eq(favorites.restaurantId, id.toString()),
+        eq(favorites.date, favoriteDelete.date.toJSDate()),
+        eq(favorites.text, favoriteDelete.text)
+      )
+    ).limit(1).returning();
 
+  return c.json(mapToFavoriteDto(favoriteDeleted));
 });
 
 export {menuRoute}

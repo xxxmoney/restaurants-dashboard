@@ -17,6 +17,8 @@ export const favorites = sqliteTable(
   (table) => [index("favorites_userId_idx").on(table.userId)],
 );
 
+export type Favorite = typeof favorites.$inferSelect
+
 export const favoritesRelations = relations(favorites, ({ one }) => ({
   users: one(users, {
     fields: [favorites.userId],
