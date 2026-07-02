@@ -4,6 +4,7 @@ export const MenuApi = {
     getMenus(restaurantId) {
         return api.get(`/menus/${restaurantId}`);
     },
+
     getFavoriteMenuItems(restaurantId, dateFromFormatted, dateToFormatted) {
       return api.get(`/menus/${restaurantId}/favorites`, {
         params: {
@@ -12,7 +13,18 @@ export const MenuApi = {
         }
       });
     },
-    addFavoriteMenuItem(restaurantId, dateFromFormatted, text) {
-
+    addFavoriteMenuItem(restaurantId, dateFormatted, text) {
+      return api.post(`/menus/${restaurantId}/favorites`, {
+        date: dateFormatted,
+        text: text
+      });
+    },
+    deleteFavoriteMenuItem(restaurantId, dateFormatted, text) {
+      return api.delete(`/menus/${restaurantId}/favorites}`, {
+        data: {
+          date: dateFormatted,
+          text: text
+        }
+      });
     }
 }

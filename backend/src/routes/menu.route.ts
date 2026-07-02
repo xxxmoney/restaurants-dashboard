@@ -67,10 +67,10 @@ menuRoute.post(':id/favorites', authMiddleware, useYupValidatorMiddleware('json'
   const { db } = useDb(c.env);
 
   const [favoriteNew] = await db.insert(favorites).values({
-    date: favoriteCreate.date.toJSDate(),
-    text: favoriteCreate.text,
+    userId: user.id,
     restaurantId: id.toString(),
-    userId: user.id
+    date: favoriteCreate.date.toJSDate(),
+    text: favoriteCreate.text
   }).returning();
 
   return c.json(mapToFavoriteDto(favoriteNew));

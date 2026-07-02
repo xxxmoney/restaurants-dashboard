@@ -56,14 +56,22 @@ export const useMenuStore = defineStore('menus', () => {
         return menusByRestaurant.value[restaurantId]?.find(menu => parseDate(menu.date).toFormat(DATE_FORMAT) === today);
     }
 
-    // TODO: change this api call
-    function toggleFavoriteMenuItem(restaurantId, date, text) {
-        const favorite = favoriteMenuItemsByRestaurant.value[restaurantId].find(item => item.date === date && item.text === text);
-        // TODO: handling of remove/add
+    async function toggleFavoriteMenuItem(restaurantId, date, text) {
+      const favorite = getFavoriteMenuItem(restaurantId, date, text);
+      if (favorite) {
+          await MenuApi.deleteFavoriteMenuItem(restaurantId, date, text);
+          favoriteMenuItemsByRestaurant.value[restaurantId] = favoriteMenuItemsByRestaurant.value[restaurantId].filter(item => item !== favorite);
+      } else {
+          await MenuApi.addFavoriteMenuItem(restaurantId, date, text);
+          favoriteMenuItemsByRestaurant.value[restaurantId].push({ date, text });
+      }
     }
 
+    function getFavoriteMenuItem(restaurantId, date, text) {
+      return favoriteMenuItemsByRestaurant.value[restaurantId].find(item => item.date === date && item.text === text);
+    }
     function hasFavoriteMenuItem(restaurantId, date, text) {
-        return favoriteMenuItemsByRestaurant.value[restaurantId].some(item => item.date === date && item.text === text);
+        return !!getFavoriteMenuItem(restaurantId, date, text);
     }
 
     return {

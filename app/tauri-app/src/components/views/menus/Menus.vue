@@ -54,15 +54,12 @@ function getMenuRowClass(data) {
   return [{'!bg-green-400 !bg-opacity-40': hasFavorite(data)}];
 }
 
-function toggleFavorite(item) {
-  // TODO: adjust to use favorite id
-  //store.toggleFavoriteMenuItem(item.id);
+async function toggleFavorite(item, date) {
+  await store.toggleFavoriteMenuItem(restaurantId, date, item.text);
 }
 
-function hasFavorite(item) {
-  // TODO: adjust to use favorite id
-  //return store.hasFavoriteMenuItem(item.id);
-  return false;
+function hasFavorite(item, date) {
+  return store.hasFavoriteMenuItem(restaurantId, date, item.text);
 }
 
 onMounted(async () => {
@@ -102,18 +99,18 @@ onMounted(async () => {
           </template>
         </Column>
 
-        <template #expansion="{data}">
-          <Empty v-if="data.categorizedItems.length === 0"/>
+        <template #expansion="{data: { categorizedItems, date }}">
+          <Empty v-if="categorizedItems.length === 0"/>
 
           <template v-else>
-            <div class="flex flex-col" v-for="categorizedItem in data.categorizedItems">
+            <div class="flex flex-col" v-for="categorizedItem in categorizedItems">
               <span class="p-lg text-lg font-bold">{{ categorizedItem.category }}</span>
               <Divider class="mt-0"/>
 
               <DataTable :value="categorizedItem.items" sortField="price" :sortOrder="1" :rowClass="getMenuRowClass">
                 <Column header="#">
                   <template #body="{data}">
-                    <Button rounded icon="pi pi-heart" aria-label="Favorite" :severity="hasFavorite(data) ? 'primary' : 'secondary'" @click="toggleFavorite(data)"/>
+                    <Button rounded icon="pi pi-heart" aria-label="Favorite" :severity="hasFavorite(data, date) ? 'primary' : 'secondary'" @click="toggleFavorite(data, date)"/>
                   </template>
                 </Column>
                 <Column field="name" header="Name"/>
