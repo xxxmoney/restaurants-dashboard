@@ -20,7 +20,7 @@ export const MenuApi = {
       });
     },
     deleteFavoriteMenuItem(restaurantId, dateFormatted, text) {
-      return api.delete(`/menus/${restaurantId}/favorites}`, {
+      return api.delete(`/menus/${restaurantId}/favorites`, {
         data: {
           date: dateFormatted,
           text: text

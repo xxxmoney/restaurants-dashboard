@@ -55,11 +55,12 @@ function getMenuRowClass(data) {
 }
 
 async function toggleFavorite(item, date) {
-  await store.toggleFavoriteMenuItem(restaurantId, date, item.text);
+  console.log(item, date);
+  await store.toggleFavoriteMenuItem(restaurantId, date, item.name);
 }
 
 function hasFavorite(item, date) {
-  return store.hasFavoriteMenuItem(restaurantId, date, item.text);
+  return store.hasFavoriteMenuItem(restaurantId, date, item.name);
 }
 
 onMounted(async () => {
