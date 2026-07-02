@@ -13,6 +13,7 @@ import {RESTAURANTS} from "root/shared/constants/restaurant.constants.js";
 import {useCustomToast} from "@/composables/customToast.comp.js";
 import Dead from "@/components/common/Dead.vue";
 import {CURRENCY_SYMBOL} from "@/common/constants/common.constants.js";
+import {useAuthStore} from "@/stores/auth.store.js";
 
 const {restaurantId} = defineProps({
   restaurantId: {
@@ -20,18 +21,19 @@ const {restaurantId} = defineProps({
     required: true
   }
 });
-const store = useMenuStore();
+const authStore = useAuthStore();
+const menuStore = useMenuStore();
 const {showErrorToast} = useCustomToast();
 
 const restaurant = computed(() => RESTAURANTS[restaurantId]);
-const menus = computed(() => store.getMenus(restaurantId));
-const currentMenu = computed(() => store.getCurrentDayMenu(restaurantId));
+const menus = computed(() => menuStore.getMenus(restaurantId));
+const currentMenu = computed(() => menuStore.getCurrentDayMenu(restaurantId));
 
 const expandedRows = ref({});
 
 async function loadMenus() {
   try {
-    await store.loadMenus(restaurantId);
+    await menuStore.loadMenus(restaurantId, authStore.isAuthenticated);
   } catch (error) {
     console.error(error);
     showErrorToast(`Failed to load menus for '${RESTAURANTS[restaurantId].name}'`);
@@ -56,11 +58,11 @@ function getMenuRowClass(data) {
 
 async function toggleFavorite(item, date) {
   console.log(item, date);
-  await store.toggleFavoriteMenuItem(restaurantId, date, item.name);
+  await menuStore.toggleFavoriteMenuItem(restaurantId, date, item.name);
 }
 
 function hasFavorite(item, date) {
-  return store.hasFavoriteMenuItem(restaurantId, date, item.name);
+  return menuStore.hasFavoriteMenuItem(restaurantId, date, item.name);
 }
 
 onMounted(async () => {
@@ -109,7 +111,7 @@ onMounted(async () => {
               <Divider class="mt-0"/>
 
               <DataTable :value="categorizedItem.items" sortField="price" :sortOrder="1" :rowClass="getMenuRowClass">
-                <Column header="#">
+                <Column v-if="authStore.isAuthenticated" header="#">
                   <template #body="{data}">
                     <Button rounded icon="pi pi-heart" aria-label="Favorite" :severity="hasFavorite(data, date) ? 'primary' : 'secondary'" @click="toggleFavorite(data, date)"/>
                   </template>

@@ -21,7 +21,7 @@ export const useMenuStore = defineStore('menus', () => {
         return menusByRestaurant.value[restaurantId];
     }
 
-    async function loadMenus(restaurantId) {
+    async function loadMenus(restaurantId, shouldLoadFavorites) {
         menusByRestaurant.value[restaurantId] = null;
         try {
             const response = await MenuApi.getMenus(restaurantId);
@@ -35,11 +35,13 @@ export const useMenuStore = defineStore('menus', () => {
 
             menusByRestaurant.value[restaurantId] = response.data;
 
-            const timestamps = response.data.map(item => DateTime.fromFormat(item.date, DATE_FORMAT).toMillis());
-            const minDate = DateTime.fromMillis(Math.min(...timestamps));
-            const maxDate = DateTime.fromMillis(Math.max(...timestamps));
-            const { data: favorites } = await MenuApi.getFavoriteMenuItems(restaurantId, minDate.toFormat(DATE_FORMAT), maxDate.toFormat(DATE_FORMAT));
-            favoriteMenuItemsByRestaurant.value[restaurantId] = favorites;
+            if (shouldLoadFavorites) {
+              const timestamps = response.data.map(item => DateTime.fromFormat(item.date, DATE_FORMAT).toMillis());
+              const minDate = DateTime.fromMillis(Math.min(...timestamps));
+              const maxDate = DateTime.fromMillis(Math.max(...timestamps));
+              const { data: favorites } = await MenuApi.getFavoriteMenuItems(restaurantId, minDate.toFormat(DATE_FORMAT), maxDate.toFormat(DATE_FORMAT));
+              favoriteMenuItemsByRestaurant.value[restaurantId] = favorites;
+            }
         } catch (e) {
             menusByRestaurant.value[restaurantId] = undefined;
             throw e;
@@ -68,7 +70,7 @@ export const useMenuStore = defineStore('menus', () => {
     }
 
     function getFavoriteMenuItem(restaurantId, date, text) {
-      return favoriteMenuItemsByRestaurant.value[restaurantId].find(item => item.date === date && item.text === text);
+      return favoriteMenuItemsByRestaurant.value[restaurantId] && favoriteMenuItemsByRestaurant.value[restaurantId].find(item => item.date === date && item.text === text);
     }
     function hasFavoriteMenuItem(restaurantId, date, text) {
         return !!getFavoriteMenuItem(restaurantId, date, text);
