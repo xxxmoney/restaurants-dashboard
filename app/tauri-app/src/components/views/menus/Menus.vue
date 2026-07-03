@@ -14,6 +14,7 @@ import {useCustomToast} from "@/composables/customToast.comp.js";
 import Dead from "@/components/common/Dead.vue";
 import {CURRENCY_SYMBOL} from "@/common/constants/common.constants.js";
 import {useAuthStore} from "@/stores/auth.store.js";
+import LoadingWrapper from "@/components/common/LoadingWrapper.vue";
 
 const {restaurantId} = defineProps({
   restaurantId: {
@@ -30,6 +31,7 @@ const menus = computed(() => menuStore.getMenus(restaurantId));
 const currentMenu = computed(() => menuStore.getCurrentDayMenu(restaurantId));
 
 const expandedRows = ref({});
+const isLoading = ref(false);
 
 async function loadMenus() {
   try {
@@ -57,8 +59,20 @@ function getMenuRowClass(data) {
 }
 
 async function toggleFavorite(item, date) {
-  console.log(item, date);
-  await menuStore.toggleFavoriteMenuItem(restaurantId, date, item.name);
+  // Prevent concurrent toggling
+  if (isLoading.value) {
+    return;
+  }
+
+  try {
+    isLoading.value = true;
+    await menuStore.toggleFavoriteMenuItem(restaurantId, date, item.name);
+  } catch(error) {
+    console.error(error);
+    showErrorToast(`Failed to toggle favorite item: '${item}' date: ${date}`);
+  } finally {
+    isLoading.value = false;
+  }
 }
 
 function hasFavorite(item, date) {
@@ -113,7 +127,9 @@ onMounted(async () => {
               <DataTable :value="categorizedItem.items" sortField="price" :sortOrder="1" :rowClass="getMenuRowClass">
                 <Column v-if="authStore.isAuthenticated" header="#">
                   <template #body="{data}">
-                    <Button rounded icon="pi pi-heart" aria-label="Favorite" :severity="hasFavorite(data, date) ? 'primary' : 'secondary'" @click="toggleFavorite(data, date)"/>
+                    <LoadingWrapper :isLoading="isLoading">
+                      <Button rounded icon="pi pi-heart" aria-label="Favorite" :severity="hasFavorite(data, date) ? 'primary' : 'secondary'" @click="toggleFavorite(data, date)"/>
+                    </LoadingWrapper>
                   </template>
                 </Column>
                 <Column field="name" header="Name"/>
