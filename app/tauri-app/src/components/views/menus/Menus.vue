@@ -15,6 +15,7 @@ import Dead from "@/components/common/Dead.vue";
 import {CURRENCY_SYMBOL} from "@/common/constants/common.constants.js";
 import {useAuthStore} from "@/stores/auth.store.js";
 import LoadingWrapper from "@/components/common/LoadingWrapper.vue";
+import {useLoading} from "@/composables/loading.comp.js";
 
 const {restaurantId} = defineProps({
   restaurantId: {
@@ -31,7 +32,7 @@ const menus = computed(() => menuStore.getMenus(restaurantId));
 const currentMenu = computed(() => menuStore.getCurrentDayMenu(restaurantId));
 
 const expandedRows = ref({});
-const isLoading = ref(false);
+const { isLoading, isLoadingDebounced, startLoading, stopLoading } = useLoading();
 
 async function loadMenus() {
   try {
@@ -65,13 +66,14 @@ async function toggleFavorite(item, date) {
   }
 
   try {
-    isLoading.value = true;
+    startLoading();
+
     await menuStore.toggleFavoriteMenuItem(restaurantId, date, item.name);
   } catch(error) {
     console.error(error);
     showErrorToast(`Failed to toggle favorite item`);
   } finally {
-    isLoading.value = false;
+    stopLoading();
   }
 }
 
@@ -127,8 +129,8 @@ onMounted(async () => {
               <DataTable :value="categorizedItem.items" sortField="price" :sortOrder="1" :rowClass="getMenuRowClass">
                 <Column v-if="authStore.isAuthenticated" header="#">
                   <template #body="{data}">
-                    <LoadingWrapper :isLoading="isLoading">
-                      <Button rounded icon="pi pi-heart" aria-label="Favorite" :severity="hasFavorite(data, date) ? 'primary' : 'secondary'" @click="toggleFavorite(data, date)"/>
+                    <LoadingWrapper :isLoading="isLoadingDebounced">
+                      <Button :disabled="isLoadingDebounced" rounded icon="pi pi-heart" aria-label="Favorite" :severity="hasFavorite(data, date) ? 'primary' : 'secondary'" @click="toggleFavorite(data, date)"/>
                     </LoadingWrapper>
                   </template>
                 </Column>
