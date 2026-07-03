@@ -13,6 +13,9 @@ import {RESTAURANTS} from "root/shared/constants/restaurant.constants.js";
 import {useCustomToast} from "@/composables/customToast.comp.js";
 import Dead from "@/components/common/Dead.vue";
 import {CURRENCY_SYMBOL} from "@/common/constants/common.constants.js";
+import {useAuthStore} from "@/stores/auth.store.js";
+import LoadingWrapper from "@/components/common/LoadingWrapper.vue";
+import {useLoading} from "@/composables/loading.comp.js";
 
 const {restaurantId} = defineProps({
   restaurantId: {
@@ -20,18 +23,20 @@ const {restaurantId} = defineProps({
     required: true
   }
 });
-const store = useMenuStore();
+const authStore = useAuthStore();
+const menuStore = useMenuStore();
 const {showErrorToast} = useCustomToast();
 
 const restaurant = computed(() => RESTAURANTS[restaurantId]);
-const menus = computed(() => store.getMenus(restaurantId));
-const currentMenu = computed(() => store.getCurrentDayMenu(restaurantId));
+const menus = computed(() => menuStore.getMenus(restaurantId));
+const currentMenu = computed(() => menuStore.getCurrentDayMenu(restaurantId));
 
 const expandedRows = ref({});
+const { isLoading, isLoadingDebounced, startLoading, stopLoading } = useLoading();
 
 async function loadMenus() {
   try {
-    await store.loadMenus(restaurantId);
+    await menuStore.loadMenus(restaurantId, authStore.isAuthenticated);
   } catch (error) {
     console.error(error);
     showErrorToast(`Failed to load menus for '${RESTAURANTS[restaurantId].name}'`);
@@ -54,12 +59,26 @@ function getMenuRowClass(data) {
   return [{'!bg-green-400 !bg-opacity-40': hasFavorite(data)}];
 }
 
-function toggleFavorite(item) {
-  store.toggleFavoriteMenuItem(item.id);
+async function toggleFavorite(item, date) {
+  // Prevent concurrent toggling
+  if (isLoading.value) {
+    return;
+  }
+
+  try {
+    startLoading();
+
+    await menuStore.toggleFavoriteMenuItem(restaurantId, date, item.name);
+  } catch(error) {
+    console.error(error);
+    showErrorToast(`Failed to toggle favorite item`);
+  } finally {
+    stopLoading();
+  }
 }
 
-function hasFavorite(item) {
-  return store.hasFavoriteMenuItem(item.id);
+function hasFavorite(item, date) {
+  return menuStore.hasFavoriteMenuItem(restaurantId, date, item.name);
 }
 
 onMounted(async () => {
@@ -99,18 +118,20 @@ onMounted(async () => {
           </template>
         </Column>
 
-        <template #expansion="{data}">
-          <Empty v-if="data.categorizedItems.length === 0"/>
+        <template #expansion="{data: { categorizedItems, date }}">
+          <Empty v-if="categorizedItems.length === 0"/>
 
           <template v-else>
-            <div class="flex flex-col" v-for="categorizedItem in data.categorizedItems">
+            <div class="flex flex-col" v-for="categorizedItem in categorizedItems">
               <span class="p-lg text-lg font-bold">{{ categorizedItem.category }}</span>
               <Divider class="mt-0"/>
 
               <DataTable :value="categorizedItem.items" sortField="price" :sortOrder="1" :rowClass="getMenuRowClass">
-                <Column header="#">
+                <Column v-if="authStore.isAuthenticated" header="#">
                   <template #body="{data}">
-                    <Button rounded icon="pi pi-heart" aria-label="Favorite" :severity="hasFavorite(data) ? 'primary' : 'secondary'" @click="toggleFavorite(data)"/>
+                    <LoadingWrapper :isLoading="isLoadingDebounced">
+                      <Button :disabled="isLoadingDebounced" rounded icon="pi pi-heart" aria-label="Favorite" :severity="hasFavorite(data, date) ? 'primary' : 'secondary'" @click="toggleFavorite(data, date)"/>
+                    </LoadingWrapper>
                   </template>
                 </Column>
                 <Column field="name" header="Name"/>
