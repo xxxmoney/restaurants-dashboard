@@ -69,7 +69,7 @@ async function toggleFavorite(item, date) {
     await menuStore.toggleFavoriteMenuItem(restaurantId, date, item.name);
   } catch(error) {
     console.error(error);
-    showErrorToast(`Failed to toggle favorite item: '${item}' date: ${date}`);
+    showErrorToast(`Failed to toggle favorite item`);
   } finally {
     isLoading.value = false;
   }
