@@ -11,8 +11,10 @@
 
 <template>
   <div class="relative">
-    <slot :class="{ 'invisible': isLoading }" />
-    <div :class="{ 'invisible': !isLoading }" class="absolute z-10 inset-0 -translate-y-1/2 flex justify-center items-center">
+    <div :class="{ 'invisible': isLoading }">
+      <slot />
+    </div>
+    <div :class="{ 'invisible': !isLoading }" class="absolute z-10 inset-0">
       <Loading />
     </div>
   </div>
