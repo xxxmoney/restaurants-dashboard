@@ -7,6 +7,7 @@ import {IS_DEBUG} from "../../../../../shared/constants/common.constants";
 import {inline} from "../../helpers/stringUtils.helper";
 
 export class NovodvorkaMenuService implements MenuService {
+  private static readonly DISH_TD_INDEX_SIZE = 0;
     private static readonly DISH_TD_INDEX_NAME = 1;
     private static readonly DISH_TD_INDEX_PRICE = 2;
     private static readonly DISH_PRICE_TRAILING_SIGN = ',-';
@@ -50,11 +51,14 @@ export class NovodvorkaMenuService implements MenuService {
                 continue;
             }
 
+            const $tdSize = $(tds[NovodvorkaMenuService.DISH_TD_INDEX_SIZE]);
+            this.logDebug(`Got td size: ${inline($tdSize.html())}`);
             const $tdName = $(tds[NovodvorkaMenuService.DISH_TD_INDEX_NAME]);
             this.logDebug(`Got td name: ${inline($tdName.html())}`);
             const $tdPrice = $(tds[NovodvorkaMenuService.DISH_TD_INDEX_PRICE]);
             this.logDebug(`Got td price: ${inline($tdPrice.html())}`);
 
+            const size = $tdSize.text().trim();
             const name = $tdName.text().trim();
             const priceText = $tdPrice.text().trim();
 
@@ -64,6 +68,7 @@ export class NovodvorkaMenuService implements MenuService {
             }
 
             const item = {
+                size: size,
                 name: this.parseDishName(name),
                 price: this.parseDishPrice(priceText)
             };

@@ -3,6 +3,7 @@ import {DateTime} from "luxon";
 export interface MenuItem {
     name: string;
     price: number;
+    size?: string;
 }
 
 export interface Menu {

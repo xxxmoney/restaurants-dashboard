@@ -5,7 +5,8 @@ export const menuSchema = yup.object({
     date: luxonDateTimeSchema.required(),
     items: yup.array().of(yup.object({
         name: yup.string().required(),
-        price: yup.number().required()
+        price: yup.number().required(),
+        size: yup.string()
     })).required()
 });
 
@@ -19,7 +20,8 @@ export const categorizedMenuSchema = yup.object({
         category: yup.string().required(),
         items: yup.array().of(yup.object({
             name: yup.string().required(),
-            price: yup.number().required()
+            price: yup.number().required(),
+            size: yup.string()
         })).required()
     })).required()
 });

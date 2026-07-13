@@ -4,6 +4,7 @@ import {MenuCategorizer} from "./menuCategorizer.service";
 import {useMenuCache} from "../composables/cache.comp";
 import {MenuProviderService} from "./menuProvider.service";
 import {getFetcher} from "../helpers/fetcher.helper";
+import {undefinedIfEmpty} from "../helpers/stringUtils.helper";
 
 export const MenuProcessor = {
     async getProcessedMenusWithCache(env: any, enumValue: number): Promise<CategorizedMenu[]> {
@@ -23,16 +24,20 @@ export const MenuProcessor = {
 
     async getProcessedMenus(env: any, enumValue: number, menus: Menu[]): Promise<CategorizedMenu[]> {
         try {
-            // Hotfix - set year of all menus to current year
             menus.forEach(menu => {
+              // Hotfix - set year of all menus to current year
                 menu.date = menu.date.set({year: DateTime.now().year});
+
+                menu.items.forEach(item => {
+                  // Normalize size
+                  item.size = undefinedIfEmpty(item.size);
+                });
             });
             // Order menus by date descending
             menus.sort((a, b) => a.date.toMillis() - b.date.toMillis());
 
             // Apply menu categorization
             const {categorizedMenus} = await MenuCategorizer.categorizeMenus({menus: menus}, env);
-
             return categorizedMenus;
         }
         catch (e) {
