@@ -5,7 +5,7 @@ import {useCheerio} from "../../composables/cheerio.comp";
 import {restaurantEnum} from "../../../../../shared/enums/restaurant.enum";
 import {CURRENCY_CZK} from "../../constants/menu.constants";
 import {IS_DEBUG} from "../../../../../shared/constants/common.constants";
-import {inline} from "../../helpers/stringUtils.helper";
+import {inline, nullIfEmpty} from "../../helpers/stringUtils.helper";
 import {getAllMatches} from "../../helpers/regex.helper";
 
 export class MinigolfMenuService implements MenuService {
@@ -42,11 +42,13 @@ export class MinigolfMenuService implements MenuService {
         for (const item of items) {
             const $item = $(item);
             this.logDebug(`Processing item: ${inline($item.html())}`);
+            const size = $item.find('.menu-item-amount').text().trim();
             const name = $item.find('.menu-item-name').text().trim();
             const priceText = $item.find('.menu-item-price').text().trim();
 
             if (name && priceText) {
                 menu.items.push({
+                    size: nullIfEmpty(size),
                     name: name,
                     price: this.parseDishPrice(priceText)
                 });

@@ -4,7 +4,7 @@ import {useCheerio} from "../../composables/cheerio.comp";
 import {restaurantEnum} from "../../../../../shared/enums/restaurant.enum";
 import {DateTime} from "luxon";
 import {IS_DEBUG} from "../../../../../shared/constants/common.constants";
-import {inline} from "../../helpers/stringUtils.helper";
+import {inline, nullIfEmpty} from "../../helpers/stringUtils.helper";
 
 export class NovodvorkaMenuService implements MenuService {
   private static readonly DISH_TD_INDEX_SIZE = 0;
@@ -68,7 +68,7 @@ export class NovodvorkaMenuService implements MenuService {
             }
 
             const item = {
-                size: size,
+                size: nullIfEmpty(size),
                 name: this.parseDishName(name),
                 price: this.parseDishPrice(priceText)
             };
