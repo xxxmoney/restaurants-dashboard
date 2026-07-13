@@ -70,6 +70,7 @@ export class GiardinoMenuService implements MenuService {
                 }
 
                 const item = {
+                    size: undefined,
                     name: description,
                     price: this.parseDishPrice(priceText)
                 };

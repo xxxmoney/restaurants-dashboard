@@ -8,9 +8,9 @@ export function inline(value?: string | null): string | undefined {
     return value.replace(/\n/g, ' ');
 }
 
-export function nullIfEmpty(value?: string | null): string | null {
+export function undefinedIfEmpty(value?: string | null): string | undefined {
   if (!value) {
-    return null;
+    return undefined;
   }
 
   return value;
