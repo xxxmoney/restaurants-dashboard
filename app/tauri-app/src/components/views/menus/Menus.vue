@@ -55,8 +55,8 @@ function getMenusRowClass(data) {
   return [{'!bg-green-400 !bg-opacity-40': data.date === currentMenu.value?.date}];
 }
 
-function getMenuRowClass(data) {
-  return [{'!bg-green-400 !bg-opacity-40': hasFavorite(data)}];
+function getMenuRowClass(data, date) {
+  return [{'!bg-green-400 !bg-opacity-40': hasFavorite(data, date)}];
 }
 
 async function toggleFavorite(item, date) {
@@ -126,7 +126,7 @@ onMounted(async () => {
               <span class="p-lg text-lg font-bold">{{ categorizedItem.category }}</span>
               <Divider class="mt-0"/>
 
-              <DataTable :value="categorizedItem.items" sortField="price" :sortOrder="1" :rowClass="getMenuRowClass">
+              <DataTable :value="categorizedItem.items" sortField="price" :sortOrder="1" :rowClass="data => getMenuRowClass(data, date)">
                 <Column v-if="authStore.isAuthenticated" header="#">
                   <template #body="{data}">
                     <LoadingWrapper :isLoading="isLoadingDebounced">
@@ -136,7 +136,7 @@ onMounted(async () => {
                 </Column>
                 <Column field="size" header="Size"/>
                 <Column field="name" header="Name"/>
-                <Column field="price" header="Price" headerClass="w-1/3" sortable>
+                <Column field="price" header="Price" sortable>
                   <template #body="{data}">
                     <span v-if="data.price === -1">? {{ CURRENCY_SYMBOL }}</span>
                     <span v-else>{{ formatCurrency(data.price) }}</span>
