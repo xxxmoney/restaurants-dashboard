@@ -31,7 +31,7 @@ const {selectedIds} = storeToRefs(store);
 
 <style>
 .flexible-grid {
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr))
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 450px), 1fr))
 }
 </style>
 
