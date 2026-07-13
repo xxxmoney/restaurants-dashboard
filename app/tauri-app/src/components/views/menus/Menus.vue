@@ -134,6 +134,7 @@ onMounted(async () => {
                     </LoadingWrapper>
                   </template>
                 </Column>
+                <Column field="size" header="Size"/>
                 <Column field="name" header="Name"/>
                 <Column field="price" header="Price" headerClass="w-1/3" sortable>
                   <template #body="{data}">
